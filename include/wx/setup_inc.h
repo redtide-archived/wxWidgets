@@ -876,6 +876,7 @@
 #define wxUSE_TEXTCTRL      1   // wxTextCtrl
 #define wxUSE_TIMEPICKCTRL  1   // wxTimePickerCtrl
 #define wxUSE_TOGGLEBTN     1   // requires wxButton
+#define wxUSE_TOOLPALETTE   1   // wxToolPalette
 #define wxUSE_TREECTRL      1   // wxTreeCtrl
 #define wxUSE_TREELISTCTRL  1   // wxTreeListCtrl
 

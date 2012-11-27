@@ -917,6 +917,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_TOOLBAR=no
     DEFAULT_wxUSE_TOOLBAR_NATIVE=no
     DEFAULT_wxUSE_TOOLBOOK=no
+    DEFAULT_wxUSE_TOOLPALETTE=no
     DEFAULT_wxUSE_TOOLTIPS=no
     DEFAULT_wxUSE_TREEBOOK=no
     DEFAULT_wxUSE_TREECTRL=no
@@ -993,6 +994,7 @@ WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], w
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
 WX_ARG_FEATURE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
+WX_ARG_FEATURE(toolpalette, [  --enable-toolpalette    use wxToolPalette class], wxUSE_TOOLPALETTE)
 WX_ARG_FEATURE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_FEATURE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
 WX_ARG_FEATURE(treelist,    [  --enable-treelist       use wxTreeListCtrl class], wxUSE_TREELISTCTRL)
@@ -6996,6 +6998,13 @@ if test "$wxUSE_TOOLBAR" = "yes"; then
     fi
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
+fi
+
+if test "$wxUSE_TOOLPALETTE" = "yes"; then
+    AC_DEFINE(wxUSE_TOOLPALETTE)
+    USES_CONTROLS=1
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolpalette"
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then

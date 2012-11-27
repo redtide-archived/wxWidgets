@@ -461,6 +461,7 @@ typedef pid_t GPid;
 #else
 #define wxUSE_TOGGLEBTN    0
 #endif
+#define wxUSE_TOOLPALETTE  1
 #define wxUSE_TREECTRL     1
 #define wxUSE_TREELISTCTRL  1
 
