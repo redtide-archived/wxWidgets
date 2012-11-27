@@ -245,6 +245,34 @@ GtkWidget * GetTextEntryWidget()
     return s_button;
 }
 
+GtkWidget *GetToolBarWidget()
+{
+    static GtkWidget *s_toolbar  = NULL;
+
+    if ( !s_toolbar )
+    {
+        s_toolbar = gtk_toolbar_new();
+        gtk_container_add(GetContainer(), s_toolbar);
+        gtk_widget_realize(s_toolbar);
+    }
+
+    return s_toolbar;
+}
+
+GtkWidget *GetToolSeparatorWidget()
+{
+    static GtkWidget *s_separator  = NULL;
+
+    if ( !s_separator )
+    {
+        s_separator = GTK_WIDGET(gtk_separator_tool_item_new());
+        gtk_container_add(GetContainer(), s_separator);
+        gtk_widget_realize(s_separator);
+    }
+
+    return s_separator;
+}
+
 GtkWidget *GetTreeWidget()
 {
     static GtkWidget *s_tree = NULL;

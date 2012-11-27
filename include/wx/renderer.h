@@ -62,6 +62,7 @@ enum
     wxCONTROL_EXPANDED   = wxCONTROL_SPECIAL, // only for the tree items
     wxCONTROL_SIZEGRIP   = wxCONTROL_SPECIAL, // only for the status bar panes
     wxCONTROL_FLAT       = wxCONTROL_SPECIAL, // checkboxes only: flat border
+    wxCONTROL_ISSPACER   = wxCONTROL_SPECIAL, // tool separators only: stretchable
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
@@ -321,6 +322,37 @@ public:
                                     int flags = 0) = 0;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+// TODO: make this function to work with other platforms and
+//       implement it in generic renderer
+#if defined(__WXGTK__) || defined(__WXMSW__)
+    virtual void DrawToolBar(wxWindow* win,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0) = 0;
+
+    virtual void DrawToolSeparator( wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxOrientation orient = wxHORIZONTAL,
+                                    int spacerWidth = 0,
+                                    int flags = 0) = 0;
+
+    virtual void DrawGripper(wxWindow* window,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0) = 0;
+
+    virtual void DrawTab(wxWindow *window,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         const wxString& label,
+                         wxDirection direction = wxTOP,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0) = 0;
+
+#endif // defined(__WXGTK__) || defined(__WXMSW__)
 
     // geometry functions
     // ------------------
@@ -499,6 +531,37 @@ public:
                                     int flags = 0)
         { m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags); }
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+#if defined(__WXGTK__) || defined(__WXMSW__)
+    virtual void DrawToolBar(wxWindow* window, wxDC& dc, const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL, int flags = 0)
+    {
+        m_rendererNative.DrawToolBar( window, dc, rect, orient, flags);
+    }
+
+    virtual void DrawToolSeparator(wxWindow* window, wxDC& dc, const wxRect& rect,
+                                   wxOrientation orient = wxHORIZONTAL,
+                                   int spacerWidth = 0, int flags = 0)
+    {
+        m_rendererNative.DrawToolSeparator( window, dc, rect, orient,
+                                            spacerWidth, flags);
+    }
+
+    virtual void DrawGripper(wxWindow* window, wxDC& dc, const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0)
+    {
+        m_rendererNative.DrawGripper( window, dc, rect, orient, flags);
+    }
+
+    virtual void DrawTab(wxWindow *window, wxDC& dc, const wxRect& rect,
+                         const wxString& label, wxDirection direction = wxTOP,
+                         const wxBitmap& bitmap = wxNullBitmap, int flags = 0)
+    {
+        m_rendererNative.DrawTab( window, dc, rect, label, direction, bitmap, flags);
+    }
+
+#endif // defined(__WXGTK__) || defined(__WXMSW__)
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

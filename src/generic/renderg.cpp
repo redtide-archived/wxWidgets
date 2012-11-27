@@ -131,6 +131,36 @@ public:
                                     int flags = 0);
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+#if defined(__WXGTK__) || defined(__WXMSW__)
+    virtual void DrawToolBar(wxWindow *window,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0);
+
+    virtual void DrawToolSeparator(wxWindow *window,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   wxOrientation orient = wxHORIZONTAL,
+                                   int spacerWidth = 0,
+                                   int flags = 0);
+
+    virtual void DrawGripper(wxWindow *window,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0);
+
+    virtual void DrawTab(wxWindow *window,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         const wxString& label,
+                         wxDirection direction = wxTOP,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0);
+
+#endif // defined(__WXGTK__) || defined(__WXMSW__)
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -454,6 +484,48 @@ int wxRendererGeneric::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
     return 5;
 }
 
+#if defined(__WXGTK__) || defined(__WXMSW__)
+
+void wxRendererGeneric::DrawToolBar(wxWindow * WXUNUSED(window),
+                                    wxDC& WXUNUSED(dc),
+                                    const wxRect& WXUNUSED(rect),
+                                    wxOrientation WXUNUSED(orient),
+                                    int WXUNUSED(flags))
+{
+    // TODO: Not implemented
+}
+
+void wxRendererGeneric::DrawToolSeparator(wxWindow * WXUNUSED(window),
+                                          wxDC& WXUNUSED(dc),
+                                          const wxRect& WXUNUSED(rect),
+                                          wxOrientation WXUNUSED(orient),
+                                          int WXUNUSED(spacerWidth),
+                                          int WXUNUSED(flags))
+{
+    // TODO: Not implemented
+}
+
+void wxRendererGeneric::DrawGripper(wxWindow * WXUNUSED(window),
+                                    wxDC& WXUNUSED(dc),
+                                    const wxRect& WXUNUSED(rect),
+                                    wxOrientation WXUNUSED(orient),
+                                    int WXUNUSED(flags))
+{
+    // TODO: Not implemented
+}
+
+void wxRendererGeneric::DrawTab(wxWindow * WXUNUSED(window),
+                                wxDC& WXUNUSED(dc),
+                                const wxRect& WXUNUSED(rect),
+                                const wxString& WXUNUSED(label),
+                                wxDirection WXUNUSED(direction),
+                                const wxBitmap& WXUNUSED(bitmap),
+                                int WXUNUSED(flags))
+{
+    // TODO: Not implemented
+}
+
+#endif // defined(__WXGTK__) || defined(__WXMSW__)
 
 // draw the plus or minus sign
 void

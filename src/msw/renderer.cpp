@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/renderer.cpp
 // Purpose:     implementation of wxRendererNative for Windows
 // Author:      Vadim Zeitlin
@@ -99,6 +99,61 @@
     #define WP_CLOSEBUTTON 18
     #define WP_RESTOREBUTTON 21
     #define WP_HELPBUTTON 23
+
+// REBAR parts
+enum
+{
+    RP_GRIPPER      = 1,
+    RP_GRIPPERVERT  = 2,
+    RP_BAND         = 3,
+    RP_CHEVRON      = 4,
+    RP_CHEVRONVERT  = 5,
+// For Windows >= Vista
+    RP_BACKGROUND   = 6,
+    RP_SPLITTER     = 7,
+    RP_SPLITTERVERT = 8
+};
+// REBAR chevron states
+enum
+{
+    CHEVS_NORMAL  = 1,
+    CHEVS_HOT     = 2,
+    CHEVS_PRESSED = 3
+};
+// TOOLBAR parts
+enum
+{
+    TP_BUTTON              = 1,
+    TP_DROPDOWNBUTTON      = 2,
+    TP_SPLITBUTTON         = 3,
+    TP_SPLITBUTTONDROPDOWN = 4,
+    TP_SEPARATOR           = 5,
+    TP_SEPARATORVERT       = 6
+};
+// TOOLBAR states
+enum
+{
+    TS_NORMAL     = 1,
+    TS_HOT        = 2,
+    TS_PRESSED    = 3,
+    TS_DISABLED   = 4,
+    TS_CHECKED    = 5,
+    TS_HOTCHECKED = 6
+};
+// TAB parts
+enum
+{
+    TABP_TABITEM = 1
+};
+// TAB states
+enum
+{
+    TIS_NORMAL   = 1,
+    TIS_HOT      = 2,
+    TIS_SELECTED = 3,
+    TIS_DISABLED = 4,
+    TIS_FOCUSED  = 5
+};
 #endif
 
 #if defined(__WXWINCE__)
@@ -308,6 +363,33 @@ public:
                                     const wxRect& rect,
                                     wxTitleBarButton button,
                                     int flags = 0);
+
+    virtual void DrawToolBar(wxWindow *win,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0);
+
+    virtual void DrawToolSeparator( wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxOrientation orient = wxHORIZONTAL,
+                                    int spacerWidth = 0,
+                                    int flags = 0 );
+
+    virtual void DrawGripper(wxWindow *window,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0);
+
+    virtual void DrawTab(wxWindow *window,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         const wxString& label,
+                         wxDirection direction = wxTOP,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -887,6 +969,100 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
     dc.SetPen( bdr );
     dc.SetBrush( fill );
     dc.DrawRectangle(rect);
+}
+
+void wxRendererXP::DrawToolBar(wxWindow *window, wxDC& dc, const wxRect& rect,
+                               wxOrientation WXUNUSED(orient), int WXUNUSED(flags))
+{
+    wxUxThemeHandle hTheme(window, L"TOOLBAR");
+    if ( !hTheme )
+        return;
+
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
+                                                GetHdcOf(dc.GetTempHDC()),
+                                                0, 0,
+                                                &rc, NULL);
+}
+
+void wxRendererXP::DrawToolSeparator(wxWindow *window, wxDC& dc,
+                                     const wxRect& rect, wxOrientation orient,
+                                     int WXUNUSED(spacerWidth), int flags)
+{
+    wxUxThemeHandle hTheme(window, L"TOOLBAR");
+    if ( !hTheme )
+        return;
+
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    int part = TP_SEPARATORVERT;
+    if (orient == wxVERTICAL)
+        part = TP_SEPARATOR;
+
+    int state = TS_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+        state = TS_DISABLED;
+    else if ( flags & wxCONTROL_PRESSED )
+        state = TS_PRESSED;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = TS_HOT;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
+                                                GetHdcOf(dc.GetTempHDC()),
+                                                part,
+                                                state,
+                                                &rc, NULL);
+}
+
+void wxRendererXP::DrawGripper(wxWindow *window, wxDC& dc, const wxRect& rect,
+                               wxOrientation orient, int WXUNUSED(flags))
+{
+    wxUxThemeHandle hTheme(window, L"REBAR");
+    if ( !hTheme )
+        return;
+
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    int part = RP_GRIPPER;
+    if (orient == wxVERTICAL)
+        part = RP_GRIPPERVERT;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
+                                                GetHdcOf(dc.GetTempHDC()),
+                                                part, 0,
+                                                &rc, NULL);
+}
+
+void wxRendererXP::DrawTab(wxWindow *window, wxDC& dc, const wxRect& rect,
+                           const wxString& label, wxDirection direction,
+                           const wxBitmap& bitmap, int flags)
+{
+    wxUxThemeHandle hTheme(window, L"TAB");
+    if ( !hTheme )
+        return;
+
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    int state = TIS_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+        state = TIS_DISABLED;
+    else if ( flags & wxCONTROL_SELECTED )
+        state = TIS_SELECTED;
+    else if ( flags & wxCONTROL_CURRENT )
+        state = TIS_HOT;
+    else if ( flags & wxCONTROL_FOCUSED )
+        state = TIS_FOCUSED;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
+                                                GetHdcOf(dc.GetTempHDC()),
+                                                TABP_TABITEM,
+                                                state,
+                                                &rc, NULL);
 }
 
 // ----------------------------------------------------------------------------
