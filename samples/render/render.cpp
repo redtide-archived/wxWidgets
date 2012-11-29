@@ -284,13 +284,20 @@ private:
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
 #if defined(__WXGTK__) || defined(__WXMSW__)
-        dc.DrawText("DrawToolBar() + DrawGripper() +\nDrawToolSeparator()", x1, y);
+        dc.DrawText("DrawToolBar() + DrawGripper() +\nDrawToolSeparator() + DrawToolButton()", x1, y);
 
-        renderer.DrawToolBar(this, dc, wxRect(x2, y, 120, 30), wxHORIZONTAL, m_flags);
+        renderer.DrawToolBar(this, dc, wxRect(x2, y, 150, 30), wxHORIZONTAL, m_flags);
 
         renderer.DrawGripper(this, dc, wxRect(x2, y, 10, 30), wxVERTICAL, m_flags);
 
-        renderer.DrawToolSeparator( this, dc, wxRect(x2+60, y+6, 4, 18), wxVERTICAL, 0, m_flags );
+        renderer.DrawToolButton( this, dc, wxRect(x2+12, y+4, 22, 22), false, m_flags );
+
+        renderer.DrawToolSeparator( this, dc, wxRect(x2+38, y+4, 4, 22), wxVERTICAL, 0, m_flags );
+
+        renderer.DrawToolButton( this, dc, wxRect(x2+46, y+4, 28, 22), true, m_flags );
+        renderer.DrawToolDropButton( this, dc, wxRect(x2+74, y+4, 18, 22), m_flags );
+
+        renderer.DrawToolMenuButton( this, dc, wxRect(x2+96, y+4, 44, 22), m_flags );
 
         y += lineHeight + 20;
 
@@ -427,7 +434,7 @@ MyFrame::MyFrame()
                  wxID_ANY,
                  wxT("Render wxWidgets Sample"),
                  wxPoint(50, 50),
-                 wxSize(450, 470))
+                 wxSize(470, 470))
 {
     // set the frame icon
     SetIcon(wxICON(sample));

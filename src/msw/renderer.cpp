@@ -364,11 +364,27 @@ public:
                                     wxTitleBarButton button,
                                     int flags = 0);
 
-    virtual void DrawToolBar(wxWindow *win,
+    virtual void DrawToolBar(wxWindow *window,
                              wxDC& dc,
                              const wxRect& rect,
                              wxOrientation orient = wxHORIZONTAL,
                              int flags = 0);
+
+    virtual void DrawToolButton(wxWindow *window,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                bool hasDropdown = false,
+                                int flags = 0);
+
+    virtual void DrawToolDropButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual void DrawToolMenuButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
 
     virtual void DrawToolSeparator( wxWindow *window,
                                     wxDC& dc,
@@ -409,6 +425,13 @@ private:
                         wxDC& dc,
                         const wxRect& rect,
                         int flags);
+
+    // Common part of DrawToolButton(), DrawToolDropButton() and DrawToolMenuButton()
+    void DoDrawToolButton(HTHEME htheme,
+                          int part,
+                          wxDC& dc,
+                          const wxRect& rect,
+                          int flags);
 
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
@@ -890,6 +913,38 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
                             );
 }
 
+void wxRendererXP::DoDrawToolButton(HTHEME hTheme,
+                                    int part,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
+    RECT rc;
+    wxCopyRectToRECT(adjustedRect, rc);
+
+    int state = TS_NORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+        state = TS_DISABLED;
+    else if ( flags & wxCONTROL_CURRENT &~ wxCONTROL_CHECKED )
+        state = TS_HOT;
+    else if ( flags & wxCONTROL_CURRENT & wxCONTROL_CHECKED )
+        state = TS_HOTCHECKED;
+    else if ( flags & wxCONTROL_CHECKED )
+        state = TS_CHECKED;
+    else if ( flags & wxCONTROL_PRESSED )
+        state = TS_PRESSED;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
+                                                GetHdcOf(dc.GetTempHDC()),
+                                                part,
+                                                state,
+                                                &rc, NULL);
+}
+
 void
 wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
                                  wxDC& dc,
@@ -987,6 +1042,38 @@ void wxRendererXP::DrawToolBar(wxWindow *window, wxDC& dc, const wxRect& rect,
                                                 &rc, NULL);
 }
 
+void wxRendererXP::DrawToolButton(wxWindow *window, wxDC& dc, const wxRect& rect,
+                                  bool hasDropdown, int flags)
+{
+    wxUxThemeHandle hTheme(window, L"TOOLBAR");
+    if ( !hTheme )
+        return;
+
+    int part = hasDropdown ? TP_SPLITBUTTON : TP_BUTTON;
+
+    DoDrawToolButton(hTheme, part, dc, rect, flags);
+}
+
+void wxRendererXP::DrawToolDropButton(wxWindow *window, wxDC& dc,
+                                      const wxRect& rect, int flags)
+{
+    wxUxThemeHandle hTheme(window, L"TOOLBAR");
+    if ( !hTheme )
+        return;
+
+    DoDrawToolButton(hTheme, TP_SPLITBUTTONDROPDOWN, dc, rect, flags);
+}
+
+void wxRendererXP::DrawToolMenuButton(wxWindow *window, wxDC& dc,
+                                      const wxRect& rect, int flags)
+{
+    wxUxThemeHandle hTheme(window, L"TOOLBAR");
+    if ( !hTheme )
+        return;
+
+    DoDrawToolButton(hTheme, TP_DROPDOWNBUTTON, dc, rect, flags);
+}
+
 void wxRendererXP::DrawToolSeparator(wxWindow *window, wxDC& dc,
                                      const wxRect& rect, wxOrientation orient,
                                      int WXUNUSED(spacerWidth), int flags)
@@ -995,26 +1082,11 @@ void wxRendererXP::DrawToolSeparator(wxWindow *window, wxDC& dc,
     if ( !hTheme )
         return;
 
-    RECT rc;
-    wxCopyRectToRECT(rect, rc);
+    // The orientation in MSW is related to the toolbar, here is
+    // related to the separator one instead
+    int part = orient == wxVERTICAL ? TP_SEPARATOR : TP_SEPARATORVERT;
 
-    int part = TP_SEPARATORVERT;
-    if (orient == wxVERTICAL)
-        part = TP_SEPARATOR;
-
-    int state = TS_NORMAL;
-    if ( flags & wxCONTROL_DISABLED )
-        state = TS_DISABLED;
-    else if ( flags & wxCONTROL_PRESSED )
-        state = TS_PRESSED;
-    else if ( flags & wxCONTROL_CURRENT )
-        state = TS_HOT;
-
-    wxUxThemeEngine::Get()->DrawThemeBackground(hTheme,
-                                                GetHdcOf(dc.GetTempHDC()),
-                                                part,
-                                                state,
-                                                &rc, NULL);
+    DoDrawToolButton(hTheme, part, dc, rect, flags);
 }
 
 void wxRendererXP::DrawGripper(wxWindow *window, wxDC& dc, const wxRect& rect,

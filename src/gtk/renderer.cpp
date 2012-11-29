@@ -124,11 +124,27 @@ public:
                                 const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawToolBar(wxWindow *win,
+    virtual void DrawToolBar(wxWindow *window,
                              wxDC& dc,
                              const wxRect& rect,
                              wxOrientation orient = wxHORIZONTAL,
                              int flags = 0);
+
+    virtual void DrawToolButton(wxWindow *window,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                bool hasDropdown = false,
+                                int flags = 0);
+
+    virtual void DrawToolDropButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual void DrawToolMenuButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
 
     virtual void DrawToolSeparator( wxWindow *window,
                                     wxDC& dc,
@@ -972,6 +988,26 @@ void wxRendererGTK::DrawToolBar(wxWindow *window, wxDC& dc,
         rect.height
     );
 #endif // __WXGTK3__
+}
+
+void wxRendererGTK::DrawToolButton(wxWindow *window, wxDC& dc, const wxRect& rect,
+                                   bool hasDropdown, int flags)
+{
+    // TODO: Draw a GtkToolButton or GtkMenuToolButton or
+    //       GtkToggleToolButton or GtkRadioToolButton
+}
+
+void wxRendererGTK::DrawToolDropButton(wxWindow *window, wxDC& dc,
+                                       const wxRect& rect, int flags)
+{
+    // TODO: Draw a drop arrow or nothing:
+    //       included in DrawToolButton with hasDropdown = true
+}
+
+void wxRendererGTK::DrawToolMenuButton(wxWindow *window, wxDC& dc,
+                                       const wxRect& rect, int flags)
+{
+    // TODO: Draw a GtkMenuToolButton
 }
 
 void wxRendererGTK::DrawToolSeparator(wxWindow *window,
