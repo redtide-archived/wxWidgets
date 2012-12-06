@@ -236,25 +236,44 @@ protected:
 
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(inevt.wd);
-        if (it == m_watchMap.end())
-        {
-            // It's not in the map; check if was recently removed from it.
-            if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
-            {
-                wxLogTrace(wxTRACE_FSWATCHER,
-                           "Got an event for stale wd %i", inevt.wd);
-            }
-            else
-            {
-                wxFAIL_MSG("Event for unknown watch descriptor.");
-            }
 
-            // In any case, don't process this event: it's either for an
-            // already removed entry, or for a completely unknown one.
-            return;
+        // wd will be -1 for IN_Q_OVERFLOW, which would trigger the wxFAIL_MSG
+        if (inevt.wd != -1)
+        {
+            if (it == m_watchMap.end())
+            {
+                // It's not in the map; check if was recently removed from it.
+                if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
+                {
+                    wxLogTrace(wxTRACE_FSWATCHER,
+                               "Got an event for stale wd %i", inevt.wd);
+                }
+                else
+                {
+                    // In theory we shouldn't reach here. In practice, some
+                    // events, e.g. IN_MODIFY, arrive just after the IN_IGNORED
+                    // so their wd has already been discarded. Warn about them.
+                    wxFileSystemWatcherEvent
+                        event
+                        (
+                            wxFSW_EVENT_WARNING,
+                            wxString::Format
+                            (
+                             _("Unexpected event for \"%s\": no "
+                               "matching watch descriptor."),
+                             inevt.len ? inevt.name : ""
+                            )
+                        );
+                    SendEvent(event);
+
+                }
+
+                // In any case, don't process this event: it's either for an
+                // already removed entry, or for an unknown one.
+                return;
+            }
         }
 
-        wxFSWatchEntry& watch = *(it->second);
         int nativeFlags = inevt.mask;
         int flags = Native2WatcherFlags(nativeFlags);
 
@@ -264,7 +283,29 @@ protected:
             wxString errMsg = GetErrorDescription(nativeFlags);
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
+            return;
         }
+
+        if (inevt.wd == -1)
+        {
+            // Although this is not supposed to happen, we seem to be getting
+            // occasional IN_ACCESS/IN_MODIFY events without valid watch value.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING,
+                    wxString::Format
+                    (
+                        _("Invalid inotify event for \"%s\""),
+                        inevt.len ? inevt.name : ""
+                    )
+                );
+            SendEvent(event);
+            return;
+        }
+
+        wxFSWatchEntry& watch = *(it->second);
+
         // Now IN_UNMOUNT. We must do so here, as it's not in the watch flags
         if (nativeFlags & IN_UNMOUNT)
         {
@@ -412,19 +453,24 @@ protected:
 
             // get watch entry for this event
             wxFSWatchEntryDescriptors::iterator wit = m_watchMap.find(inevt.wd);
-            wxCHECK_RET(wit != m_watchMap.end(),
-                             "Watch descriptor not present in the watch map!");
-
-            // Tell the owner, in case it's interested
-            // If there's a filespec, assume he's not
-            wxFSWatchEntry& watch = *(wit->second);
-            if ( watch.GetFilespec().empty() )
+            if (wit == m_watchMap.end())
             {
-                int flags = Native2WatcherFlags(inevt.mask);
-                wxFileName path = GetEventPath(watch, inevt);
+                wxLogTrace(wxTRACE_FSWATCHER,
+                            "Watch descriptor not present in the watch map!");
+            }
+            else
+            {
+                // Tell the owner, in case it's interested
+                // If there's a filespec, assume he's not
+                wxFSWatchEntry& watch = *(wit->second);
+                if ( watch.GetFilespec().empty() )
                 {
-                    wxFileSystemWatcherEvent event(flags, path, path);
-                    SendEvent(event);
+                    int flags = Native2WatcherFlags(inevt.mask);
+                    wxFileName path = GetEventPath(watch, inevt);
+                    {
+                        wxFileSystemWatcherEvent event(flags, path, path);
+                        SendEvent(event);
+                    }
                 }
             }
 

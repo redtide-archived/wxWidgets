@@ -274,26 +274,27 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
         case CBN_DROPDOWN:
             // remember the last selection, just as wxChoice does
             m_lastAcceptedSelection = GetCurrentSelection();
-            if ( m_lastAcceptedSelection == -1 )
-            {
-                // but unlike with wxChoice we may have no selection but still
-                // have some text and we should avoid erasing it if the drop
-                // down is cancelled (see #8474)
-                m_lastAcceptedSelection = wxID_NONE;
-            }
             {
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
             break;
+
         case CBN_CLOSEUP:
+            // Do the same thing as in wxChoice but using different event type.
+            if ( m_pendingSelection != wxID_NONE )
+            {
+                SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
+                m_pendingSelection = wxID_NONE;
+            }
             {
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
             break;
+
         case CBN_SELENDOK:
 #ifndef __SMARTPHONE__
             // we need to reset this to prevent the selection from being undone
@@ -311,16 +312,9 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // could get a wrong value when it calls our GetValue()
             ::SetWindowText(GetHwnd(), value.t_str());
 
-            {
-                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
-                event.SetInt(sel);
-                event.SetString(value);
-                InitCommandEventWithItems(event, sel);
+            SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
 
-                ProcessCommand(event);
-            }
-
-            // fall through: for compability with wxGTK, also send the text
+            // fall through: for compatibility with wxGTK, also send the text
             // update event when the selection changes (this also seems more
             // logical as the text does change)
 
