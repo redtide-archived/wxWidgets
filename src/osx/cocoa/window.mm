@@ -1438,7 +1438,10 @@ void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_c
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
+    {
+        wxpeer->OSXSimulateFocusEvents();
         wxpeer->OSXHandleClicked(0);
+    }
 }
 
 void wxWidgetCocoaImpl::controlDoubleAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
@@ -2540,7 +2543,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
-    else // !receivedFocuss
+    else // !receivedFocus
     {
 #if wxUSE_CARET
         if ( thisWindow->GetCaret() )
