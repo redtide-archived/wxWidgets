@@ -290,21 +290,26 @@ private:
 
         renderer.DrawGripper(this, dc, wxRect(x2, y, 10, 30), wxVERTICAL, m_flags);
 
-        renderer.DrawToolButton( this, dc, wxRect(x2+12, y+4, 22, 22), false, m_flags );
+        renderer.DrawToolButton(this, dc, wxRect(x2+12, y+2, 26, 26), "",
+                                wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_BUTTON),
+                                wxHORIZONTAL, false, m_flags);
 
-        renderer.DrawToolSeparator( this, dc, wxRect(x2+38, y+4, 4, 22), wxVERTICAL, 0, m_flags );
+        renderer.DrawToolSeparator(this, dc, wxRect(x2+38, y+3, 4, 24), wxVERTICAL, 0, m_flags);
 
-        renderer.DrawToolButton( this, dc, wxRect(x2+46, y+4, 28, 22), true, m_flags );
-        renderer.DrawToolDropButton( this, dc, wxRect(x2+74, y+4, 18, 22), m_flags );
+        renderer.DrawToolButton(this, dc, wxRect(x2+46, y+2, 28, 26), "",
+                                wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_BUTTON),
+                                wxHORIZONTAL, true, m_flags);
 
-        renderer.DrawToolMenuButton( this, dc, wxRect(x2+96, y+4, 44, 22), m_flags );
+        renderer.DrawToolDropButton(this, dc, wxRect(x2+74, y+2, 16, 26), m_flags);
+
+        renderer.DrawToolMenuButton(this, dc, wxRect(x2+94, y+2, 44, 26), m_flags);
 
         y += lineHeight + 20;
 
         dc.DrawText("DrawTab()", x1, y);
 
         renderer.DrawTab(this, dc, wxRect(x2, y, 120, 30), wxS("A tab"),
-                         wxTOP, wxNullBitmap, m_flags);
+                         wxNullBitmap, wxTOP, m_flags);
 
         y += lineHeight + 20;
 #endif // defined(__WXGTK__) || defined(__WXMSW__)

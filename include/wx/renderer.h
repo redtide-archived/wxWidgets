@@ -322,18 +322,21 @@ public:
                                     int flags = 0) = 0;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-// TODO: make these functions to work with other platforms and
-//       implement them in generic renderer
+// TODO: make these functions to work with other platforms
+
 #if defined(__WXGTK__) || defined(__WXMSW__)
-    virtual void DrawToolBar(wxWindow* win,
+    virtual void DrawToolBar(wxWindow* window,
                              wxDC& dc,
                              const wxRect& rect,
                              wxOrientation orient = wxHORIZONTAL,
                              int flags = 0) = 0;
 
-    virtual void DrawToolButton(wxWindow* win,
+    virtual void DrawToolButton(wxWindow* window,
                                 wxDC& dc,
                                 const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap = wxNullBitmap,
+                                wxOrientation orient = wxHORIZONTAL,
                                 bool hasDropdown = false,
                                 int flags = 0) = 0;
 
@@ -364,8 +367,8 @@ public:
                          wxDC& dc,
                          const wxRect& rect,
                          const wxString& label,
-                         wxDirection direction = wxTOP,
                          const wxBitmap& bitmap = wxNullBitmap,
+                         wxDirection direction = wxTOP,
                          int flags = 0) = 0;
 
 #endif // defined(__WXGTK__) || defined(__WXMSW__)
@@ -549,50 +552,57 @@ public:
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
 #if defined(__WXGTK__) || defined(__WXMSW__)
-    virtual void DrawToolBar(wxWindow* window, wxDC& dc, const wxRect& rect,
+    virtual void DrawToolBar(wxWindow* win, wxDC& dc, const wxRect& rect,
                              wxOrientation orient = wxHORIZONTAL, int flags = 0)
     {
-        m_rendererNative.DrawToolBar( window, dc, rect, orient, flags );
+        m_rendererNative.DrawToolBar( win, dc, rect, orient, flags );
     }
 
-    virtual void DrawToolButton(wxWindow *window, wxDC& dc, const wxRect& rect,
+    virtual void DrawToolButton(wxWindow *win, wxDC& dc, const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap = wxNullBitmap,
+                                wxOrientation orient = wxHORIZONTAL,
                                 bool hasDropdown = false, int flags = 0)
     {
-        m_rendererNative.DrawToolButton( window, dc, rect, hasDropdown, flags );
+        m_rendererNative.DrawToolButton
+        (
+            win, dc, rect, label, bitmap, orient, hasDropdown, flags
+        );
     }
 
-    virtual void DrawToolDropButton(wxWindow *window, wxDC& dc,
+    virtual void DrawToolDropButton(wxWindow *win, wxDC& dc,
                                     const wxRect& rect, int flags = 0)
     {
-        m_rendererNative.DrawToolDropButton( window, dc, rect, flags );
+        m_rendererNative.DrawToolDropButton( win, dc, rect, flags );
     }
 
-    virtual void DrawToolMenuButton(wxWindow *window, wxDC& dc,
+    virtual void DrawToolMenuButton(wxWindow *win, wxDC& dc,
                                     const wxRect& rect, int flags = 0)
     {
-        m_rendererNative.DrawToolMenuButton( window, dc, rect, flags );
+        m_rendererNative.DrawToolMenuButton( win, dc, rect, flags );
     }
 
-    virtual void DrawToolSeparator(wxWindow *window, wxDC& dc, const wxRect& rect,
+    virtual void DrawToolSeparator(wxWindow *win, wxDC& dc, const wxRect& rect,
                                    wxOrientation orient = wxHORIZONTAL,
                                    int spacerWidth = 0, int flags = 0)
     {
-        m_rendererNative.DrawToolSeparator( window, dc, rect, orient,
+        m_rendererNative.DrawToolSeparator( win, dc, rect, orient,
                                             spacerWidth, flags);
     }
 
-    virtual void DrawGripper(wxWindow *window, wxDC& dc, const wxRect& rect,
+    virtual void DrawGripper(wxWindow *win, wxDC& dc, const wxRect& rect,
                              wxOrientation orient = wxHORIZONTAL,
                              int flags = 0)
     {
-        m_rendererNative.DrawGripper( window, dc, rect, orient, flags);
+        m_rendererNative.DrawGripper( win, dc, rect, orient, flags);
     }
 
-    virtual void DrawTab(wxWindow *window, wxDC& dc, const wxRect& rect,
-                         const wxString& label, wxDirection direction = wxTOP,
-                         const wxBitmap& bitmap = wxNullBitmap, int flags = 0)
+    virtual void DrawTab(wxWindow *win, wxDC& dc, const wxRect& rect,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                          wxDirection direction = wxTOP, int flags = 0)
     {
-        m_rendererNative.DrawTab( window, dc, rect, label, direction, bitmap, flags);
+        m_rendererNative.DrawTab( win, dc, rect, label, bitmap, direction, flags);
     }
 
 #endif // defined(__WXGTK__) || defined(__WXMSW__)

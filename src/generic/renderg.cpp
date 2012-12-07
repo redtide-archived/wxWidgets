@@ -131,7 +131,6 @@ public:
                                     int flags = 0);
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-#if defined(__WXGTK__) || defined(__WXMSW__)
     virtual void DrawToolBar(wxWindow *window,
                              wxDC& dc,
                              const wxRect& rect,
@@ -141,6 +140,9 @@ public:
     virtual void DrawToolButton(wxWindow *window,
                                 wxDC& dc,
                                 const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap = wxNullBitmap,
+                                wxOrientation orient = wxHORIZONTAL,
                                 bool hasDropdown = false,
                                 int flags = 0);
 
@@ -171,11 +173,9 @@ public:
                          wxDC& dc,
                          const wxRect& rect,
                          const wxString& label,
-                         wxDirection direction = wxTOP,
                          const wxBitmap& bitmap = wxNullBitmap,
+                         wxDirection direction = wxTOP,
                          int flags = 0);
-
-#endif // defined(__WXGTK__) || defined(__WXMSW__)
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -521,8 +521,6 @@ static wxColour GetBaseColour()
     return baseColour;
 }
 
-#if defined(__WXGTK__) || defined(__WXMSW__)
-
 void wxRendererGeneric::DrawToolBar(wxWindow * WXUNUSED(window),
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -535,11 +533,14 @@ void wxRendererGeneric::DrawToolBar(wxWindow * WXUNUSED(window),
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 
-void wxRendererGeneric::DrawToolButton(wxWindow * WXUNUSED(window),
-                                       wxDC& dc,
-                                       const wxRect& rect,
-                                       bool WXUNUSED(hasDropdown),
-                                       int flags)
+void wxRendererGeneric::DrawToolButton( wxWindow * WXUNUSED(window),
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        const wxString& WXUNUSED(label),
+                                        const wxBitmap& WXUNUSED(bitmap),
+                                        wxOrientation WXUNUSED(orient),
+                                        bool WXUNUSED(hasDropdown),
+                                        int flags)
 {
     if (!(flags & wxCONTROL_DISABLED))
     {
@@ -571,7 +572,7 @@ void wxRendererGeneric::DrawToolDropButton(wxWindow *window,
                                            const wxRect& rect,
                                            int flags)
 {
-    DrawToolButton(window, dc, rect, true, flags);
+    DrawToolButton(window, dc, rect, wxString(), wxBitmap(), wxHORIZONTAL, true, flags);
     DrawDropArrow(window, dc, rect, flags);
 }
 
@@ -580,7 +581,7 @@ void wxRendererGeneric::DrawToolMenuButton(wxWindow * window,
                                            const wxRect& rect,
                                            int flags)
 {
-    DrawToolButton(window, dc, rect, false, flags);
+    DrawToolButton(window, dc, rect, wxString(), wxBitmap(), wxHORIZONTAL, false, flags);
 
     wxRect arrowRect
     (
@@ -676,8 +677,8 @@ void wxRendererGeneric::DrawTab(wxWindow * WXUNUSED(window),
                                 wxDC& dc,
                                 const wxRect& rect,
                                 const wxString& WXUNUSED(label),
-                                wxDirection direction,
                                 const wxBitmap& WXUNUSED(bitmap),
+                                wxDirection direction,
                                 int flags)
 {
     wxPoint  borderPoints[6];
@@ -802,8 +803,6 @@ void wxRendererGeneric::DrawTab(wxWindow * WXUNUSED(window),
                     borderPoints[5].x,     borderPoints[5].y);
     }
 }
-
-#endif // defined(__WXGTK__) || defined(__WXMSW__)
 
 // draw the plus or minus sign
 void

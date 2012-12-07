@@ -218,7 +218,13 @@ public:
 class wxRendererMSW : public wxRendererMSWBase
 {
 public:
-    wxRendererMSW() { }
+    wxRendererMSW()
+    {
+        m_penBlack     = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW));
+        m_penDarkGrey  = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
+        m_penLightGrey = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+        m_penHighlight = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT));
+    }
 
     static wxRendererNative& Get();
 
@@ -240,6 +246,23 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawButtonLabel(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& image,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                                 int indexAccel = -1,
+                                 wxRect *rectBounds = NULL);
+
+    virtual void DrawTab(wxWindow *win,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         const wxString& label,
+                         const wxBitmap& bitmap = wxNullBitmap,
+                         wxDirection direction = wxTOP,
+                         int flags = 0);
+
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
                               const wxRect& rect,
@@ -258,6 +281,38 @@ public:
                                     const wxRect& rect,
                                     wxTitleBarButton button,
                                     int flags = 0);
+
+    virtual void DrawToolBar(wxWindow *window,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             wxOrientation orient = wxHORIZONTAL,
+                             int flags = 0);
+
+    virtual void DrawToolButton(wxWindow *window,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap = wxNullBitmap,
+                                wxOrientation orient = wxHORIZONTAL,
+                                bool hasDropdown = false,
+                                int flags = 0);
+
+    virtual void DrawToolDropButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual void DrawToolMenuButton(wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+
+    virtual void DrawToolSeparator( wxWindow *window,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxOrientation orient = wxHORIZONTAL,
+                                    int spacerWidth = 0,
+                                    int flags = 0 );
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
@@ -284,6 +339,37 @@ private:
     {
         DoDrawFrameControl(DFC_BUTTON, kind, win, dc, rect, flags);
     }
+
+    void DoDrawToolButton(wxDC& dc,
+                          const wxRect& rect,
+                          int flags);
+
+    void DrawBorder(wxDC& dc,
+                    wxBorder border,
+                    const wxRect& rect,
+                    int flags = 0);
+
+    void DrawShadedRect(wxDC& dc,
+                        wxRect *rect,
+                        const wxPen& pen1,
+                        const wxPen& pen2);
+
+    void DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen);
+
+    void DrawRaisedBorder(wxDC& dc, wxRect *rect);
+    void DrawSunkenBorder(wxDC& dc, wxRect *rect);
+    void DrawAntiSunkenBorder(wxDC& dc, wxRect *rect);
+    void DrawBoxBorder(wxDC& dc, wxRect *rect);
+    void DrawStaticBorder(wxDC& dc, wxRect *rect);
+
+    void DrawHorizontalLine(wxDC& dc, wxCoord y, wxCoord x1, wxCoord x2);
+    void DrawVerticalLine(wxDC& dc, wxCoord x, wxCoord y1, wxCoord y2);
+
+    // GDI objects we often use
+    wxPen m_penBlack,
+          m_penDarkGrey,
+          m_penLightGrey,
+          m_penHighlight;
 
     wxDECLARE_NO_COPY_CLASS(wxRendererMSW);
 };
@@ -373,6 +459,9 @@ public:
     virtual void DrawToolButton(wxWindow *window,
                                 wxDC& dc,
                                 const wxRect& rect,
+                                const wxString& label,
+                                const wxBitmap& bitmap = wxNullBitmap,
+                                wxOrientation orient = wxHORIZONTAL,
                                 bool hasDropdown = false,
                                 int flags = 0);
 
@@ -403,8 +492,8 @@ public:
                          wxDC& dc,
                          const wxRect& rect,
                          const wxString& label,
-                         wxDirection direction = wxTOP,
                          const wxBitmap& bitmap = wxNullBitmap,
+                         wxDirection direction = wxTOP,
                          int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
@@ -426,7 +515,7 @@ private:
                         const wxRect& rect,
                         int flags);
 
-    // Common part of DrawToolButton(), DrawToolDropButton() and DrawToolMenuButton()
+    // Common part of all DrawXXXToolButton() functions
     void DoDrawToolButton(HTHEME htheme,
                           int part,
                           wxDC& dc,
@@ -535,6 +624,140 @@ wxRendererNative& wxRendererMSW::Get()
 }
 
 void
+wxRendererMSW::DrawShadedRect(wxDC& dc,
+                              wxRect *rect,
+                              const wxPen& pen1,
+                              const wxPen& pen2)
+{
+    // draw the rectangle
+    dc.SetPen(pen1);
+    dc.DrawLine(rect->GetLeft(), rect->GetTop(),
+                rect->GetLeft(), rect->GetBottom());
+    dc.DrawLine(rect->GetLeft() + 1, rect->GetTop(),
+                rect->GetRight(), rect->GetTop());
+    dc.SetPen(pen2);
+    dc.DrawLine(rect->GetRight(), rect->GetTop(),
+                rect->GetRight(), rect->GetBottom());
+    dc.DrawLine(rect->GetLeft(), rect->GetBottom(),
+                rect->GetRight() + 1, rect->GetBottom());
+
+    // adjust the rect
+    rect->Inflate(-1);
+}
+
+void
+wxRendererMSW::DrawRect(wxDC& dc, wxRect *rect, const wxPen& pen)
+{
+    // draw
+    dc.SetPen(pen);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.DrawRectangle(*rect);
+
+    // adjust the rect
+    rect->Inflate(-1);
+}
+
+void
+wxRendererMSW::DrawRaisedBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penHighlight, m_penBlack);
+    DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
+}
+
+void
+wxRendererMSW::DrawSunkenBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, rect, m_penBlack, m_penLightGrey);
+}
+
+void
+wxRendererMSW::DrawAntiSunkenBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penLightGrey, m_penBlack);
+    DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+}
+
+void
+wxRendererMSW::DrawBoxBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+}
+
+void
+wxRendererMSW::DrawStaticBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+}
+
+void
+wxRendererMSW::DrawBorder(wxDC& dc,
+                         wxBorder border,
+                         const wxRect& rectTotal,
+                         int WXUNUSED(flags))
+{
+    wxRect rect = rectTotal;
+
+    switch ( border )
+    {
+        case wxBORDER_SUNKEN:
+        case wxBORDER_THEME:
+            DrawSunkenBorder(dc, &rect);
+            break;
+
+        // wxBORDER_DOUBLE and wxBORDER_THEME are currently the same value.
+#if 0
+        case wxBORDER_DOUBLE:
+            DrawAntiSunkenBorder(dc, &rect);
+            DrawExtraBorder(dc, &rect);
+            break;
+#endif
+        case wxBORDER_STATIC:
+            DrawStaticBorder(dc, &rect);
+            break;
+
+        case wxBORDER_RAISED:
+            DrawRaisedBorder(dc, &rect);
+            break;
+
+        case wxBORDER_SIMPLE:
+            DrawRect(dc, &rect, wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW));
+            break;
+
+        default:
+            wxFAIL_MSG(wxT("unknown border type"));
+            // fall through
+
+        case wxBORDER_DEFAULT:
+        case wxBORDER_NONE:
+            break;
+    }
+}
+
+void
+wxRendererMSW::DrawHorizontalLine(wxDC& dc, wxCoord y, wxCoord x1, wxCoord x2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x1, y, x2 + 1, y);
+
+    dc.SetPen(m_penHighlight);
+    y++;
+    dc.DrawLine(x1, y, x2 + 1, y);
+}
+
+void
+wxRendererMSW::DrawVerticalLine(wxDC& dc, wxCoord x, wxCoord y1, wxCoord y2)
+{
+    dc.SetPen(m_penDarkGrey);
+    dc.DrawLine(x, y1, x, y2 + 1);
+
+    dc.SetPen(m_penHighlight);
+    x++;
+    dc.DrawLine(x, y1, x, y2 + 1);
+}
+
+void
 wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
                                       wxDC& dc,
                                       const wxRect& rect,
@@ -609,6 +832,363 @@ wxRendererMSW::DrawPushButton(wxWindow *win,
     }
 
     DoDrawButton(DFCS_BUTTONPUSH, win, dc, rect, flags);
+}
+
+void
+wxRendererMSW::DrawButtonLabel(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& image,
+                               const wxRect& rect,
+                               int flags,
+                               int alignment,
+                               int indexAccel,
+                               wxRect *rectBounds)
+{
+    wxDCTextColourChanger clrChanger(dc);
+
+    wxRect rectLabel = rect;
+    if ( !label.empty() && (flags & wxCONTROL_DISABLED) )
+    {
+        if ( flags & wxCONTROL_PRESSED )
+        {
+            // shift the label if a button is pressed
+            rectLabel.Offset(1, 1);
+        }
+
+        // draw shadow of the text
+        clrChanger.Set(wxSystemSettings::GetColour( wxSYS_COLOUR_3DHIGHLIGHT ));
+        wxRect rectShadow = rect;
+        rectShadow.Offset(1, 1);
+        dc.DrawLabel(label, rectShadow, alignment, indexAccel);
+
+        // make the main label text grey
+        clrChanger.Set(wxSystemSettings::GetColour( wxSYS_COLOUR_3DSHADOW ));
+
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            // leave enough space for the focus rect
+            rectLabel.Inflate(-2);
+        }
+    }
+
+    dc.DrawLabel(label, image, rectLabel, alignment, indexAccel, rectBounds);
+
+    if ( !label.empty() && (flags & wxCONTROL_FOCUSED) )
+    {
+        rectLabel.Inflate(-1);
+
+        DrawFocusRect(NULL, dc, rectLabel);
+    }
+}
+
+void
+wxRendererMSW::DrawTab(wxWindow * WXUNUSED(win),
+                       wxDC& dc,
+                       const wxRect& rect,
+                       const wxString& label,
+                       const wxBitmap& bitmap,
+                       wxDirection direction,
+                       int flags)
+{
+    #define SELECT_FOR_VERTICAL(X,Y) ( isVertical ? Y : X )
+    #define REVERSE_FOR_VERTICAL(X,Y) \
+        SELECT_FOR_VERTICAL(X,Y)      \
+        ,                             \
+        SELECT_FOR_VERTICAL(Y,X)
+
+    wxRect r = rect;
+
+    bool isVertical = ( direction == wxLEFT ) || ( direction == wxRIGHT );
+
+    // the current tab is drawn indented (to the top for default case) and
+    // bigger than the other ones
+    const wxSize indent = wxSize(2, 2);
+
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        r.Inflate( SELECT_FOR_VERTICAL( indent.x , 0),
+                   SELECT_FOR_VERTICAL( 0, indent.y ));
+
+        switch ( direction )
+        {
+            default:
+                wxFAIL_MSG(wxT("invaild notebook tab orientation"));
+                // fall through
+            case wxTOP:
+                r.y -= indent.y;
+                // fall through
+            case wxBOTTOM:
+                r.height += indent.y;
+                break;
+            case wxLEFT:
+                r.x -= indent.x;
+                // fall through
+            case wxRIGHT:
+                r.width += indent.x;
+                break;
+        }
+    }
+
+    // draw the text, image and the focus around them (if necessary)
+    wxRect rectLabel( REVERSE_FOR_VERTICAL(r.x, r.y),
+                      REVERSE_FOR_VERTICAL(r.width, r.height) );
+    rectLabel.Deflate(1, 1);
+
+    if ( isVertical )
+    {
+        // draw it horizontally into memory and rotate for screen
+        wxMemoryDC dcMem;
+        wxBitmap bmpRotated, bmpMem( rectLabel.x + rectLabel.width,
+                                     rectLabel.y + rectLabel.height );
+        dcMem.SelectObject(bmpMem);
+        dcMem.SetBackground(dc.GetBackground());
+        dcMem.SetFont(dc.GetFont());
+        dcMem.SetTextForeground(dc.GetTextForeground());
+        dcMem.Clear();
+
+        bmpRotated =
+#if wxUSE_IMAGE
+        wxBitmap( wxImage(bitmap.ConvertToImage()).Rotate90(direction==wxLEFT) );
+#else
+        bitmap;
+#endif // wxUSE_IMAGE
+
+        DrawButtonLabel(dcMem, label, bmpRotated, rectLabel, 
+                        flags, wxALIGN_CENTRE);
+        dcMem.SelectObject(wxNullBitmap);
+
+        bmpMem =
+#if wxUSE_IMAGE
+        wxBitmap( wxImage(bmpMem.ConvertToImage()).Rotate90(direction==wxRIGHT) );
+#else
+        bmpMem.GetSubBitmap(rectLabel);
+#endif // wxUSE_IMAGE
+
+        dc.DrawBitmap(bmpMem, rectLabel.y, rectLabel.x, false);
+    }
+    else
+    {
+        DrawButtonLabel(dc, label, bitmap, rectLabel, flags, wxALIGN_CENTRE);
+    }
+
+    // now draw the tab border itself (maybe use DrawRoundedRectangle()?)
+    static const wxCoord CUTOFF = 2; // radius of the rounded corner
+    wxCoord x  = SELECT_FOR_VERTICAL(r.x, r.y),
+            y  = SELECT_FOR_VERTICAL(r.y, r.x),
+            x2 = SELECT_FOR_VERTICAL(r.GetRight(), r.GetBottom()),
+            y2 = SELECT_FOR_VERTICAL(r.GetBottom(), r.GetRight());
+
+    // FIXME: all this code will break if the tab indent or the border width,
+    //        it is tied to the fact that both of them are equal to 2
+    switch ( direction )
+    {
+        default:
+            // default is top
+        case wxLEFT:
+            // left orientation looks like top but IsVertical makes x and y reversed
+        case wxTOP:
+            // top is not vertical so use coordinates in written order
+            dc.SetPen(m_penHighlight);
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x, y2),
+                        REVERSE_FOR_VERTICAL(x, y + CUTOFF));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x, y + CUTOFF),
+                        REVERSE_FOR_VERTICAL(x + CUTOFF, y));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x + CUTOFF, y),
+                        REVERSE_FOR_VERTICAL(x2 - CUTOFF + 1, y));
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2, y2),
+                        REVERSE_FOR_VERTICAL(x2, y + CUTOFF));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2, y + CUTOFF),
+                        REVERSE_FOR_VERTICAL(x2 - CUTOFF, y));
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2 - 1, y2),
+                        REVERSE_FOR_VERTICAL(x2 - 1, y + CUTOFF - 1));
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the border below this tab
+                dc.DrawLine(REVERSE_FOR_VERTICAL(x + 1, y2 + 1),
+                            REVERSE_FOR_VERTICAL(x2 - 1, y2 + 1));
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(REVERSE_FOR_VERTICAL(x + 1, y + CUTOFF + 1),
+                            REVERSE_FOR_VERTICAL(x + 1, y2 + 1));
+            }
+            break;
+
+        case wxRIGHT:
+            // right orientation looks like bottom but IsVertical makes x and y reversed
+        case wxBOTTOM:
+            // bottom is not vertical so use coordinates in written order
+            dc.SetPen(m_penHighlight);
+            // we need to continue one pixel further to overwrite the corner of
+            // the border for the selected tab
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x, y - (flags & wxCONTROL_SELECTED ? 1 : 0)),
+                        REVERSE_FOR_VERTICAL(x, y2 - CUTOFF));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x, y2 - CUTOFF),
+                        REVERSE_FOR_VERTICAL(x + CUTOFF, y2));
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x + CUTOFF, y2),
+                        REVERSE_FOR_VERTICAL(x2 - CUTOFF + 1, y2));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2, y),
+                        REVERSE_FOR_VERTICAL(x2, y2 - CUTOFF));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2, y2 - CUTOFF),
+                        REVERSE_FOR_VERTICAL(x2 - CUTOFF, y2));
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x + CUTOFF, y2 - 1),
+                        REVERSE_FOR_VERTICAL(x2 - CUTOFF + 1, y2 - 1));
+            dc.DrawLine(REVERSE_FOR_VERTICAL(x2 - 1, y),
+                        REVERSE_FOR_VERTICAL(x2 - 1, y2 - CUTOFF + 1));
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the (double!) border above this tab
+                dc.DrawLine(REVERSE_FOR_VERTICAL(x + 1, y - 1),
+                            REVERSE_FOR_VERTICAL(x2 - 1, y - 1));
+                dc.DrawLine(REVERSE_FOR_VERTICAL(x + 1, y - 2),
+                            REVERSE_FOR_VERTICAL(x2 - 1, y - 2));
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(REVERSE_FOR_VERTICAL(x + 1, y2 - CUTOFF),
+                            REVERSE_FOR_VERTICAL(x + 1, y - 1));
+            }
+            break;
+    }
+
+    #undef SELECT_FOR_VERTICAL
+    #undef REVERSE_FOR_VERTICAL
+}
+
+void
+wxRendererMSW::DrawToolBar(wxWindow * WXUNUSED(window),
+                           wxDC& dc,
+                           const wxRect& rect,
+                           wxOrientation orient,
+                           int WXUNUSED(flags))
+{
+    if(orient == wxHORIZONTAL)
+    {
+        DrawHorizontalLine(dc, rect.GetY(), rect.GetX(), rect.GetRight());
+        DrawHorizontalLine(dc, rect.GetY() + rect.GetHeight() -1,
+                                rect.GetX(), rect.GetRight());
+    }
+    else
+    {
+        DrawVerticalLine(dc, rect.x, rect.y, rect.GetBottom());
+    }
+}
+
+void
+wxRendererMSW::DoDrawToolButton(wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
+{
+    wxPoint upperLeft(rect.x, rect.y);
+    wxPoint downLeft(rect.x, rect.y + rect.height - 1);
+    wxPoint upperRight(rect.x + rect.width -1, rect.y);
+
+    if ( flags & wxCONTROL_PRESSED )
+    {
+        dc.SetPen(m_penHighlight);
+        dc.DrawRectangle(rect);
+        dc.SetPen(m_penDarkGrey);
+
+        dc.DrawLine(upperLeft, downLeft);
+        dc.DrawLine(upperLeft, upperRight);
+    }
+    else if ( flags & wxCONTROL_CURRENT )
+    {
+        dc.SetPen(m_penDarkGrey);
+        dc.DrawRectangle(rect);
+        dc.SetPen(m_penHighlight);
+
+        dc.DrawLine(upperLeft, downLeft);
+        dc.DrawLine(upperLeft, upperRight);
+    }
+}
+
+void
+wxRendererMSW::DrawToolButton(wxWindow *WXUNUSED(window),
+                              wxDC& dc,
+                              const wxRect& rect,
+                              const wxString& label,
+                              const wxBitmap& bitmap,
+                              wxOrientation orient,
+                              bool WXUNUSED(hasDropdown),
+                              int flags)
+{
+    DoDrawToolButton(dc, rect, flags);
+
+    if(!label.empty())
+    {
+        if(orient == wxHORIZONTAL)
+            dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
+        else
+            dc.DrawLabel(label, bitmap, rect, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL);
+    }
+    else
+    {
+        int x = (rect.GetLeft() + rect.GetRight() - bitmap.GetWidth()) / 2;
+        int y = (rect.GetTop() + rect.GetBottom() + 1 - bitmap.GetHeight()) / 2;
+
+        if ( flags & wxCONTROL_PRESSED )
+            x++;
+
+        dc.DrawBitmap(bitmap, x, y, bitmap.GetMask() != NULL);
+    }
+}
+
+void wxRendererMSW::DrawToolDropButton( wxWindow *window,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags )
+{
+    DoDrawToolButton(dc, rect, flags);
+    DrawDropArrow(window, dc, rect, flags);
+}
+
+void wxRendererMSW::DrawToolMenuButton( wxWindow *window,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags )
+{
+    DoDrawToolButton(dc, rect, flags);
+
+    wxRect arrowRect
+    (
+        rect.GetX() + (rect.GetWidth()  /3 *2),
+        rect.GetY() + (rect.GetHeight() /3),
+        rect.GetWidth()  / 3,
+        rect.GetHeight() / 3
+    );
+
+    DrawDropArrow(window, dc, rect, flags);
+}
+
+void
+wxRendererMSW::DrawToolSeparator(wxWindow *WXUNUSED(window),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int WXUNUSED(spacerWidth),
+                                 int WXUNUSED(flags))
+{
+    if(orient == wxHORIZONTAL)
+    {
+        DrawHorizontalLine(dc, rect.y + rect.height/2, rect.x, rect.GetRight());
+    }
+    else
+    {
+        DrawVerticalLine(dc, rect.x + rect.width/2, rect.y, rect.GetBottom());
+    }
 }
 
 void
@@ -1026,8 +1606,11 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
     dc.DrawRectangle(rect);
 }
 
-void wxRendererXP::DrawToolBar(wxWindow *window, wxDC& dc, const wxRect& rect,
-                               wxOrientation WXUNUSED(orient), int WXUNUSED(flags))
+void wxRendererXP::DrawToolBar(wxWindow *window,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               wxOrientation WXUNUSED(orient),
+                               int WXUNUSED(flags))
 {
     wxUxThemeHandle hTheme(window, L"TOOLBAR");
     if ( !hTheme )
@@ -1042,8 +1625,14 @@ void wxRendererXP::DrawToolBar(wxWindow *window, wxDC& dc, const wxRect& rect,
                                                 &rc, NULL);
 }
 
-void wxRendererXP::DrawToolButton(wxWindow *window, wxDC& dc, const wxRect& rect,
-                                  bool hasDropdown, int flags)
+void wxRendererXP::DrawToolButton(wxWindow *window,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  const wxString& WXUNUSED(label),
+                                  const wxBitmap& WXUNUSED(bitmap),
+                                  wxOrientation WXUNUSED(orient),
+                                  bool hasDropdown,
+                                  int flags)
 {
     wxUxThemeHandle hTheme(window, L"TOOLBAR");
     if ( !hTheme )
@@ -1054,8 +1643,10 @@ void wxRendererXP::DrawToolButton(wxWindow *window, wxDC& dc, const wxRect& rect
     DoDrawToolButton(hTheme, part, dc, rect, flags);
 }
 
-void wxRendererXP::DrawToolDropButton(wxWindow *window, wxDC& dc,
-                                      const wxRect& rect, int flags)
+void wxRendererXP::DrawToolDropButton(wxWindow *window,
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
 {
     wxUxThemeHandle hTheme(window, L"TOOLBAR");
     if ( !hTheme )
@@ -1064,8 +1655,10 @@ void wxRendererXP::DrawToolDropButton(wxWindow *window, wxDC& dc,
     DoDrawToolButton(hTheme, TP_SPLITBUTTONDROPDOWN, dc, rect, flags);
 }
 
-void wxRendererXP::DrawToolMenuButton(wxWindow *window, wxDC& dc,
-                                      const wxRect& rect, int flags)
+void wxRendererXP::DrawToolMenuButton(wxWindow *window,
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
 {
     wxUxThemeHandle hTheme(window, L"TOOLBAR");
     if ( !hTheme )
@@ -1074,9 +1667,12 @@ void wxRendererXP::DrawToolMenuButton(wxWindow *window, wxDC& dc,
     DoDrawToolButton(hTheme, TP_DROPDOWNBUTTON, dc, rect, flags);
 }
 
-void wxRendererXP::DrawToolSeparator(wxWindow *window, wxDC& dc,
-                                     const wxRect& rect, wxOrientation orient,
-                                     int WXUNUSED(spacerWidth), int flags)
+void wxRendererXP::DrawToolSeparator(wxWindow *window,
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     wxOrientation orient,
+                                     int WXUNUSED(spacerWidth),
+                                     int flags)
 {
     wxUxThemeHandle hTheme(window, L"TOOLBAR");
     if ( !hTheme )
@@ -1109,9 +1705,13 @@ void wxRendererXP::DrawGripper(wxWindow *window, wxDC& dc, const wxRect& rect,
                                                 &rc, NULL);
 }
 
-void wxRendererXP::DrawTab(wxWindow *window, wxDC& dc, const wxRect& rect,
-                           const wxString& label, wxDirection direction,
-                           const wxBitmap& bitmap, int flags)
+void wxRendererXP::DrawTab(wxWindow *window,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           const wxString& WXUNUSED(label),
+                           const wxBitmap& WXUNUSED(bitmap),
+                           wxDirection WXUNUSED(direction),
+                           int flags)
 {
     wxUxThemeHandle hTheme(window, L"TAB");
     if ( !hTheme )
