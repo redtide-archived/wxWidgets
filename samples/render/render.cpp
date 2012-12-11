@@ -179,7 +179,7 @@ private:
     {
         wxPaintDC dc(this);
 
-        wxRendererNative& renderer = wxRendererNative::Get();
+        wxRendererNative& renderer = wxRendererNative::GetGeneric();
 
         int x1 = 10,    // text offset
             x2 = 300,   // drawing offset
@@ -286,25 +286,25 @@ private:
 #if defined(__WXGTK__) || defined(__WXMSW__)
         dc.DrawText("DrawToolBar() + DrawGripper() +\nDrawToolSeparator() + DrawToolButton()", x1, y);
 
-        renderer.DrawToolBar(this, dc, wxRect(x2, y, 150, 30), wxHORIZONTAL, m_flags);
+        renderer.DrawToolBar(this, dc, wxRect(x2, y, 150, 40), wxHORIZONTAL, m_flags);
 
-        renderer.DrawGripper(this, dc, wxRect(x2, y, 10, 30), wxVERTICAL, m_flags);
+        renderer.DrawGripper(this, dc, wxRect(x2, y, 10, 36), wxVERTICAL, m_flags);
 
-        renderer.DrawToolButton(this, dc, wxRect(x2+12, y+2, 26, 26), "",
+        renderer.DrawToolButton(this, dc, wxRect(x2+12, y+2, 32, 36), "",
                                 wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_BUTTON),
                                 wxHORIZONTAL, false, m_flags);
 
-        renderer.DrawToolSeparator(this, dc, wxRect(x2+38, y+3, 4, 24), wxVERTICAL, 0, m_flags);
-
-        renderer.DrawToolButton(this, dc, wxRect(x2+46, y+2, 28, 26), "",
+        renderer.DrawToolButton(this, dc, wxRect(x2+44, y+2, 32, 36), "",
                                 wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_BUTTON),
                                 wxHORIZONTAL, true, m_flags);
 
-        renderer.DrawToolDropButton(this, dc, wxRect(x2+74, y+2, 16, 26), m_flags);
+        renderer.DrawToolDropButton(this, dc, wxRect(x2+76, y+2, 14, 36), m_flags);
 
-        renderer.DrawToolMenuButton(this, dc, wxRect(x2+94, y+2, 44, 26), m_flags);
+        renderer.DrawToolSeparator(this, dc, wxRect(x2+94, y+4, 2, 32), wxVERTICAL, 0, m_flags);
 
-        y += lineHeight + 20;
+        renderer.DrawToolMenuButton(this, dc, wxRect(x2+100, y+2, 46, 36), m_flags);
+
+        y += lineHeight + 40;
 
         dc.DrawText("DrawTab()", x1, y);
 
