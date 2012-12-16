@@ -1,76 +1,96 @@
------------------------------------------------------------------------------
--- Name:        wxwidgets.lua
--- Purpose:     wxWidgets configuration file for Premake4
--- Author:      laurent.humbertclaude@gmail.com, v.krishnakumar@gmail.com
--- Modified by: Andrea Zanellato zanellato.andrea@gmail.com
--- Revision:    $Hash$
------------------------------------------------------------------------------
-newoption  {
+-- ============================================================================
+-- Name:        wx-config.lua
+-- Purpose:     Premake4 wx-config command
+-- Author:      Andrea Zanellato
+-- Modified by:
+-- Created:     2012/12/16
+-- RCS-ID:      $Id$
+-- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Licence:     wxWindows licence
+-- ============================================================================
+newoption
+{
     trigger     = "wxcompiler",
     description = "Compiler to use",
-    allowed = {
-        { "gcc", "GNU Compiler" },
-        { "vc",  "MS Visual C" }
+    allowed     =
+    { 
+                { "gcc", "GNU Compiler" },
+                { "vc",  "MS Visual C" }
     }
 }
-newoption  {
+newoption
+{
     trigger     = "wxmedia",
     description = "Whether to use wxMediaCtrl in wxMedia library",
-    allowed = {
-        { "yes", "Don't use wxMedia library" },
-        { "no",  "Use wxMedia library" }
+    allowed     =
+    {
+                { "yes", "Don't use wxMedia library" },
+                { "no",  "Use wxMedia library" }
     }
 }
-newoption  {
+newoption
+{
     trigger     = "wxmonolithic",
     description = "Whether to use wxWidgets as monolithic DLL (MSW only)",
 }
-newoption  {
+newoption
+{
     trigger     = "wxroot",
     value       = "PATH",
-    description = {
-                    "Path to wxwidgets root folder, by default, WXWIN envvar",
-                    "will be used or wx-config found in path on POSIX"
+    description =
+    {
+                  "Path to wxwidgets root folder, by default, WXWIN envvar",
+                  "will be used or wx-config found in path on POSIX"
     }
 }
-newoption  {
+newoption
+{
     trigger     = "wxstatic",
     description = "Whether to use static or dynamic library build",
-    allowed = {
-        { "yes", "Static build" },
-        { "no",  "DLL build" }
+    allowed     =
+    {
+                { "yes", "Static build" },
+                { "no",  "DLL build" }
     }
 }
-newoption  {
+newoption
+{
     trigger     = "wxunicode",
     description = "Whether to use Unicode or ANSI build (wxWidgets 2.8 only)",
-    allowed = {
-        { "yes", "Unicode build" },
-        { "no",  "ANSI build" }
+    allowed     =
+    {
+                { "yes", "Unicode build" },
+                { "no",  "ANSI build" }
     }
 }
-newoption  {
+newoption
+{
     trigger     = "wxversion",
     description = "wxWidgets version to use",
-    allowed = {
-        { "2.4", "wxWidgets 2.4" },
-        { "2.5", "wxWidgets 2.5" },
-        { "2.6", "wxWidgets 2.6" },
-        { "2.7", "wxWidgets 2.7" },
-        { "2.8", "wxWidgets 2.8" },
-        { "2.9", "wxWidgets 2.9" }
+    allowed     =
+    {
+                { "2.9", "wxWidgets 2.9" },
+                { "3.0", "wxWidgets 3.0" },
+                { "3.1", "wxWidgets 3.1" },
+                { "3.2", "wxWidgets 3.2" }
     }
 }
 -----------------------------------------------------------------------------
 -- Common globals initialization
 -----------------------------------------------------------------------------
-wxDebugSuffix   = "d"
-wxPrefix        = "wx_"
-wxUnicodeSign   = "u"
+wx = {}
 
-wxCompiler      = _OPTIONS.wxcompiler
-wxMonolithic    = _OPTIONS.wxmonolithic
-wxRoot          = _OPTIONS.wxroot
+function wx.GetCompilerName() return _OPTIONS.wxcompiler   end
+function wx.IsMonolithic()    return _OPTIONS.wxmonolithic end
+function wx.GetLibDir()       return _OPTIONS.wxroot       end
+function wx.IsStatic()        return _OPTIONS.wxstatic     end
+function wx.IsUnicode()       return _OPTIONS.wxunicode    end
+function wx.UseMediaCtrl()    return _OPTIONS.wxmedia      end
+function wx.Version()         return _OPTIONS.wxversion    end
+
+wx.GetCompilerName()      = 
+wx.IsMonolithic()    = 
+wxRoot          = 
 wxStatic        = _OPTIONS.wxstatic
 wxUnicode       = _OPTIONS.wxunicode
 wxUseMediaCtrl  = _OPTIONS.wxmedia
@@ -81,11 +101,11 @@ wxVersion       = _OPTIONS.wxversion
 -- Default to '2.9'
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
--- wxCompiler : compiler used to compile windows libraries ( "vc" or "gcc" )
+-- wx.GetCompilerName() : compiler used to compile windows libraries ( "vc" or "gcc" )
 -----------------------------------------------------------------------------
 if not os.is("windows") then
     wxCompiler = "gcc"
-    wxMonolithic = "no"
+    wx.IsMonolithic() = "no"
 elseif wxCompiler ~= "gcc" and wxCompiler ~= "vc" then
     error( wxCompiler .. ": invalid compiler.")
 end
@@ -100,14 +120,14 @@ else
     error( wxUseMediaCtrl .. ": wrong parameter, use only yes or no." )
 end
 -----------------------------------------------------------------------------
--- wxMonolithic
+-- wx.IsMonolithic()
 -----------------------------------------------------------------------------
-if wxMonolithic ~= "yes" and wxMonolithic ~= "no" then
-    error( wxMonolithic .. ": wrong parameter, use only yes or no." )
-elseif wxMonolithic == "no" then
-    wxMonolithic = false
+if wx.IsMonolithic() ~= "yes" and wx.IsMonolithic() ~= "no" then
+    error( wx.IsMonolithic() .. ": wrong parameter, use only yes or no." )
+elseif wx.IsMonolithic() == "no" then
+    wx.IsMonolithic() = false
 else
-    wxMonolithic = true
+    wx.IsMonolithic() = true
 end
 -----------------------------------------------------------------------------
 -- wxRoot : Path to wxWidgets root folder.
@@ -135,10 +155,10 @@ end
 -----------------------------------------------------------------------------
 if wxUnicode ~= "yes" and wxUnicode ~= "no" then
     error( wxUnicode .. ": wrong parameter, use only yes or no." )
-elseif wxUnicode == "no" and wxVersion < "2.9" then
+elseif wxUnicode == "no" and wx.Version() < "2.9" then
     wxUseUnicode    = false
     wxUnicodeSign   = ""
-elseif not os.is("windows") and wxVersion > "2.8" then
+elseif not os.is("windows") and wx.Version() > "2.8" then
     wxDebugSuffix   = ""
     wxUseUnicode    = true
 else
@@ -154,7 +174,7 @@ else -- linux or bsd
     wxToolkit = "gtk2"
 end
 -----------------------------------------------------------------------------
--- The wx_config the parameters are.
+-- The wxConfig the parameters are:
 --         Debug   : "yes" use debug version of wxwidgets. Default to "no"
 --         Host    : 
 --         Universal : use universal configuration. Default to "no"
@@ -162,7 +182,7 @@ end
 --                     eg: "aui,media,html"
 --                     Default to ""; base is implicit
 -----------------------------------------------------------------------------
-function wx_config( options )
+function wxConfig( options )
 
 -- Parameter Checks
     local wrongParam        = false
@@ -178,15 +198,13 @@ function wx_config( options )
         print("valid options are : '" .. table.concat(allowedWxOptions, "', '").."'")
     end
 
-    wx_config_Private(
-                        options.Debug        or "",
-                        options.Host         or "",
-                        options.Universal    or "",
-                        options.Libs         or ""
-                     )
+    wxConfigPrivate(options.Debug     or "",
+                    options.Host      or "",
+                    options.Universal or "",
+                    options.Libs      or "")
 end
 
-function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
+function wxConfigPrivate( wxDebug, wxHost, wxUniversal, wxLibs )
 
     if wxDebug == "yes" then
         defines {"__WXDEBUG__"}
@@ -202,7 +220,7 @@ function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
 
     -- function to compensate lack of wx-config program on windows
     -- but wait, look at http://sites.google.com/site/wxconfig/ for one !
-    function wx_config_for_windows(wxCompiler)
+    function wxConfigMSW(wxCompiler)
         -- buildtype is one of "", "u", "d" or "ud"
         local wxBuildType = wxUnicodeSign
 
@@ -216,17 +234,18 @@ function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
         defines{ "__WXMSW__" }
 
         -- common include path
-        includedirs {
+        includedirs
+        {
             path.join(wxRoot, "include"),
             path.join(wxLibPath, "msw" .. wxBuildType)   -- something like "%WXWIN%\lib\vc_lib\mswud" to find "wx/setup.h"
-            }
+        }
 
         -- common library path
         libdirs { wxLibPath }
 
         -- add the libs
-        libVersion = string.gsub(wxVersion, '%.', '') -- remove dot from version
-        if wxMonolithic then
+        libVersion = string.gsub(wx.Version(), '%.', '') -- remove dot from version
+        if wx.IsMonolithic() then
             links { "wxmsw"..libVersion..wxBuildType }
         else
             links { "wxbase"..libVersion..wxBuildType } -- base lib
@@ -248,7 +267,7 @@ function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
     end
 
     -- use wx-config to figure out build parameters
-    function wx_config_for_posix()
+    function wxConfigUnix()
         local configCmd = "wx-config" -- this is the wx-config command line
         if wxRoot ~= "" then configCmd = path.join(wxRoot, "wx-config") end
 
@@ -264,7 +283,7 @@ function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
         configCmd = configCmd .. checkYesNo(wxUniversal, "universal")
 
         if wxHost ~= "" then configCmd = configCmd .. " --host=" .. wxHost end
---     if wxVersion ~= "" then configCmd = configCmd .. " --version=" .. wxVersion end
+--     if wx.Version() ~= "" then configCmd = configCmd .. " --version=" .. wxVersion end
 
         -- set the parameters to the current configuration
         buildoptions {"`" .. configCmd .." --cxxflags`"}
@@ -272,8 +291,8 @@ function wx_config_Private( wxDebug, wxHost, wxUniversal, wxLibs )
     end
 
     if not os.is("windows") then
-        wx_config_for_posix()
+        wxConfigUnix()
     else
-        wx_config_for_windows( wxCompiler )
+        wxConfigMSW( wxCompiler )
     end
 end
