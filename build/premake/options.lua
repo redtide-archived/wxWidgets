@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        configure.lua
--- Purpose:     wxWidgets configuration for Premake4
+-- Name:        options.lua
+-- Purpose:     wxWidgets configure options
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/16
@@ -10,7 +10,22 @@
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- Optional Features
+-- X Features
+-- ----------------------------------------------------------------------------
+newoption
+{
+    trigger     = "x-includes"
+    value       = "DIR"
+    description = "X include files are in DIR"
+}
+newoption
+{
+    trigger     = "x-libraries"
+    value       = "DIR"
+    description = "X library files are in DIR"
+}
+-- ----------------------------------------------------------------------------
+-- Global build options
 -- ----------------------------------------------------------------------------
 newoption
 {
@@ -29,6 +44,17 @@ newoption
 }
 newoption
 {
+    trigger     = "without-subdirs"
+    description = "don't generate makefiles for samples/demos/..."
+}
+newoption
+{
+    trigger     = "with-flavour"
+    value       = "NAME"
+    description = "specify a name to identify this build"
+}
+newoption
+{
     trigger     = "enable-official_build"
     description = "official build of wxWidgets (win32 DLL only)"
 }
@@ -43,10 +69,19 @@ newoption
     trigger     = "disable-all-features"
     description = "disable all optional features to build minimal library"
 }
+-- ----------------------------------------------------------------------------
+-- Port selection
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-universal"
     description = "use wxWidgets GUI controls instead of native ones"
+}
+newoption
+{
+    trigger     = "with-themes"
+    value       = "all|list"
+    description = "use only the specified comma-separated list of wxUniversal themes"
 }
 newoption
 {
@@ -78,6 +113,9 @@ newoption
     trigger     = "enable-debug_gdb"
     description = "create code with extra GDB debugging information"
 }
+-- ----------------------------------------------------------------------------
+-- Obsolete, here just for completeness, not used anywhere
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-debug_cntxt"
@@ -88,6 +126,9 @@ newoption
     trigger     = "enable-mem_tracing"
     description = "obsolete, don't use: create code with memory tracing"
 }
+-- ----------------------------------------------------------------------------
+-- Obsolete, here just for completeness, not used anywhere
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "disable-shared"
@@ -1294,24 +1335,6 @@ newoption
 -- ----------------------------------------------------------------------------
 -- Optional Packages
 -- ----------------------------------------------------------------------------
-
-newoption
-{
-    trigger     = "without-subdirs"
-    description = "don't generate makefiles for samples/demos/..."
-}
-newoption
-{
-    trigger     = "with-flavour"
-    value       = "NAME"
-    description = "specify a name to identify this build"
-}
-newoption
-{
-    trigger     = "with-themes"
-    value       = "all|list"
-    description = "use only the specified comma-separated list of wxUniversal themes"
-}
 newoption
 {
     trigger     = "with-gtk"

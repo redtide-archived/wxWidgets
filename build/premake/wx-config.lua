@@ -75,26 +75,7 @@ newoption
                 { "3.2", "wxWidgets 3.2" }
     }
 }
------------------------------------------------------------------------------
--- Common globals initialization
------------------------------------------------------------------------------
-wx = {}
 
-function wx.GetCompilerName() return _OPTIONS.wxcompiler   end
-function wx.IsMonolithic()    return _OPTIONS.wxmonolithic end
-function wx.GetLibDir()       return _OPTIONS.wxroot       end
-function wx.IsStatic()        return _OPTIONS.wxstatic     end
-function wx.IsUnicode()       return _OPTIONS.wxunicode    end
-function wx.UseMediaCtrl()    return _OPTIONS.wxmedia      end
-function wx.Version()         return _OPTIONS.wxversion    end
-
-wx.GetCompilerName()      = 
-wx.IsMonolithic()    = 
-wxRoot          = 
-wxStatic        = _OPTIONS.wxstatic
-wxUnicode       = _OPTIONS.wxunicode
-wxUseMediaCtrl  = _OPTIONS.wxmedia
-wxVersion       = _OPTIONS.wxversion
 -----------------------------------------------------------------------------
 -- FIXME the 'allowed' parameter seems to work only on wxversion
 -- Version : one of '2.4', '2.5', '2.6', '2.7', '2.8', '2.9'.
