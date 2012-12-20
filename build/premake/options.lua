@@ -1325,7 +1325,9 @@ newoption
     trigger     = "enable-autoidman"
     description = "use automatic ids management"
 }
-
+-- ----------------------------------------------------------------------------
+-- Autoconf
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "disable-largefile"

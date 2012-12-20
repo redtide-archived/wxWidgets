@@ -11,16 +11,16 @@
 
 wx = {}
 
--- ---------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
 -- TODO: Temporary options
--- ---------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
 wx.version                      = "2.9.5"
 wx.compiler                     = ""
 wx.includedir                   = ""
 wx.libdir                       = ""
--- ---------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
 -- Global compile options
--- ---------------------------------------------------------------------------
+-- ----------------------------------------------------------------------------
 wx.shared                       = true
 wx.stl                          = false
 wx.std_containers               = false
@@ -28,7 +28,6 @@ wx.std_iostreams                = false
 wx.std_string                   = false
 wx.std_string_conv_in_wxstring  = false
 wx.unicode                      = true
-wx.mslu                         = false
 wx.utf8                         = false
 wx.utf8only                     = false
 wx.extended_rtti                = false
@@ -40,8 +39,6 @@ wx.no_exceptions                =
 wx.permissive                   =
 wx.no_deps                      =
 wx.vararg_macros                = true
-wx.universal_binary             = false
-wx.macosx_arch                  = ""
 wx.compat26                     = false
 wx.compat28                     = true
 wx.rpath                        = true
@@ -67,19 +64,8 @@ wx.x-libraries                  = ""
 -- ----------------------------------------------------------------------------
 -- Port selection
 -- ----------------------------------------------------------------------------
-wx.gtk                          = 0
 wx.motif                        = 0
-wx.osx_carbon                   = 0
-wx.osx_cocoa                    = 0
-wx.osx_iphone                   = 0
-wx.osx                          = 0
-wx.carbon                       = wx.osx_carbon
-wx.cocoa                        = wx.osx_cocoa
-wx.iphone                       = wx.osx_iphone
-wx.mac                          = wx.osx
-wx.old_cocoa                    = 0
 wx.wine                         = 0
-wx.msw                          = 0
 wx.pm                           = 0
 wx.directfb                     = 0
 wx.microwin                     = 0
@@ -97,9 +83,6 @@ wx.libtiff                      = 0
 wx.libxpm                       = 0
 wx.libiconv                     = 0
 wx.libmspack                    = 0
-wx.gtkprint                     = 0
-wx.gnomeprint                   = 0
-wx.gnomevfs                     = 0
 wx.libnotify                    = 0
 wx.hildon                       = 0
 wx.opengl                       = 0
@@ -109,9 +92,6 @@ wx.sdl                          = 0
 wx.regex                        = 0
 wx.zlib                         = 0
 wx.expat                        = 0
-
-wx.macosx-sdk                   = ""
-wx.macosx-version-min           = ""
 -- ----------------------------------------------------------------------------
 -- Debugging options
 -- ----------------------------------------------------------------------------
@@ -131,7 +111,6 @@ wx.http                         = false
 wx.fileproto                    = false
 wx.sockets                      = false
 wx.ipv6                         = false
-wx.ole                          = false
 wx.dataobj                      = false
 wx.baseevtloop                  = false
 wx.epollloop                    = false
@@ -187,15 +166,11 @@ wx.protocol-ftp                 = false
 wx.protocol-file                = false
 
 wx.threads                      = false
-
-wx.iniconf                      = false
-wx.regkey                       = false
 -- ----------------------------------------------------------------------------
 -- Optional "big" GUI features
 -- ----------------------------------------------------------------------------
 wx.docview                      = false
 wx.help                         = false
-wx.mshtmlhelp                   = false
 wx.html                         = false
 wx.htmlhelp                     = false
 wx.xrc                          = false
@@ -355,15 +330,7 @@ wx.iff                          = false
 wx.pnm                          = false
 wx.xpm                          = false
 wx.ico_cur                      = false
--- ----------------------------------------------------------------------------
--- wxMSW-only options
--- ----------------------------------------------------------------------------
-wx.dccache                      = false
-wx.ps-in-msw                    = false
-wx.ownerdrawn                   = false
-wx.uxtheme                      = false
-wx.wxdib                        = false
-wx.webviewie                    = false
+
 -- This one is not really MSW-specific but it exists mainly to be turned off
 -- under MSW, it should be off by default on the other platforms
 wx.autoidman                    = false
