@@ -5,14 +5,14 @@
 -- Modified by:
 -- Created:     2012/12/19
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.osx                          = 0
-wx.osx_carbon                   = 0
-wx.osx_cocoa                    = 0
-wx.old_cocoa                    = 0
-wx.osx_iphone                   = 0
+wx.osx                          = true
+wx.osx_carbon                   = false
+wx.osx_cocoa                    = true
+wx.old_cocoa                    = false
+wx.osx_iphone                   = false
 wx.carbon                       = wx.osx_carbon
 wx.cocoa                        = wx.osx_cocoa
 wx.iphone                       = wx.osx_iphone
@@ -22,5 +22,5 @@ wx.mac                          = wx.osx
 -- ----------------------------------------------------------------------------
 wx.universal_binary             = false
 wx.macosx_arch                  = ""
-wx.macosx-sdk                   = ""
-wx.macosx-version-min           = ""
+wx.macosx_sdk                   = ""
+wx.macosx_version_min           = ""

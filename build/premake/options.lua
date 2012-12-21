@@ -5,7 +5,7 @@
 -- Modified by:
 -- Created:     2012/12/16
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
 -- ----------------------------------------------------------------------------
@@ -1594,3 +1594,4 @@ newoption
     value       = "PREFIX"
     description = "Exec prefix where CppUnit is installed (optional)"
 }
+

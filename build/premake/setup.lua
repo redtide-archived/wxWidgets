@@ -27,10 +27,12 @@ configuration "windows"
 -- X Features
 -- ----------------------------------------------------------------------------
 configuration "x-includes"
-    includedirs{ _OPTIONS.x-includes }
+    wx.x_includes = _OPTIONS.x-includes
+    includedirs     { wx.x_includes }
 
 configuration "x-libraries"
-    links{ _OPTIONS.x-libraries }
+    wx.libraries  = _OPTIONS.x-libraries
+    links           { wx.x_libraries }
 -- ----------------------------------------------------------------------------
 -- Global build options
 -- ----------------------------------------------------------------------------
@@ -61,7 +63,7 @@ configuration "enable-vendor"
     wx.vendor = _OPTIONS.enable-vendor
 
 configuration "disable-all-features"
-    wx.all-features = false
+    wx.all_features = false
 -- ---------------------------------------------------------------------------
 -- Port selection
 -- ---------------------------------------------------------------------------

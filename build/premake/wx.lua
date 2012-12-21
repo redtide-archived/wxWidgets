@@ -5,12 +5,10 @@
 -- Modified by:
 -- Created:     2012/12/17
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-
 wx = {}
-
 -- ----------------------------------------------------------------------------
 -- TODO: Temporary options
 -- ----------------------------------------------------------------------------
@@ -28,23 +26,20 @@ wx.std_iostreams                = false
 wx.std_string                   = false
 wx.std_string_conv_in_wxstring  = false
 wx.unicode                      = true
-wx.utf8                         = false
-wx.utf8only                     = false
 wx.extended_rtti                = false
-wx.omf                          = false
-wx.optimize                     =
-wx.profile                      =
-wx.no_rtti                      =
-wx.no_exceptions                =
-wx.permissive                   =
-wx.no_deps                      =
+wx.optimize                     = false
+wx.profile                      = false
+wx.no_rtti                      = false
+wx.no_exceptions                = false
+wx.permissive                   = false
+wx.no_deps                      = false
 wx.vararg_macros                = true
 wx.compat26                     = false
 wx.compat28                     = true
 wx.rpath                        = true
-wx.objc_uniquifying             =
-wx.visibility                   =
-wx.tls                          =
+wx.objc_uniquifying             = false
+wx.visibility                   = false
+wx.tls                          = false
 -- ----------------------------------------------------------------------------
 -- Global build options
 -- ----------------------------------------------------------------------------
@@ -53,27 +48,7 @@ wx.monolithic                   = false
 wx.plugins                      = false
 wx.subdirs                      = false
 wx.flavour                      = ""
-wx.official_build               = false
-wx.vendor                       = "custom"
-wx.all-features                 = true
--- ----------------------------------------------------------------------------
--- X Features
--- ----------------------------------------------------------------------------
-wx.x-includes                   = ""
-wx.x-libraries                  = ""
--- ----------------------------------------------------------------------------
--- Port selection
--- ----------------------------------------------------------------------------
-wx.motif                        = 0
-wx.wine                         = 0
-wx.pm                           = 0
-wx.directfb                     = 0
-wx.microwin                     = 0
-wx.x11                          = 0
-wx.nanox                        = 0
-wx.gpe                          = 0
-wx.universal                    = false
-wx.themes                       = "all"
+wx.all_features                 = true
 -- ----------------------------------------------------------------------------
 -- External libraries
 -- ----------------------------------------------------------------------------
@@ -84,7 +59,6 @@ wx.libxpm                       = 0
 wx.libiconv                     = 0
 wx.libmspack                    = 0
 wx.libnotify                    = 0
-wx.hildon                       = 0
 wx.opengl                       = 0
 
 wx.dmalloc                      = 0
@@ -97,8 +71,8 @@ wx.expat                        = 0
 -- ----------------------------------------------------------------------------
 wx.debug                        = false
 wx.debug_flag                   = false
-wx.debug_info                   = false
 wx.debug_gdb                    = false
+wx.debug_info                   = false
 -- ----------------------------------------------------------------------------
 -- Optional non GUI features
 -- ----------------------------------------------------------------------------
@@ -161,9 +135,9 @@ wx.zipstream                    = false
 -- URL-related classes
 wx.url                          = false
 wx.protocol                     = false
-wx.protocol-http                = false
-wx.protocol-ftp                 = false
-wx.protocol-file                = false
+wx.protocol_http                = false
+wx.protocol_ftp                 = false
+wx.protocol_file                = false
 
 wx.threads                      = false
 -- ----------------------------------------------------------------------------
@@ -185,7 +159,6 @@ wx.logdialog                    = false
 wx.mdi                          = false
 wx.mdidoc                       = false
 wx.mediactrl                    = false
-wx.gstreamer8                   = false
 wx.richtext                     = false
 wx.postscript                   = false
 wx.printarch                    = false

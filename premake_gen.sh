@@ -6,7 +6,7 @@
 #   Modified by: 
 #   Created:     2011/10/22
 #   Revision:    $ID$
-#   Copyright:   (c) Andrea Zanellato
+#   Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 #   Licence:     wxWindows licence
 ############################################################################
 
