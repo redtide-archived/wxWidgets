@@ -1233,10 +1233,9 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
         }
     }
 
-    wxWindow* wnd = NULL;
-
 #if wxUSE_TOOLTIPS
-   if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
+    wxWindow* wnd = NULL;
+    if (evt.Moving() && TabHitTest(evt.m_x, evt.m_y, &wnd))
     {
         wxString tooltip(m_pages[GetIdxFromWindow(wnd)].tooltip);
 
@@ -1247,8 +1246,8 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     }
     else
         UnsetToolTip();
-#endif
-   
+#endif // wxUSE_TOOLTIPS
+
     if (!evt.LeftIsDown() || m_clickPt == wxDefaultPosition)
         return;
 
@@ -2542,6 +2541,7 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
 
             wxWindow* src_tab = dest_tabs->GetWindowFromIdx(src_idx);
             dest_tabs->MovePage(src_tab, dest_idx);
+            m_tabs.MovePage(m_tabs.GetPage(src_idx).window, dest_idx);
             dest_tabs->SetActivePage((size_t)dest_idx);
             dest_tabs->DoShowHide();
             dest_tabs->Refresh();
@@ -2726,7 +2726,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 if (insert_idx == -1)
                     insert_idx = dest_tabs->GetPageCount();
                 dest_tabs->InsertPage(page_info.window, page_info, insert_idx);
-                nb->m_tabs.AddPage(page_info.window, page_info);
+                nb->m_tabs.InsertPage(page_info.window, page_info, insert_idx);
 
                 nb->DoSizing();
                 dest_tabs->DoShowHide();
