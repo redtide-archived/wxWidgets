@@ -5,129 +5,11 @@
 -- Modified by:
 -- Created:     2012/12/16
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-
 -- ----------------------------------------------------------------------------
--- X Features
--- ----------------------------------------------------------------------------
-newoption
-{
-    trigger     = "x-includes"
-    value       = "DIR"
-    description = "X include files are in DIR"
-}
-newoption
-{
-    trigger     = "x-libraries"
-    value       = "DIR"
-    description = "X library files are in DIR"
-}
--- ----------------------------------------------------------------------------
--- Global build options
--- ----------------------------------------------------------------------------
-newoption
-{
-    trigger     = "disable-gui"
-    description = "don't build GUI parts of the library"
-}
-newoption
-{
-    trigger     = "enable-monolithic"
-    description = "build wxWidgets as single library"
-}
-newoption
-{
-    trigger     = "enable-plugins"
-    description = "build parts of wxWidgets as loadable components"
-}
-newoption
-{
-    trigger     = "without-subdirs"
-    description = "don't generate makefiles for samples/demos/..."
-}
-newoption
-{
-    trigger     = "with-flavour"
-    value       = "NAME"
-    description = "specify a name to identify this build"
-}
-newoption
-{
-    trigger     = "enable-official_build"
-    description = "official build of wxWidgets (win32 DLL only)"
-}
-newoption
-{
-    trigger     = "enable-vendor"
-    value       = "VENDOR"
-    description = "vendor name (win32 DLL only)"
-}
-newoption
-{
-    trigger     = "disable-all-features"
-    description = "disable all optional features to build minimal library"
-}
--- ----------------------------------------------------------------------------
--- Port selection
--- ----------------------------------------------------------------------------
-newoption
-{
-    trigger     = "enable-universal"
-    description = "use wxWidgets GUI controls instead of native ones"
-}
-newoption
-{
-    trigger     = "with-themes"
-    value       = "all|list"
-    description = "use only the specified comma-separated list of wxUniversal themes"
-}
-newoption
-{
-    trigger     = "enable-nanox"
-    description = "use NanoX"
-}
-newoption
-{
-    trigger     = "enable-gpe"
-    description = "use GNOME PDA Environment features if possible"
-}
-newoption
-{
-    trigger     = "enable-debug"
-    description = "build library for debugging"
-}
-newoption
-{
-    trigger     = "disable-debug_flag"
-    description = "disable all debugging support"
-}
-newoption
-{
-    trigger     = "enable-debug_info"
-    description = "generate debug information"
-}
-newoption
-{
-    trigger     = "enable-debug_gdb"
-    description = "create code with extra GDB debugging information"
-}
--- ----------------------------------------------------------------------------
--- Obsolete, here just for completeness, not used anywhere
--- ----------------------------------------------------------------------------
-newoption
-{
-    trigger     = "enable-debug_cntxt"
-    description = "obsolete, don't use: use wxDebugContext"
-}
-newoption
-{
-    trigger     = "enable-mem_tracing"
-    description = "obsolete, don't use: create code with memory tracing"
-}
--- ----------------------------------------------------------------------------
--- Obsolete, here just for completeness, not used anywhere
+-- Global compile options
 -- ----------------------------------------------------------------------------
 newoption
 {
@@ -187,7 +69,7 @@ newoption
 newoption
 {
     trigger     = "enable-omf"
-    description = "use OMF object format"
+    description = "use OMF object format (OS/2)"
 }
 newoption
 {
@@ -266,6 +148,127 @@ newoption
     trigger     = "disable-tls"
     description = "disable use of compiler TLS support"
 }
+-- ----------------------------------------------------------------------------
+-- Global build options
+-- ----------------------------------------------------------------------------
+newoption
+{
+    trigger     = "disable-gui"
+    description = "don't build GUI parts of the library"
+}
+newoption
+{
+    trigger     = "enable-monolithic"
+    description = "build wxWidgets as single library"
+}
+newoption
+{
+    trigger     = "enable-plugins"
+    description = "build parts of wxWidgets as loadable components"
+}
+newoption
+{
+    trigger     = "without-subdirs"
+    description = "don't generate makefiles for samples/demos/..."
+}
+newoption
+{
+    trigger     = "with-flavour"
+    value       = "NAME"
+    description = "specify a name to identify this build"
+}
+newoption
+{
+    trigger     = "enable-official_build"
+    description = "official build of wxWidgets (win32 DLL only)"
+}
+newoption
+{
+    trigger     = "enable-vendor"
+    value       = "VENDOR"
+    description = "vendor name (win32 DLL only)"
+}
+newoption
+{
+    trigger     = "disable-all-features"
+    description = "disable all optional features to build minimal library"
+}
+-- ----------------------------------------------------------------------------
+-- X Features
+-- ----------------------------------------------------------------------------
+newoption
+{
+    trigger     = "x-includes"
+    value       = "DIR"
+    description = "X include files are in DIR"
+}
+newoption
+{
+    trigger     = "x-libraries"
+    value       = "DIR"
+    description = "X library files are in DIR"
+}
+-- ----------------------------------------------------------------------------
+-- Port selection
+-- ----------------------------------------------------------------------------
+newoption
+{
+    trigger     = "enable-universal"
+    description = "use wxWidgets GUI controls instead of native ones"
+}
+newoption
+{
+    trigger     = "with-themes"
+    value       = "all|list"
+    description = "use only the specified comma-separated list of wxUniversal themes"
+}
+newoption
+{
+    trigger     = "enable-nanox"
+    description = "use NanoX"
+}
+newoption
+{
+    trigger     = "enable-gpe"
+    description = "use GNOME PDA Environment features if possible"
+}
+-- ---------------------------------------------------------------------------
+-- Debugging options
+-- ---------------------------------------------------------------------------
+newoption
+{
+    trigger     = "enable-debug"
+    description = "build library for debugging"
+}
+newoption
+{
+    trigger     = "disable-debug_flag"
+    description = "disable all debugging support"
+}
+newoption
+{
+    trigger     = "enable-debug_info"
+    description = "generate debug information"
+}
+newoption
+{
+    trigger     = "enable-debug_gdb"
+    description = "create code with extra GDB debugging information"
+}
+-- Obsolete, here just for completeness, not used anywhere
+newoption
+{
+    trigger     = "enable-debug_cntxt"
+    description = "obsolete, don't use: use wxDebugContext"
+}
+newoption
+{
+    trigger     = "enable-mem_tracing"
+    description = "obsolete, don't use: create code with memory tracing"
+}
+-- ----------------------------------------------------------------------------
+-- Optional non GUI features
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-intl"
@@ -438,7 +441,7 @@ newoption
 }
 newoption
 {
-    trigger     = "enable-fs_archive  "
+    trigger     = "enable-fs_archive"
     description = "   use virtual archive filesystems"
 }
 newoption
@@ -581,6 +584,9 @@ newoption
     trigger     = "enable-regkey"
     description = "use wxRegKey class (Win32 only)"
 }
+-- ----------------------------------------------------------------------------
+-- Optional "big" GUI features
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-docview"
@@ -706,6 +712,9 @@ newoption
     trigger     = "enable-graphics_ctx"
     description = "use graphics context 2D drawing API"
 }
+-- ----------------------------------------------------------------------------
+-- IPC &c
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-clipboard"
@@ -716,6 +725,9 @@ newoption
     trigger     = "enable-dnd"
     description = "use Drag'n'Drop classes"
 }
+-- ----------------------------------------------------------------------------
+-- Optional GUI controls
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "disable-controls"
@@ -738,11 +750,6 @@ newoption
 }
 newoption
 {
-    trigger     = "enable-bannerwindow"
-    description = "use wxBannerWindow class"
-}
-newoption
-{
     trigger     = "enable-artstd"
     description = "use standard XPM icons in wxArtProvider"
 }
@@ -750,6 +757,11 @@ newoption
 {
     trigger     = "enable-arttango"
     description = "use Tango icons in wxArtProvider"
+}
+newoption
+{
+    trigger     = "enable-bannerwindow"
+    description = "use wxBannerWindow class"
 }
 newoption
 {
@@ -1071,6 +1083,9 @@ newoption
     trigger     = "enable-treelist"
     description = "use wxTreeListCtrl class"
 }
+-- ----------------------------------------------------------------------------
+-- Common dialogs
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-commondlg"
@@ -1093,6 +1108,11 @@ newoption
 }
 newoption
 {
+    trigger     = "enable-dirdlg"
+    description = "use wxDirDialog"
+}
+newoption
+{
     trigger     = "enable-filedlg"
     description = "use wxFileDialog"
 }
@@ -1105,11 +1125,6 @@ newoption
 {
     trigger     = "enable-fontdlg"
     description = "use wxFontDialog"
-}
-newoption
-{
-    trigger     = "enable-dirdlg"
-    description = "use wxDirDialog"
 }
 newoption
 {
@@ -1146,6 +1161,9 @@ newoption
     trigger     = "enable-wizarddlg"
     description = "use wxWizard"
 }
+-- ----------------------------------------------------------------------------
+-- Misc GUI options
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-menus"
@@ -1221,6 +1239,9 @@ newoption
     trigger     = "enable-webviewwebkit"
     description = "use wxWebView WebKit backend"
 }
+-- ----------------------------------------------------------------------------
+-- Support for image formats that do not rely on external library
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-palette"
@@ -1266,6 +1287,9 @@ newoption
     trigger     = "enable-ico_cur"
     description = "use Windows ICO and CUR formats"
 }
+-- ----------------------------------------------------------------------------
+-- wxMSW-only options
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "enable-dccache"
@@ -1301,6 +1325,9 @@ newoption
     trigger     = "enable-autoidman"
     description = "use automatic ids management"
 }
+-- ----------------------------------------------------------------------------
+-- Autoconf
+-- ----------------------------------------------------------------------------
 newoption
 {
     trigger     = "disable-largefile"
@@ -1315,11 +1342,6 @@ newoption
 {
     trigger     = "disable-sdltest"
     description = "Do not try to compile and run a test SDL program"
-}
-newoption
-{
-    trigger     = "enable-omf"
-    description = "use OMF object format (OS/2)"
 }
 newoption
 {
@@ -1572,3 +1594,4 @@ newoption
     value       = "PREFIX"
     description = "Exec prefix where CppUnit is installed (optional)"
 }
+

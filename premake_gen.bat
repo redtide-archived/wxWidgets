@@ -5,7 +5,7 @@ REM Author:      Andrea Zanellato
 REM Modified by: 
 REM Created:     2011/10/22
 REM Revision:    $ID$
-REM Copyright:   (c) Andrea Zanellato
+REM Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 REM Licence:     wxWindows licence
 REM ===========================================================================
 @ECHO OFF
