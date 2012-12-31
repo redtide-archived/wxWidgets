@@ -101,22 +101,6 @@ wxChoice::~wxChoice()
     delete m_strings;
 }
 
-void wxChoice::SendSelectionChangedEvent(wxEventType evt_type)
-{
-    if (GetSelection() == -1)
-        return;
-
-    wxCommandEvent event( evt_type, GetId() );
-
-    int n = GetSelection();
-    event.SetInt( n );
-    event.SetString( GetStringSelection() );
-    event.SetEventObject( this );
-    InitCommandEventWithItems( event, n );
-
-    HandleWindowEvent( event );
-}
-
 void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
 {
 #ifdef __WXGTK3__
@@ -197,8 +181,12 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
     GtkListStore* store = GTK_LIST_STORE(model);
     GtkTreeIter iter;
-    gtk_tree_model_iter_nth_child( model, &iter,
-                                   NULL, (gint) n );
+    if ( !gtk_tree_model_iter_nth_child(model, &iter, NULL, n) )
+    {
+        // This is really not supposed to happen for a valid index.
+        wxFAIL_MSG(wxS("Item unexpectedly not found."));
+        return;
+    }
     gtk_list_store_remove( store, &iter );
 
     m_clientData.RemoveAt( n );

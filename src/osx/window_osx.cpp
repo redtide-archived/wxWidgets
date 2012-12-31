@@ -350,7 +350,11 @@ void wxWindowMac::SetPeer(wxOSXWidgetImpl* peer)
         GetParent()->MacChildAdded() ;
         
         // adjust font, controlsize etc
-        DoSetWindowVariant( m_windowVariant ) ;
+        GetPeer()->SetControlSize( m_windowVariant );
+        InheritAttributes();
+        // in case nothing has been set, use the variant default fonts
+        if ( !m_hasFont )
+            DoSetWindowVariant( m_windowVariant );
         
         GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
         
@@ -600,6 +604,25 @@ void wxWindowMac::SetFocus()
         return ;
 
     GetPeer()->SetFocus() ;
+}
+
+void wxWindowMac::OSXSimulateFocusEvents()
+{
+    wxWindow* former = FindFocus() ;
+    if ( former != NULL && former != this )
+    {
+        {
+            wxFocusEvent event( wxEVT_KILL_FOCUS, former->GetId());
+            event.SetEventObject(former);
+            former->HandleWindowEvent(event) ;
+        }
+
+        {
+            wxFocusEvent event(wxEVT_SET_FOCUS, former->GetId());
+            event.SetEventObject(former);
+            former->HandleWindowEvent(event);
+        }
+    }
 }
 
 void wxWindowMac::DoCaptureMouse()

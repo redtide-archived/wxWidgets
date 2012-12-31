@@ -499,6 +499,13 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
+        wxNSTextFieldControl* timpl = dynamic_cast<wxNSTextFieldControl*>(impl);
+        if ( fieldEditor )
+        {
+            NSRange range = [fieldEditor selectedRange];
+            timpl->SetInternalSelection(range.location, range.location + range.length);
+        }
+
         impl->DoNotifyFocusEvent( false, NULL );
     }
 }
@@ -515,7 +522,8 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w )
 
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
-    [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    // TODO Remove if no regression, this was causing automatic resizes of multi-line textfields when the tlw changed
+    // [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
 
     wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
@@ -863,11 +871,11 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     {
         [editor setSelectedRange:NSMakeRange(from, to-from)];
     }
-    else
-    {
-        m_selStart = from;
-        m_selEnd = to;
-    }
+
+    // the editor might still be in existence, but we might be already passed our 'focus lost' storage
+    // of the selection, so make sure we copy this
+    m_selStart = from;
+    m_selEnd = to;
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
@@ -911,6 +919,52 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     }
 }
 
+void wxNSTextFieldControl::SetInternalSelection( long from , long to )
+{
+    m_selStart = from;
+    m_selEnd = to;
+}
+
+// as becoming first responder on a window - triggers a resign on the same control, we have to avoid
+// the resign notification writing back native selection values before we can set our own
+
+static WXWidget s_widgetBecomingFirstResponder = nil;
+
+bool wxNSTextFieldControl::becomeFirstResponder(WXWidget slf, void *_cmd)
+{
+    s_widgetBecomingFirstResponder = slf;
+    bool retval = wxWidgetCocoaImpl::becomeFirstResponder(slf, _cmd);
+    s_widgetBecomingFirstResponder = nil;
+    if ( retval )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+        {
+            long textLength = [[m_textField stringValue] length];
+            m_selStart = wxMin(textLength,wxMax(m_selStart,0)) ;
+            m_selEnd = wxMax(0,wxMin(textLength,m_selEnd)) ;
+            
+            [editor setSelectedRange:NSMakeRange(m_selStart, m_selEnd-m_selStart)];
+        }
+    }
+    return retval;
+}
+
+bool wxNSTextFieldControl::resignFirstResponder(WXWidget slf, void *_cmd)
+{
+    if ( slf != s_widgetBecomingFirstResponder )
+    {
+        NSText* editor = [m_textField currentEditor];
+        if ( editor )
+        {
+            NSRange range = [editor selectedRange];
+            m_selStart = range.location;
+            m_selEnd = range.location + range.length;
+        }
+    }
+    return wxWidgetCocoaImpl::resignFirstResponder(slf, _cmd);
+}
+
 bool wxNSTextFieldControl::SetHint(const wxString& hint)
 {
     wxCFStringRef hintstring(hint);
@@ -934,7 +988,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxWidgetCocoaImpl* c = NULL;
 
-    if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
+    if ( style & wxTE_MULTILINE )
     {
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];

@@ -236,25 +236,44 @@ protected:
 
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(inevt.wd);
-        if (it == m_watchMap.end())
-        {
-            // It's not in the map; check if was recently removed from it.
-            if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
-            {
-                wxLogTrace(wxTRACE_FSWATCHER,
-                           "Got an event for stale wd %i", inevt.wd);
-            }
-            else
-            {
-                wxFAIL_MSG("Event for unknown watch descriptor.");
-            }
 
-            // In any case, don't process this event: it's either for an
-            // already removed entry, or for a completely unknown one.
-            return;
+        // wd will be -1 for IN_Q_OVERFLOW, which would trigger the wxFAIL_MSG
+        if (inevt.wd != -1)
+        {
+            if (it == m_watchMap.end())
+            {
+                // It's not in the map; check if was recently removed from it.
+                if (m_staleDescriptors.Index(inevt.wd) != wxNOT_FOUND)
+                {
+                    wxLogTrace(wxTRACE_FSWATCHER,
+                               "Got an event for stale wd %i", inevt.wd);
+                }
+                else
+                {
+                    // In theory we shouldn't reach here. In practice, some
+                    // events, e.g. IN_MODIFY, arrive just after the IN_IGNORED
+                    // so their wd has already been discarded. Warn about them.
+                    wxFileSystemWatcherEvent
+                        event
+                        (
+                            wxFSW_EVENT_WARNING,
+                            wxString::Format
+                            (
+                             _("Unexpected event for \"%s\": no "
+                               "matching watch descriptor."),
+                             inevt.len ? inevt.name : ""
+                            )
+                        );
+                    SendEvent(event);
+
+                }
+
+                // In any case, don't process this event: it's either for an
+                // already removed entry, or for an unknown one.
+                return;
+            }
         }
 
-        wxFSWatchEntry& watch = *(it->second);
         int nativeFlags = inevt.mask;
         int flags = Native2WatcherFlags(nativeFlags);
 
@@ -264,7 +283,29 @@ protected:
             wxString errMsg = GetErrorDescription(nativeFlags);
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
+            return;
         }
+
+        if (inevt.wd == -1)
+        {
+            // Although this is not supposed to happen, we seem to be getting
+            // occasional IN_ACCESS/IN_MODIFY events without valid watch value.
+            wxFileSystemWatcherEvent
+                event
+                (
+                    wxFSW_EVENT_WARNING,
+                    wxString::Format
+                    (
+                        _("Invalid inotify event for \"%s\""),
+                        inevt.len ? inevt.name : ""
+                    )
+                );
+            SendEvent(event);
+            return;
+        }
+
+        wxFSWatchEntry& watch = *(it->second);
+
         // Now IN_UNMOUNT. We must do so here, as it's not in the watch flags
         if (nativeFlags & IN_UNMOUNT)
         {
@@ -351,6 +392,17 @@ protected:
         // renames
         else if (nativeFlags & IN_MOVE)
         {
+            // IN_MOVE events are produced in the following circumstances:
+            // * A move within a dir (what the user sees as a rename) gives an
+            //   IN_MOVED_FROM and IN_MOVED_TO pair, each with the same path.
+            // * A move within watched dir foo/ e.g. from foo/bar1/ to foo/bar2/
+            //   will also produce such a pair, but with different paths.
+            // * A move to baz/ will give only an IN_MOVED_FROM for foo/bar1;
+            //   if baz/ is inside a different watch, that gets the IN_MOVED_TO.
+
+            // The first event to arrive, usually the IN_MOVED_FROM, is
+            // cached to await a matching IN_MOVED_TO; should none arrive, the
+            // unpaired event will be processed later in ProcessRenames().
             wxInotifyCookies::iterator it2 = m_cookies.find(inevt.cookie);
             if ( it2 == m_cookies.end() )
             {
@@ -369,15 +421,35 @@ protected:
                 // If there's a filespec, assume he's not
                 if ( watch.GetFilespec().empty() )
                 {
+                    // The the only way to know the path for the first event,
+                    // normally the IN_MOVED_FROM, is to retrieve the watch
+                    // corresponding to oldinevt. This is needed for a move
+                    // within a watch.
+                    wxFSWatchEntry* oldwatch;
+                    wxFSWatchEntryDescriptors::iterator oldwatch_it =
+                                                m_watchMap.find(oldinevt.wd);
+                    if (oldwatch_it != m_watchMap.end())
+                    {
+                        oldwatch = oldwatch_it->second;
+                    }
+                    else
+                    {
+                        wxLogTrace(wxTRACE_FSWATCHER,
+                            "oldinevt's watch descriptor not in the watch map");
+                        // For want of a better alternative, use 'watch'. That
+                        // will work fine for renames, though not for moves
+                        oldwatch = &watch;
+                    }
+
                     wxFileSystemWatcherEvent event(flags);
                     if ( inevt.mask & IN_MOVED_FROM )
                     {
                         event.SetPath(GetEventPath(watch, inevt));
-                        event.SetNewPath(GetEventPath(watch, oldinevt));
+                        event.SetNewPath(GetEventPath(*oldwatch, oldinevt));
                     }
                     else
                     {
-                        event.SetPath(GetEventPath(watch, oldinevt));
+                        event.SetPath(GetEventPath(*oldwatch, oldinevt));
                         event.SetNewPath(GetEventPath(watch, inevt));
                     }
                     SendEvent(event);
@@ -402,6 +474,8 @@ protected:
 
     void ProcessRenames()
     {
+        // After all of a batch of events has been processed, this deals with
+        // any still-unpaired IN_MOVED_FROM or IN_MOVED_TO events.
         wxInotifyCookies::iterator it = m_cookies.begin();
         while ( it != m_cookies.end() )
         {
@@ -412,19 +486,24 @@ protected:
 
             // get watch entry for this event
             wxFSWatchEntryDescriptors::iterator wit = m_watchMap.find(inevt.wd);
-            wxCHECK_RET(wit != m_watchMap.end(),
-                             "Watch descriptor not present in the watch map!");
-
-            // Tell the owner, in case it's interested
-            // If there's a filespec, assume he's not
-            wxFSWatchEntry& watch = *(wit->second);
-            if ( watch.GetFilespec().empty() )
+            if (wit == m_watchMap.end())
             {
-                int flags = Native2WatcherFlags(inevt.mask);
-                wxFileName path = GetEventPath(watch, inevt);
+                wxLogTrace(wxTRACE_FSWATCHER,
+                            "Watch descriptor not present in the watch map!");
+            }
+            else
+            {
+                // Tell the owner, in case it's interested
+                // If there's a filespec, assume he's not
+                wxFSWatchEntry& watch = *(wit->second);
+                if ( watch.GetFilespec().empty() )
                 {
-                    wxFileSystemWatcherEvent event(flags, path, path);
-                    SendEvent(event);
+                    int flags = Native2WatcherFlags(inevt.mask);
+                    wxFileName path = GetEventPath(watch, inevt);
+                    {
+                        wxFileSystemWatcherEvent event(flags, path, path);
+                        SendEvent(event);
+                    }
                 }
             }
 
