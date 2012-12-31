@@ -307,3 +307,11 @@ wx.ico_cur                      = false
 -- This one is not really MSW-specific but it exists mainly to be turned off
 -- under MSW, it should be off by default on the other platforms
 wx.autoidman                    = false
+
+function wx.GetProjectKind()
+    if wx.shared == true then
+        return "StaticLib"
+    else
+        return "SharedLib"
+    end
+end

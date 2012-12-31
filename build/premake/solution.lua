@@ -17,7 +17,10 @@ solution "wxWidgets"
     PremakeDir          = os.getcwd()
 
     dofile( PremakeDir .. "/options.lua" )
+    dofile( PremakeDir .. "/wx.lua" )
+    dofile( PremakeDir .. "/wx/unix.lua" )
     dofile( PremakeDir .. "/setup.lua" )
+    dofile( PremakeDir .. "/wx/libs/aui.lua" )
 
     BuildDir            = solution().location
 

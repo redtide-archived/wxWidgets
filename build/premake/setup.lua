@@ -8,7 +8,6 @@
 -- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-
 configuration "bsd"
     defines{"__BSD__", "__WXGTK__"}
 
@@ -27,11 +26,11 @@ configuration "windows"
 -- X Features
 -- ----------------------------------------------------------------------------
 configuration "x-includes"
-    wx.x_includes = _OPTIONS.x-includes
+    wx.x_includes = _OPTIONS["x-includes"]
     includedirs     { wx.x_includes }
 
 configuration "x-libraries"
-    wx.libraries  = _OPTIONS.x-libraries
+    wx.x_libraries  = _OPTIONS["x-libraries"]
     links           { wx.x_libraries }
 -- ----------------------------------------------------------------------------
 -- Global build options
@@ -54,13 +53,13 @@ configuration "without-subdirs"
     wx.subdirs      = false
 
 configuration "with-flavour"
-    wx.flavour = _OPTIONS.with-flavour
+    wx.flavour = _OPTIONS["with-flavour"]
 
 configuration "enable-official_build"
     wx.official_build = true
 
 configuration "enable-vendor"
-    wx.vendor = _OPTIONS.enable-vendor
+    wx.vendor = _OPTIONS["enable-vendor"]
 
 configuration "disable-all-features"
     wx.all_features = false
@@ -78,8 +77,6 @@ configuration "enable-nanox"
 
 configuration "enable-gpe"
     wx.gpe          = true
-
-configuration ""
 -- ---------------------------------------------------------------------------
 -- Debugging options
 -- ---------------------------------------------------------------------------
@@ -103,70 +100,3 @@ configuration "enable-debug_gdb"
 -- ----------------------------------------------------------------------------
 configuration "disable-shared"
     wx.shared = false
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
-configuration ""
-    wx.
-
