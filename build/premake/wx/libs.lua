@@ -10,21 +10,21 @@
 -- ============================================================================
 
 if wx.aui then
-    dofile( PremakeDir .. "/wx/libs/aui.lua" )
+    require "wx.libs.aui"
 end
 
 if wx.propgrid then
-    dofile( PremakeDir .. "/wx/libs/propgrid.lua" )
+    require "wx.libs.propgrid"
 end
 
 if wx.ribbon then
-    dofile( PremakeDir .. "/wx/libs/ribbon.lua" )
+    require "wx.libs.ribbon"
 end
 
 if wx.stc then
-    dofile( PremakeDir .. "/wx/libs/stc.lua" )
+    require "wx.libs.stc"
 end
 
 if wx.universal then
-    dofile( PremakeDir .. "/wx/ports/universal.lua" )
+    require "wx.ports.universal"
 end
