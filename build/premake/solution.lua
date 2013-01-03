@@ -14,19 +14,16 @@ solution "wxWidgets"
     location            ( "../../build/" .. _ACTION )
     configurations      {"Debug", "Release"}
 
-    BuildDir            = solution().location
-    PremakeDir          = os.getcwd()
-    os.chdir( BuildDir )
-
 -- Load options
-    dofile( PremakeDir .. "/wx/options.lua" )
+    require "wx.options"
 
 -- Load wx namespace defaults
-    dofile( PremakeDir .. "/wx/wx.lua" )
-    dofile( PremakeDir .. "/wx/ports/unix.lua" )
+    require "wx.wx"
+    
+    require "wx.ports.unix"
 
 -- Load configuration
-    dofile( PremakeDir .. "/wx/configure.lua" )
+    require "wx.configure"
 
 -- Load libs
-    dofile( PremakeDir .. "/wx/libs.lua" )
+    require "wx.libs"
