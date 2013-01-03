@@ -359,19 +359,55 @@ function wx.Execute(command)
     return lines
 end
 
--- Checks if a library of a minimum version given is available
-function wx.unix.CheckLibraryVersion(library, version)
-    local value
+-- Checks if a library is installed and returns true or false if not installed
+function wx.unix.CheckLibrary(library, required)
+    local exists, output
+    local available = true
     
-    for index,line in pairs(wx.Execute("pkg-config " .. library .. " --modversion")) do
+    output = "Checking for " .. library .. "..."
+    exists = os.execute("pkg-config " .. library .. " --exists")
+    
+    if exists > 0 then
+        output = output .. " not found"
+        available = false
+        
+        if required == true then
+            print("error: " .. output)
+            os.exit(1)
+        end
+    else
+        output = output .. " found"
+    end
+    
+    print(output)
+    
+    return available
+end
+
+-- Checks if a library of a minimum version given is available
+function wx.unix.CheckLibraryVersion(library, version, required)
+    local value, output, available
+    
+    output = "Checking " .. library .. " >= " .. version .. "..."
+    
+    for index,line in pairs(wx.Execute("pkg-config " .. library .. " --modversion 2> /dev/null")) do
         value = line
         break
     end
     
-    if value >= version then
-        print("Checking for library " .. library .. " >= v" .. version .. " (found)")
+    if type(value) ~= "nil" and value >= version then
+        output = output .. " found"
+        available = true
     else
-        print("Checking for library " .. library .. " >= v" .. version .. " (not found)")
-        os.exit(1)
+        output = output .. " not found"
+        if required == true then
+            print("error: " .. output)
+            os.exit(1)
+        end
+        available = false
     end
+    
+    print(output)
+    
+    return available
 end
