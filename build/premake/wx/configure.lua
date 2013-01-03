@@ -9,11 +9,7 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 configuration "disable-unicode"
-    wx.unicode = false
-
-configuration "not disable-unicode"
-    flags       {"Unicode"}
-    wx.unicode = true
+    wx.SetOption("unicode", false)
 -- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
@@ -31,92 +27,92 @@ configuration "solaris"
 
 configuration "windows"
     defines{"__WINDOWS__", "__WIN32__", "__WXMSW__", "WIN32", "_WINDOWS"}
-if wx.unicode then
-    defines{"UNICODE", "_UNICODE"}
-end
+    if wx.unicode then
+        defines{"UNICODE", "_UNICODE"}
+    end
 -- ----------------------------------------------------------------------------
 -- X Features
 -- ----------------------------------------------------------------------------
 configuration "x-includes"
-    wx.x_includes = _OPTIONS["x-includes"]
+    wx.SetOption("x_includes")
     includedirs     { wx.x_includes }
 
 configuration "x-libraries"
-    wx.x_libraries  = _OPTIONS["x-libraries"]
+    wx.SetOption("x_libraries")
     links           { wx.x_libraries }
 -- ----------------------------------------------------------------------------
 -- Global build options
 -- ----------------------------------------------------------------------------
 configuration "disable-gui"
     defines{"__WXBASE__", "wxUSE_GUI=0"}
-    wx.gui = false
+    wx.SetOption("gui", false)
 
 configuration "not disable-gui"
     defines{"wxUSE_GUI=1"}
-    wx.gui = true
 
 configuration "enable-monolithic"
-    wx.monolithic = true
+    wx.SetOption("monolithic", true)
 
 configuration "enable-plugins"
-    wx.plugins = true
+    wx.SetOption("plugins", true)
 
 configuration "without-subdirs"
-    wx.subdirs = false
+    wx.SetOption("subdirs", false)
 
 configuration "with-flavour"
-    wx.flavour = _OPTIONS["with-flavour"]
+    wx.SetOption("flavour")
 
 configuration "enable-official_build"
-    wx.official_build = true
+    wx.SetOption("official_build", true)
 
 configuration "enable-vendor"
-    wx.vendor = _OPTIONS["enable-vendor"]
+    wx.SetOption("vendor")
 
 configuration "disable-all-features"
-    wx.all_features = false
+    wx.SetOption("all_features", false)
 -- ---------------------------------------------------------------------------
 -- Port selection
 -- ---------------------------------------------------------------------------
 configuration "enable-universal"
-    wx.universal = true
+    wx.SetOption("universal", true)
 
 configuration "with-themes"
-    wx.themes = true
+    wx.SetOption("themes", true)
 
 configuration "enable-nanox"
-    wx.nanox = true
+    wx.SetOption("nanox", true)
 
 configuration "enable-gpe"
-    wx.gpe = true
+    wx.SetOption("gpe", true)
 -- ---------------------------------------------------------------------------
 -- Debugging options
 -- ---------------------------------------------------------------------------
 configuration "enable-debug"
-    wx.debug        = true
-    wx.debug_flag   = true
+    wx.SetOption("debug", true)
+    wx.SetOption("debug_flag", true)
 
 configuration "disable-debug_flag"
-    wx.debug        = false
-    wx.debug_flag   = false
-    wx.debug_info   = false
-    wx.debug_gdb    = false
+    wx.SetOption("debug", false)
+    wx.SetOption("debug_flag", false)
+    wx.SetOption("debug_info", false)
+    wx.SetOption("debug_gdb", false)
 
 configuration "enable-debug_info"
-    wx.debug_info   = true
+    wx.SetOption("debug_info", true)
 
 configuration "enable-debug_gdb"
+    wx.SetOption("debug_gdb", true)
     wx.debug_gdb    = true
 -- ----------------------------------------------------------------------------
 -- Global compile options
 -- ----------------------------------------------------------------------------
 configuration "disable-shared"
-    wx.shared = false
+    wx.SetOption("shared", false)
 -- ----------------------------------------------------------------------------
 -- Optional "big" GUI features
 -- ----------------------------------------------------------------------------
 configuration "enable-aui"
-    wx.aui  = true
+    wx.SetOption("aui", true)
     defines {"wxUSE_AUI=1"}
 -------------------------------------------------------------------------------
 -- Debug configuration

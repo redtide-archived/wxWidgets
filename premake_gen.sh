@@ -27,9 +27,13 @@ if [ "$platform" = "unknown" ]; then
     exit 1
 fi
 
-# Build premake
 cd build
-make CONFIG=Release -C./premake/$platform
+
+# Build premake
+if [ ! -e "premake/$platform/bin/release/premake4" ]; then
+    make CONFIG=Release -C./premake/$platform
+fi
+
 ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
 
 exit 0
