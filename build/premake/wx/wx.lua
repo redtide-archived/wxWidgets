@@ -10,6 +10,10 @@
 -- ============================================================================
 wx = {}
 -- ----------------------------------------------------------------------------
+-- Store functions for unix based platforms
+-- ----------------------------------------------------------------------------
+wx.unix = {}
+-- ----------------------------------------------------------------------------
 -- TODO: Temporary options
 -- ----------------------------------------------------------------------------
 wx.version                      = "2.9.5"
@@ -318,4 +322,56 @@ function wx.GetProjectKind()
     end
 end
 
-return wx
+-- Sets a wx option based on the current configuration been checked
+function wx.SetOption(name, value)
+    local configuration
+    
+    for index,option in pairs(premake.CurrentConfiguration.terms) do
+        configuration = option
+    end
+    
+    local option_type, option_value = type(_OPTIONS[configuration]), _OPTIONS[configuration]
+    
+    if option_type == "string" then
+        if option_value ~= "" then
+            wx[name] = option_value
+        else
+            wx[name] = value
+        end
+    elseif option_type == "number" then
+        wx[name] = option_value
+    elseif option_type == "boolean" then
+        wx[name] = value
+    end
+end
+
+-- Execute a command and return the result in a table
+function wx.Execute(command)
+    local process = assert(io.popen(command), "Failed to execute: " .. command)
+    local lines = {}
+    
+    for line in process:lines() do
+        table.insert(lines, line)
+    end
+    
+    process:close()
+    
+    return lines
+end
+
+-- Checks if a library of a minimum version given is available
+function wx.unix.CheckLibraryVersion(library, version)
+    local value
+    
+    for index,line in pairs(wx.Execute("pkg-config " .. library .. " --modversion")) do
+        value = line
+        break
+    end
+    
+    if value >= version then
+        print("Checking for library " .. library .. " >= v" .. version .. " (found)")
+    else
+        print("Checking for library " .. library .. " >= v" .. version .. " (not found)")
+        os.exit(1)
+    end
+end
