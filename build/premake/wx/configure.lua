@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        setup.lua
--- Purpose:     wxWidgets setup
+-- Name:        configure.lua
+-- Purpose:     wxWidgets build configuration
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/17
@@ -8,6 +8,15 @@
 -- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
+configuration "disable-unicode"
+    wx.unicode = false
+
+configuration "not disable-unicode"
+    flags       {"Unicode"}
+    wx.unicode = true
+-- ----------------------------------------------------------------------------
+-- Ports configurations
+-- ----------------------------------------------------------------------------
 configuration "bsd"
     defines{"__BSD__", "__WXGTK__"}
 
@@ -21,7 +30,10 @@ configuration "solaris"
     defines{"__SOLARIS__", "__WXMOTIF__"}
 
 configuration "windows"
-    defines{"__WINDOWS__", "__WIN32__", "__WXMSW__"}
+    defines{"__WINDOWS__", "__WIN32__", "__WXMSW__", "WIN32", "_WINDOWS"}
+if wx.unicode then
+    defines{"UNICODE", "_UNICODE"}
+end
 -- ----------------------------------------------------------------------------
 -- X Features
 -- ----------------------------------------------------------------------------
@@ -41,16 +53,16 @@ configuration "disable-gui"
 
 configuration "not disable-gui"
     defines{"wxUSE_GUI=1"}
-    wx.gui          = true
+    wx.gui = true
 
 configuration "enable-monolithic"
-    wx.monolithic   = true
+    wx.monolithic = true
 
 configuration "enable-plugins"
-    wx.plugins      = true
+    wx.plugins = true
 
 configuration "without-subdirs"
-    wx.subdirs      = false
+    wx.subdirs = false
 
 configuration "with-flavour"
     wx.flavour = _OPTIONS["with-flavour"]
@@ -67,16 +79,16 @@ configuration "disable-all-features"
 -- Port selection
 -- ---------------------------------------------------------------------------
 configuration "enable-universal"
-    wx.universal    = true
+    wx.universal = true
 
 configuration "with-themes"
-    wx.themes       = true
+    wx.themes = true
 
 configuration "enable-nanox"
-    wx.nanox        = true
+    wx.nanox = true
 
 configuration "enable-gpe"
-    wx.gpe          = true
+    wx.gpe = true
 -- ---------------------------------------------------------------------------
 -- Debugging options
 -- ---------------------------------------------------------------------------
@@ -100,3 +112,24 @@ configuration "enable-debug_gdb"
 -- ----------------------------------------------------------------------------
 configuration "disable-shared"
     wx.shared = false
+-- ----------------------------------------------------------------------------
+-- Optional "big" GUI features
+-- ----------------------------------------------------------------------------
+configuration "enable-aui"
+    wx.aui  = true
+    defines {"wxUSE_AUI=1"}
+-------------------------------------------------------------------------------
+-- Debug configuration
+-------------------------------------------------------------------------------
+configuration "Debug"
+    defines         {"DEBUG", "_DEBUG"}
+    flags           {"Symbols"}
+if wx.compiler == "gcc" then
+    buildoptions    {"-O0"}
+end
+-------------------------------------------------------------------------------
+-- Release configuration
+-------------------------------------------------------------------------------
+configuration "Release"
+    defines         {"NDEBUG"}
+    flags           {"OptimizeSpeed"}

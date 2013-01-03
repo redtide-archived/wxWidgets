@@ -309,9 +309,13 @@ wx.ico_cur                      = false
 wx.autoidman                    = false
 
 function wx.GetProjectKind()
-    if wx.shared == true then
-        return "StaticLib"
-    else
+    if wx.shared then
+        print "SharedLib"
         return "SharedLib"
+    else
+        print "StaticLib"
+        return "StaticLib"
     end
 end
+
+return wx

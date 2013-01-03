@@ -30,6 +30,6 @@ fi
 # Build premake
 cd build
 make CONFIG=Release -C./premake/$platform
-./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $1
+./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
 
 exit 0
