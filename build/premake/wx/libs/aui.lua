@@ -9,7 +9,7 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 project "aui"
-    kind ( wx.GetProjectKind() )
+    kind( wx.getprojectkind() )
     files
     {
         "../../../../include/wx/aui/framemanager.h",

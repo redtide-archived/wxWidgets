@@ -9,7 +9,7 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 project "propgrid"
-    kind ( wx.GetProjectKind() )
+    kind( wx.getprojectkind() )
     files
     {
         "../../../../include/wx/propgrid/advprops.h",

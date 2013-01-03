@@ -1594,4 +1594,3 @@ newoption
     value       = "PREFIX",
     description = "Exec prefix where CppUnit is installed (optional)"
 }
-

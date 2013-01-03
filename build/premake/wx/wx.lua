@@ -31,7 +31,7 @@ wx.std_string                   = false
 wx.std_string_conv_in_wxstring  = false
 wx.unicode                      = true
 wx.extended_rtti                = false
-wx.optimize                     = false
+wx.optimize                     = true
 wx.profile                      = false
 wx.no_rtti                      = false
 wx.no_exceptions                = false
@@ -308,22 +308,24 @@ wx.pnm                          = false
 wx.xpm                          = false
 wx.ico_cur                      = false
 
+-------------------------------------------------------------------------------
 -- This one is not really MSW-specific but it exists mainly to be turned off
 -- under MSW, it should be off by default on the other platforms
+-------------------------------------------------------------------------------
 wx.autoidman                    = false
 
-function wx.GetProjectKind()
+function wx.getprojectkind()
     if wx.shared then
-        print "SharedLib"
         return "SharedLib"
     else
-        print "StaticLib"
         return "StaticLib"
     end
 end
 
+-------------------------------------------------------------------------------
 -- Sets a wx option based on the current configuration been checked
-function wx.SetOption(name, value)
+-------------------------------------------------------------------------------
+function wx.setoption(name, value)
     local configuration
     
     for index,option in pairs(premake.CurrentConfiguration.terms) do
@@ -345,8 +347,10 @@ function wx.SetOption(name, value)
     end
 end
 
+-------------------------------------------------------------------------------
 -- Execute a command and return the result in a table
-function wx.Execute(command)
+-------------------------------------------------------------------------------
+function wx.execute(command)
     local process = assert(io.popen(command), "Failed to execute: " .. command)
     local lines = {}
     
@@ -359,8 +363,10 @@ function wx.Execute(command)
     return lines
 end
 
+-------------------------------------------------------------------------------
 -- Checks if a library is installed and returns true or false if not installed
-function wx.unix.CheckLibrary(library, required)
+-------------------------------------------------------------------------------
+function wx.unix.checklib(library, required)
     local exists, output
     local available = true
     
@@ -384,13 +390,15 @@ function wx.unix.CheckLibrary(library, required)
     return available
 end
 
+-------------------------------------------------------------------------------
 -- Checks if a library of a minimum version given is available
-function wx.unix.CheckLibraryVersion(library, version, required)
+-------------------------------------------------------------------------------
+function wx.unix.checklibversion(library, version, required)
     local value, output, available
     
     output = "Checking " .. library .. " >= " .. version .. "..."
     
-    for index,line in pairs(wx.Execute("pkg-config " .. library .. " --modversion 2> /dev/null")) do
+    for index,line in pairs(wx.execute("pkg-config " .. library .. " --modversion 2> /dev/null")) do
         value = line
         break
     end

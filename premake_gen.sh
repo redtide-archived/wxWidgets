@@ -29,11 +29,12 @@ fi
 
 cd build
 
-# Build premake
+# Build premake if needed
 if [ ! -e "premake/$platform/bin/release/premake4" ]; then
     make CONFIG=Release -C./premake/$platform
 fi
 
+# Run premake4 with user's parameters
 ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
 
 exit 0
