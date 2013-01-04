@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        jpeg.lua
--- Purpose:     wxWidgets builtin jpeg project
+-- Name:        tiff.lua
+-- Purpose:     wxWidgets builtin tiff library project
 -- Author:      Jefferson González
 -- Modified by:
 -- Created:     2013/01/04
