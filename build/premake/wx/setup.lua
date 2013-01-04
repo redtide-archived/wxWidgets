@@ -364,7 +364,73 @@ function wx.execute(command)
 end
 
 -------------------------------------------------------------------------------
--- Checks if a library is installed and returns true or false if not installed
+-- Search for a header on standard unix locations and returns the path found.
+-- TODO: Add macosx standard paths.
+-------------------------------------------------------------------------------
+function wx.unix.findheader(header)
+    -- directories used to search for headers
+    local directories = {
+        "/usr/include",
+        "/usr/local/include",
+    }
+    
+    for i,dir in pairs(directories) do
+        local result = wx.execute("find " .. dir .. " -print0 | grep -FzZ " .. "\"".. header .."\"")
+        
+        if #result > 0 then
+            return string.gsub(result[1], header, "")
+        end
+    end
+    
+    return nil
+end
+
+-------------------------------------------------------------------------------
+-- Search for a library on standard unix locations and returns table
+-- with static and shared fields that contain the path found for each
+-- or nil if was not found.
+-- TODO: Add macosx standard paths.
+-------------------------------------------------------------------------------
+function wx.unix.findlib(library)
+    local static, shared
+    
+    -- directories used to search for libraries
+    local directories = {
+        "/usr/lib",
+        "/usr/local/lib",
+    }
+    
+    library = string.gsub(library, "lib", "")
+    library = string.gsub(library, ".so", "")
+    library = string.gsub(library, ".a", "")
+    library = "lib" .. library
+    
+    -- search static library
+    for i,dir in pairs(directories) do
+        local result = wx.execute("find " .. dir .. " -name " .. "\"".. library ..".a\" | grep java -v")
+        
+        if #result > 0 then
+            static = string.gsub(result[1], library .. ".a", "")
+            break
+        end
+    end
+    
+    -- search shared library
+    for i,dir in pairs(directories) do
+        local result = wx.execute("find " .. dir .. " -name " .. "\"".. library ..".so\" | grep java -v")
+        
+        if #result > 0 then
+            shared = string.gsub(result[1], library .. ".so", "")
+            break
+        end
+    end
+    
+    return {["shared"]=shared, ["static"]=static}
+end
+
+-------------------------------------------------------------------------------
+-- Checks if a library is installed by using pkg-config and returns true or 
+-- false if not installed
 -------------------------------------------------------------------------------
 function wx.unix.checklib(library, required)
     local exists, output
@@ -391,7 +457,7 @@ function wx.unix.checklib(library, required)
 end
 
 -------------------------------------------------------------------------------
--- Checks if a library of a minimum version given is available
+-- Checks with pkg-config if a library of a minimum version given is available
 -------------------------------------------------------------------------------
 function wx.unix.checklibversion(library, version, required)
     local value, output, available
