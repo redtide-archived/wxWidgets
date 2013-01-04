@@ -10,9 +10,9 @@
 -- ============================================================================
 
 project "zlib"
-    kind( wx.getprojectkind() )
+    kind "StaticLib"
     
-    targetname("wxzlib")
+    targetname "wxzlib"
     
     includedirs
     {
