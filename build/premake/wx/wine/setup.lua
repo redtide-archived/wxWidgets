@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        directfb.lua
--- Purpose:     wxDFB setup
+-- Name:        wx/wine/setup.lua
+-- Purpose:     wxWine setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/21
@@ -8,4 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.directfb = true
+wx.wine = true

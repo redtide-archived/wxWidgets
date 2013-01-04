@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        macosx.lua
+-- Name:        wx/osx/setup.lua
 -- Purpose:     wxOSX setup
 -- Author:      Andrea Zanellato
 -- Modified by:

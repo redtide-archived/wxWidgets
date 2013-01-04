@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        microwindows.lua
--- Purpose:     wxMicroWindows setup
+-- Name:        wx/x11/setup.lua
+-- Purpose:     wxX11 setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/21
@@ -8,4 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.microwin = true
+wx.x11 = true

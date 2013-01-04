@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        wx.lua
--- Purpose:     wx Lua namespace
+-- Name:        wx/setup.lua
+-- Purpose:     wx Lua namespace, common setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/17

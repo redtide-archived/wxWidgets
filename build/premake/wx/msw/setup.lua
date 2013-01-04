@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        msw.lua
+-- Name:        wx/msw/setup.lua
 -- Purpose:     wxMSW setup
 -- Author:      Andrea Zanellato
 -- Modified by:

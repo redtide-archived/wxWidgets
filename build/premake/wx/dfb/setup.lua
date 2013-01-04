@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        os2.lua
--- Purpose:     wxOS2 setup
+-- Name:        wx/dfb/setup.lua
+-- Purpose:     wxDFB setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/21
@@ -8,8 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.pm  = true
--- ----------------------------------------------------------------------------
--- Global compile options
--- ----------------------------------------------------------------------------
-wx.omf = false
+wx.directfb = true

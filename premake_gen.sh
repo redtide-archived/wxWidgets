@@ -27,18 +27,16 @@ if [ "$platform" = "unknown" ]; then
     exit 1
 fi
 
-cd build
-
 # Build premake if needed
-if [ ! -e "premake/$platform/bin/release/premake4" ]; then
-    make CONFIG=Release -C./premake/$platform
+if [ ! -e "build/premake/$platform/bin/release/premake4" ]; then
+    make CONFIG=Release -C./build/premake/$platform
 fi
 
 # Run premake4 with user's parameters
 if [ ! $1 = "--help" ]; then
-    ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
+    ./build/premake/$platform/bin/release/premake4 $@
 else
-    ./premake/$platform/bin/release/premake4 --file=./premake/wx/options.lua /help
+    ./build/premake/$platform/bin/release/premake4 --file=./build/premake/wx/options.lua /help
 fi
 
 exit 0

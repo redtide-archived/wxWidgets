@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        nanox.lua
--- Purpose:     wxNanoX setup
+-- Name:        wx/microwindows/setup.lua
+-- Purpose:     wxMicroWindows setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/21
@@ -8,4 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.nanox = true
+wx.microwin = true

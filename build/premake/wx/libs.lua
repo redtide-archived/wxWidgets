@@ -26,5 +26,5 @@ if wx.stc then
 end
 
 if wx.universal then
-    require "wx.ports.universal"
+    require "wx.univ.setup"
 end

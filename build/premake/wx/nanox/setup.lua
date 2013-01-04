@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        motif.lua
--- Purpose:     wxMotif setup
+-- Name:        wx/nanox/setup.lua
+-- Purpose:     wxNanoX setup
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/21
@@ -8,4 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.motif = true
+wx.nanox = true

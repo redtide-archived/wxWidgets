@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        unix.lua
+-- Name:        wx/unix/setup.lua
 -- Purpose:     wxUnix setup
 -- Author:      Andrea Zanellato
 -- Modified by:

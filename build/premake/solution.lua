@@ -18,9 +18,9 @@ solution "wxWidgets"
     require "wx.options"
 
 -- Load wx namespace defaults
-    require "wx.wx"
+    require "wx.setup"
     
-    require "wx.ports.unix"
+    require "wx.unix.setup"
 
 -- Load configuration
     require "wx.configure"

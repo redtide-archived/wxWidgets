@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        gtk.lua
+-- Name:        wx/gtk/setup.lua
 -- Purpose:     wxGTK wxGPE setup
 -- Author:      Andrea Zanellato
 -- Modified by:
