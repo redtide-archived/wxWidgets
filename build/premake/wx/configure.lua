@@ -94,6 +94,18 @@ configuration "with-flavour"
 configuration "disable-all-features"
     wx.setoption("all_features", false)
 -- ----------------------------------------------------------------------------
+-- Third party library options
+-- ----------------------------------------------------------------------------
+configuration "not with-libjpeg"
+    defines{"wxUSE_LIBJPEG=1"}
+    
+configuration "with-libjpeg"
+if _OPTIONS["with-libjpeg"] == "no" then
+    wx.setoption("libjpeg")
+else
+    defines{"wxUSE_LIBJPEG=1"}
+end
+-- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
 configuration "bsd"
