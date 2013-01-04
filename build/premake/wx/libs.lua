@@ -28,3 +28,7 @@ end
 if wx.universal then
     require "wx.univ.setup"
 end
+
+if wx.gui and wx.libjpeg ~= "no" then
+    require "wx.libs.jpeg"
+end
