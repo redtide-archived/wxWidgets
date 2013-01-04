@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        jpeg.lua
--- Purpose:     wxWidgets builtin jpeg project
+-- Name:        zlib.lua
+-- Purpose:     wxWidgets builtin zlib library project
 -- Author:      Jefferson González
 -- Modified by:
 -- Created:     2013/01/04
