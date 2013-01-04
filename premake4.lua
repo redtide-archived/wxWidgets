@@ -10,6 +10,8 @@
 -- ============================================================================
 if _ACTION ~= nil and _ACTION ~= "help" then
     dofile(os.getcwd() .. "/build/premake/solution.lua")
+else
+    dofile(os.getcwd() .. "/build/premake/wx/options.lua")
 end
 
 
