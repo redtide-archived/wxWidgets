@@ -35,6 +35,10 @@ if [ ! -e "premake/$platform/bin/release/premake4" ]; then
 fi
 
 # Run premake4 with user's parameters
-./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
+if [ ! $1 = "--help" ]; then
+    ./premake/$platform/bin/release/premake4 --file=./premake/solution.lua $@
+else
+    ./premake/$platform/bin/release/premake4 --file=./premake/wx/options.lua /help
+fi
 
 exit 0

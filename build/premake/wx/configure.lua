@@ -74,6 +74,26 @@ configuration "disable-visibility"
 configuration "disable-tls"
     wx.setoption("tls", false)
 -- ----------------------------------------------------------------------------
+-- Global build options
+-- ----------------------------------------------------------------------------
+configuration "disable-gui"
+    wx.setoption("gui", false)
+
+configuration "enable-monolithic"
+    wx.setoption("monolithic", true)
+
+configuration "enable-plugins"
+    wx.setoption("plugins", true)
+
+configuration "without-subdirs"
+    wx.setoption("subdirs", false)
+
+configuration "with-flavour"
+    wx.setoption("flavour")
+
+configuration "disable-all-features"
+    wx.setoption("all_features", false)
+-- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
 configuration "bsd"
