@@ -10,9 +10,9 @@
 -- ============================================================================
 
 project "png"
-    kind( wx.getprojectkind() )
+    kind "StaticLib"
     
-    targetname("wxpng")
+    targetname "wxpng"
     
     includedirs
     {

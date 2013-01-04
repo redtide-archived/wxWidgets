@@ -10,9 +10,9 @@
 -- ============================================================================
 
 project "tiff"
-    kind( wx.getprojectkind() )
+    kind "StaticLib"
     
-    targetname("wxtiff")
+    targetname "wxtiff"
     
     links { "zlib", "jpeg" }
     
@@ -32,7 +32,7 @@ project "tiff"
     configuration "vs*"
         defines { "_CRT_NONSTDC_NO_WARNINGS" }
         
-    configuration "bsd or linux or macosx or solaris"
+    configuration "not windows"
         files { "../../src/tiff/libtiff/tif_unix.c" }
     
     configuration "windows"
