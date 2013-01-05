@@ -87,4 +87,30 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
             _OPTIONS["with-libjpeg"] = "builtin"
         end
     end
+    
+    -- Check for tiff
+    if _OPTIONS["with-zlib"] and _OPTIONS["with-libjpeg"] then
+        if not _OPTIONS["with-libtiff"] or _OPTIONS["with-libtiff"] ~= "no" then
+            local header = wx.unix.findheader("tiff.h")
+            local libdir = wx.unix.findlib("tiff")
+            
+            -- Non standard path found
+            if header and header ~= "standard" then
+                _OPTIONS["with-libtiff"] = "yes"
+                wx.includes.libtiff = header
+                
+                if libdir.static and libdir.static ~= "standard" then
+                    wx.libdirs.libtiff = libdir.static
+                elseif libdir.shared and libdir.shared ~= "standard" then
+                    wx.libdirs.libtiff = libdir.shared
+                end
+            -- Standard path found
+            elseif header then
+                _OPTIONS["with-libtiff"] = "yes"
+            -- Non found use builtin
+            else
+                _OPTIONS["with-libtiff"] = "builtin"
+            end
+        end
+    end
 end

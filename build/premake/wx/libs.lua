@@ -40,3 +40,7 @@ end
 if wx.gui and wx.libjpeg == "builtin" then
     require "wx.libs.jpeg"
 end
+
+if wx.gui and wx.libtiff == "builtin" then
+    require "wx.libs.tiff"
+end

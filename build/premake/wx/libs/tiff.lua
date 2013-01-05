@@ -14,29 +14,24 @@ project "tiff"
     
     targetname "wxtiff"
     
-    links { "zlib", "jpeg" }
+    if wx.zlib == "builtin" then
+        links { "wxzlib" }
+        includedirs { "../../src/zlib" }
+    else
+        links { "z" }
+    end
+    
+    if wx.libjpeg == "builtin" then
+        links { "wxjpeg" }
+        includedirs { "../../src/jpeg" }
+    else
+        links { "jpeg" }
+    end
     
     includedirs
     {
-        "../../src/zlib"
-        "../../src/jpeg"
         "../../src/tiff/libtiff"
     }
-        
-    --[[
-        define this to get rid of a warning about using POSIX lfind():
-        confusingly enough, we do define lfind as _lfind for MSVC but
-        doing this results in a just more confusing warning, see:
-        http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=101278--
-      ]]--
-    configuration "vs*"
-        defines { "_CRT_NONSTDC_NO_WARNINGS" }
-        
-    configuration "not windows"
-        files { "../../src/tiff/libtiff/tif_unix.c" }
-    
-    configuration "windows"
-        files { "../../src/tiff/libtiff/tif_win32.c" }
     
     files
     {
@@ -79,3 +74,18 @@ project "tiff"
         "../../src/tiff/libtiff/tif_write.c",
         "../../src/tiff/libtiff/tif_zip.c"
     }
+        
+    --[[
+        define this to get rid of a warning about using POSIX lfind():
+        confusingly enough, we do define lfind as _lfind for MSVC but
+        doing this results in a just more confusing warning, see:
+        http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=101278--
+      ]]--
+    configuration "vs*"
+        defines { "_CRT_NONSTDC_NO_WARNINGS" }
+        
+    configuration "not windows"
+        files { "../../src/tiff/libtiff/tif_unix.c" }
+    
+    configuration "windows"
+        files { "../../src/tiff/libtiff/tif_win32.c" }

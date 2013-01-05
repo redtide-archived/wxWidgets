@@ -409,9 +409,12 @@ function wx.unix.findheader(header)
         local result = wx.execute("find " .. dir .. " -print0 | grep -FzZ " .. "\"".. header .."\"")
         
         if #result > 0 then
-            path = string.gsub(result[1], "/" .. header, "")
-            if path == dir then
-                path = "standard"
+            local headervalid = string.find(result[1], "/" .. header)
+            if headervalid then
+                path = string.gsub(result[1], "/" .. header, "")
+                if path == dir then
+                    path = "standard"
+                end
             end
         end
     end
