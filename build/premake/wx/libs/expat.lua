@@ -19,9 +19,6 @@ project "expat"
         "../../src/expat/lib"
     }
     
-    configuration {"vs*", "windows"}
-        defines { "COMPILED_FROM_DSP" }
-    
     files
     {
         -- Headers
@@ -46,3 +43,6 @@ project "expat"
         "../../src/expat/lib/xmlrole.c",
         "../../src/expat/lib/xmltok.c"
     }
+    
+    configuration {"vs*", "windows"}
+        defines { "COMPILED_FROM_DSP" }

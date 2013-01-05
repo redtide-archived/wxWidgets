@@ -44,3 +44,11 @@ end
 if wx.gui and wx.libtiff == "builtin" then
     require "wx.libs.tiff"
 end
+
+if wx.expat == "builtin" then
+    require "wx.libs.expat"
+end
+
+if wx.regex == "builtin" then
+    require "wx.libs.regex"
+end
