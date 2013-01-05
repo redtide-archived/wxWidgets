@@ -446,9 +446,6 @@ function wx.unix.findlib(library)
         "/usr/local/lib",
     }
     
-    library = string.gsub(library, "lib", "")
-    library = string.gsub(library, ".so", "")
-    library = string.gsub(library, ".a", "")
     library = "lib" .. library
     
     wx.print("Searching for library " .. library .. "... ")
