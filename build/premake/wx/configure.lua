@@ -96,13 +96,9 @@ configuration "disable-all-features"
 -- ----------------------------------------------------------------------------
 -- Third party library options
 -- ----------------------------------------------------------------------------
-configuration "not with-libjpeg"
-    defines{"wxUSE_LIBJPEG=1"}
-    
 configuration "with-libjpeg"
-if _OPTIONS["with-libjpeg"] == "no" then
     wx.setoption("libjpeg")
-else
+if wx.libjpeg ~= "no" then
     defines{"wxUSE_LIBJPEG=1"}
 end
 -- ----------------------------------------------------------------------------
