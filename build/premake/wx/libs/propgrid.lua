@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        propgrid.lua
--- Purpose:     wxPropertyGrid project
+-- Name:        wx/libs/propgrid.lua
+-- Purpose:     wxPropertyGrid library project
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2013/01/02
@@ -10,23 +10,32 @@
 -- ============================================================================
 project "propgrid"
     kind( wx.getprojectkind() )
+
+    includedirs
+    {
+        "../../include"
+    }
+
     files
     {
-        "../../../../include/wx/propgrid/advprops.h",
-        "../../../../include/wx/propgrid/editors.h",
-        "../../../../include/wx/propgrid/manager.h",
-        "../../../../include/wx/propgrid/property.h",
-        "../../../../include/wx/propgrid/propgrid.h",
-        "../../../../include/wx/propgrid/propgriddefs.h",
-        "../../../../include/wx/propgrid/propgridiface.h",
-        "../../../../include/wx/propgrid/propgridpagestate.h",
-        "../../../../include/wx/propgrid/props.h",
-        "../../../../src/propgrid/advprops.cpp",
-        "../../../../src/propgrid/editors.cpp",
-        "../../../../src/propgrid/manager.cpp",
-        "../../../../src/propgrid/property.cpp",
-        "../../../../src/propgrid/propgrid.cpp",
-        "../../../../src/propgrid/propgridiface.cpp",
-        "../../../../src/propgrid/propgridpagestate.cpp",
-        "../../../../src/propgrid/props.cpp"
+        -- Headers
+        "../../include/wx/propgrid/advprops.h",
+        "../../include/wx/propgrid/editors.h",
+        "../../include/wx/propgrid/manager.h",
+        "../../include/wx/propgrid/property.h",
+        "../../include/wx/propgrid/propgrid.h",
+        "../../include/wx/propgrid/propgriddefs.h",
+        "../../include/wx/propgrid/propgridiface.h",
+        "../../include/wx/propgrid/propgridpagestate.h",
+        "../../include/wx/propgrid/props.h",
+
+        -- Sources
+        "../../src/propgrid/advprops.cpp",
+        "../../src/propgrid/editors.cpp",
+        "../../src/propgrid/manager.cpp",
+        "../../src/propgrid/property.cpp",
+        "../../src/propgrid/propgrid.cpp",
+        "../../src/propgrid/propgridiface.cpp",
+        "../../src/propgrid/propgridpagestate.cpp",
+        "../../src/propgrid/props.cpp"
     }
