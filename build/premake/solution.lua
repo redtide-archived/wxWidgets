@@ -14,6 +14,10 @@ solution "wxWidgets"
     location            ( "../../build/" .. _ACTION )
     configurations      {"Debug", "Release"}
     
+    -- Temporary workaround
+    targetdir           ( "../../build/" .. _ACTION .. "/libs" )
+    libdirs             { "../../build/" .. _ACTION .. "/libs" } 
+    
 -- Make directory to hold the setup.h    
     os.mkdir("../../build/" .. _ACTION .. "/wx")
     
