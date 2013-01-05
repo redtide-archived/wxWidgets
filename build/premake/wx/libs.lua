@@ -29,6 +29,10 @@ if wx.universal then
     require "wx.univ.setup"
 end
 
+if wx.zlib == "builtin" then
+    require "wx.libs.zlib"
+end
+
 if wx.gui and wx.libpng == "builtin" then
     require "wx.libs.png"
 end

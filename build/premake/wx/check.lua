@@ -14,27 +14,53 @@
 -----------------------------------------------------------------------------
 if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
     
-    -- Check for png
-    if not _OPTIONS["with-libpng"] or _OPTIONS["with-libpng"] ~= "no" then
-        local header = wx.unix.findheader("png.h")
-        local libdir = wx.unix.findlib("png")
+    -- Check for zlib
+    if not _OPTIONS["with-zlib"] or _OPTIONS["with-zlib"] ~= "no" then
+        local header = wx.unix.findheader("zlib.h")
+        local libdir = wx.unix.findlib("z")
         
         -- Non standard path found
         if header and header ~= "standard" then
-            _OPTIONS["with-libpng"] = "yes"
-            wx.includes.libpng = header
+            _OPTIONS["with-zlib"] = "yes"
+            wx.includes.zlib = header
             
             if libdir.static and libdir.static ~= "standard" then
-                wx.libdirs.libpng = libdir.static
+                wx.libdirs.zlib = libdir.static
             elseif libdir.shared and libdir.shared ~= "standard" then
-                wx.libdirs.libpng = libdir.shared
+                wx.libdirs.zlib = libdir.shared
             end
         -- Standard path found
         elseif header then
-            _OPTIONS["with-libpng"] = "yes"
+            _OPTIONS["with-zlib"] = "yes"
         -- Non found use builtin
         else
-            _OPTIONS["with-libpng"] = "builtin"
+            _OPTIONS["with-zlib"] = "builtin"
+        end
+    end
+    
+    -- Check for png
+    if _OPTIONS["with-zlib"] then
+        if not _OPTIONS["with-libpng"] or _OPTIONS["with-libpng"] ~= "no" then
+            local header = wx.unix.findheader("png.h")
+            local libdir = wx.unix.findlib("png")
+            
+            -- Non standard path found
+            if header and header ~= "standard" then
+                _OPTIONS["with-libpng"] = "yes"
+                wx.includes.libpng = header
+                
+                if libdir.static and libdir.static ~= "standard" then
+                    wx.libdirs.libpng = libdir.static
+                elseif libdir.shared and libdir.shared ~= "standard" then
+                    wx.libdirs.libpng = libdir.shared
+                end
+            -- Standard path found
+            elseif header then
+                _OPTIONS["with-libpng"] = "yes"
+            -- Non found use builtin
+            else
+                _OPTIONS["with-libpng"] = "builtin"
+            end
         end
     end
     

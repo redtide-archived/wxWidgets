@@ -96,16 +96,22 @@ configuration "disable-all-features"
 -- ----------------------------------------------------------------------------
 -- Third party library options
 -- ----------------------------------------------------------------------------
-configuration "with-libjpeg"
-    wx.setoption("libjpeg")
-if wx.libjpeg ~= "no" then
-    defines{"wxUSE_LIBJPEG=1"}
+configuration "with-zlib"
+    wx.setoption("zlib")
+if wx.zlib ~= "no" then
+    defines{"wxUSE_ZLIB=1"}
 end
 
 configuration "with-libpng"
     wx.setoption("libpng")
 if wx.libpng ~= "no" then
     defines{"wxUSE_LIBPNG=1"}
+end
+
+configuration "with-libjpeg"
+    wx.setoption("libjpeg")
+if wx.libjpeg ~= "no" then
+    defines{"wxUSE_LIBJPEG=1"}
 end
 -- ----------------------------------------------------------------------------
 -- Ports configurations
