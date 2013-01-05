@@ -14,9 +14,12 @@ project "tiff"
     
     targetname "wxtiff"
     
+    local withoptions = ""
+    
     if wx.zlib == "builtin" then
         links { "wxzlib" }
         includedirs { "../../src/zlib" }
+        withoptions = "--with-zlib-include-dir=" .. "../../../src/zlib "
     else
         links { "z" }
     end
@@ -24,14 +27,10 @@ project "tiff"
     if wx.libjpeg == "builtin" then
         links { "wxjpeg" }
         includedirs { "../../src/jpeg" }
+        withoptions = withoptions .. "--with-jpeg-include-dir=DIR=" .. "../../../src/jpeg "
     else
         links { "jpeg" }
     end
-    
-    includedirs
-    {
-        "../../src/tiff/libtiff"
-    }
     
     files
     {
@@ -85,7 +84,32 @@ project "tiff"
         defines { "_CRT_NONSTDC_NO_WARNINGS" }
         
     configuration "not windows"
+        includedirs
+        {
+            "../../build/" .. _ACTION .. "/tiff"
+        }
+    
         files { "../../src/tiff/libtiff/tif_unix.c" }
+        
+        wx.print("Configuring libtiff... ")
+        
+        local currentpath = os.getcwd()
+        
+        os.execute("cp -r ../../src/tiff " .. "../../build/" .. _ACTION .. "/tifftemp")
+        
+        os.chdir("../../build/" .. _ACTION .. "/tifftemp")
+        
+        os.execute("./configure " .. withoptions .. "> /dev/null 2>&1")
+        
+        os.chdir(currentpath)
+        
+        os.mkdir("../../build/" .. _ACTION .. "/tiff")
+        
+        os.execute("cp ../../build/" .. _ACTION .. "/tifftemp/libtiff/*.h ../../build/" .. _ACTION .. "/tiff")
+        
+        os.execute("rm -rf ../../build/" .. _ACTION .. "/tifftemp")
+        
+        print("done")
     
     configuration "windows"
         files { "../../src/tiff/libtiff/tif_win32.c" }
