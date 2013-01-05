@@ -26,4 +26,9 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
     -- Check for tiff
     wx.unix.configurelib("libtiff", "tiff.h", "tiff", {"zlib", "libjpeg"})
     
+    -- Check for expat
+    wx.unix.configurelib("expat", "expat.h", "expat")
+    
+    -- Check for regex
+    wx.unix.configurelib("regex", "regex.h", "regex")
 end

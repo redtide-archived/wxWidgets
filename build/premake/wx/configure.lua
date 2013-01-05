@@ -131,6 +131,24 @@ configuration "with-libtiff"
 if wx.libtiff ~= "no" then
     defines{"wxUSE_LIBTIFF=1"}
 end
+
+configuration "not with-expat"
+    defines{"wxUSE_EXPAT=1"}
+
+configuration "with-expat"
+    wx.setoption("expat")
+if wx.expat ~= "no" then
+    defines{"wxUSE_EXPAT=1"}
+end
+
+configuration "not with-regex"
+    defines{"wxUSE_REGEX=1"}
+
+configuration "with-regex"
+    wx.setoption("regex")
+if wx.regex ~= "no" then
+    defines{"wxUSE_REGEX=1"}
+end
 -- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
