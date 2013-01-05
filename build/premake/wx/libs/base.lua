@@ -193,7 +193,7 @@ project "base"
             "../../src/os2/stdpaths.cpp",
             "../../src/os2/thread.cpp",
             "../../src/os2/utils.cpp",
-            "../../src/os2/utilsexc.cpp"
+            "../../src/os2/utilsexc.cpp",
         end
     --]]
 -- ============================================================================
@@ -205,7 +205,7 @@ project "base"
 
             "../../src/msdos/dir.cpp",
             "../../src/msdos/mimetype.cpp",
-            "../../src/msdos/utilsdos.cpp"
+            "../../src/msdos/utilsdos.cpp",
         end
     --]]
 -- ============================================================================
@@ -470,4 +470,46 @@ project "base"
 -- ============================================================================
 --                                  wxNet (part of wxBase)
 -- ============================================================================
+        if not wx.msw then
+            "../../src/msw/sockmsw.cpp",
+            "../../src/msw/urlmsw.cpp",
+            if wx.wince then
+                "../../include/wx/msw/wince/net.h",
+                "../../src/msw/wince/net.cpp",
+            end
+        else
+            "../../src/common/socketiohandler.cpp",
+            "../../src/unix/sockunix.cpp",
+        end
+
+        if wx.osx then
+            "../../src/osx/core/sockosx.cpp",
+        end
+--[[
+        if wx.os2 then
+            "../../src/unix/sockunix.cpp"
+        end
+]]--
+        "../../include/wx/fs_inet.h",
+        "../../include/wx/protocol/file.h",
+        "../../include/wx/protocol/ftp.h",
+        "../../include/wx/protocol/http.h",
+        "../../include/wx/protocol/log.h",
+        "../../include/wx/protocol/protocol.h",
+        "../../include/wx/sckaddr.h",
+        "../../include/wx/sckipc.h",
+        "../../include/wx/sckstrm.h",
+        "../../include/wx/socket.h",
+        "../../include/wx/url.h",
+
+        "../../src/common/fs_inet.cpp",
+        "../../src/common/ftp.cpp",
+        "../../src/common/http.cpp",
+        "../../src/common/protocol.cpp",
+        "../../src/common/sckaddr.cpp",
+        "../../src/common/sckfile.cpp",
+        "../../src/common/sckipc.cpp",
+        "../../src/common/sckstrm.cpp",
+        "../../src/common/socket.cpp",
+        "../../src/common/url.cpp"
     }
