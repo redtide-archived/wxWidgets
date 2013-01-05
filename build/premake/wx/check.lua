@@ -19,8 +19,11 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
         local header = wx.unix.findheader("zlib.h")
         local libdir = wx.unix.findlib("z")
         
+        -- Forced builtin or not found
+        if _OPTIONS["with-zlib"] == "builtin" or not header then
+            _OPTIONS["with-zlib"] = "builtin"
         -- Non standard path found
-        if header and header ~= "standard" then
+        elseif header and header ~= "standard" then
             _OPTIONS["with-zlib"] = "yes"
             wx.includes.zlib = header
             
@@ -32,9 +35,6 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
         -- Standard path found
         elseif header then
             _OPTIONS["with-zlib"] = "yes"
-        -- Non found use builtin
-        else
-            _OPTIONS["with-zlib"] = "builtin"
         end
     end
     
@@ -44,8 +44,11 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
             local header = wx.unix.findheader("png.h")
             local libdir = wx.unix.findlib("png")
             
+            -- Forced builtin or not found
+            if _OPTIONS["with-libpng"] == "builtin" or not header then
+                _OPTIONS["with-libpng"] = "builtin"
             -- Non standard path found
-            if header and header ~= "standard" then
+            elseif header and header ~= "standard" then
                 _OPTIONS["with-libpng"] = "yes"
                 wx.includes.libpng = header
                 
@@ -57,9 +60,6 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
             -- Standard path found
             elseif header then
                 _OPTIONS["with-libpng"] = "yes"
-            -- Non found use builtin
-            else
-                _OPTIONS["with-libpng"] = "builtin"
             end
         end
     end
@@ -69,8 +69,11 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
         local header = wx.unix.findheader("jpeglib.h")
         local libdir = wx.unix.findlib("jpeg")
         
+        -- Forced builtin or not found
+        if _OPTIONS["with-libjpeg"] == "builtin" or not header then
+            _OPTIONS["with-libjpeg"] = "builtin"
         -- Non standard path found
-        if header and header ~= "standard" then
+        elseif header and header ~= "standard" then
             _OPTIONS["with-libjpeg"] = "yes"
             wx.includes.libjpeg = header
             
@@ -82,9 +85,6 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
         -- Standard path found
         elseif header then
             _OPTIONS["with-libjpeg"] = "yes"
-        -- Non found use builtin
-        else
-            _OPTIONS["with-libjpeg"] = "builtin"
         end
     end
     
@@ -94,8 +94,11 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
             local header = wx.unix.findheader("tiff.h")
             local libdir = wx.unix.findlib("tiff")
             
+            -- Forced builtin or not found
+            if _OPTIONS["with-libtiff"] == "builtin" or not header then
+                _OPTIONS["with-libtiff"] = "builtin"
             -- Non standard path found
-            if header and header ~= "standard" then
+            elseif header and header ~= "standard" then
                 _OPTIONS["with-libtiff"] = "yes"
                 wx.includes.libtiff = header
                 
@@ -107,9 +110,6 @@ if os.is("bsd") or os.is("linux") or os.is("macosx") or os.is("solaris") then
             -- Standard path found
             elseif header then
                 _OPTIONS["with-libtiff"] = "yes"
-            -- Non found use builtin
-            else
-                _OPTIONS["with-libtiff"] = "builtin"
             end
         end
     end
