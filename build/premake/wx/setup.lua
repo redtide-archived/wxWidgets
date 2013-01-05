@@ -547,3 +547,43 @@ function wx.unix.checklibversion(library, version, required)
     
     return available
 end
+
+-------------------------------------------------------------------------------
+-- Mainly to configure third party libraries.
+-------------------------------------------------------------------------------
+function wx.unix.configurelib(library, header_file, library_file, dependencies)
+    local with_library = "with-" .. library
+    
+    -- Check dependencies
+    if dependencies and #dependencies > 0 then
+        for i,d in pairs(dependencies) do
+            if _OPTIONS["with-"..d] == "no" then
+                return nil
+            end
+        end
+    end
+    
+    -- Check library
+    if not _OPTIONS[with_library] or _OPTIONS[with_library] ~= "no" then
+        local header = wx.unix.findheader(header_file)
+        local libdir = wx.unix.findlib(library_file)
+        
+        -- Forced builtin or not found
+        if _OPTIONS[with_library] == "builtin" or not header then
+            _OPTIONS[with_library] = "builtin"
+        -- Non standard path found
+        elseif header and header ~= "standard" then
+            _OPTIONS[with_library] = "yes"
+            wx.includes[library] = header
+            
+            if libdir.static and libdir.static ~= "standard" then
+                wx.libdirs[library] = libdir.static
+            elseif libdir.shared and libdir.shared ~= "standard" then
+                wx.libdirs[library] = libdir.shared
+            end
+        -- Standard path found
+        elseif header then
+            _OPTIONS[with_library] = "yes"
+        end
+    end
+end
