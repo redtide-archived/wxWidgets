@@ -14,6 +14,13 @@ project "png"
     
     targetname "wxpng"
     
+    if wx.zlib == "builtin" then
+        links { "wxzlib" }
+        includedirs { "../../src/zlib" }
+    else
+        links { "z" }
+    end
+    
     includedirs
     {
         "../../src/png"
