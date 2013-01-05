@@ -14,8 +14,11 @@ project "png"
     
     targetname "wxpng"
     
+    links { "zlib" }
+    
     includedirs
     {
+        "../../src/zlib",
         "../../src/png"
     }
     
