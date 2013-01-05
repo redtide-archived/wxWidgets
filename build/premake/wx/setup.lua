@@ -21,6 +21,26 @@ wx.compiler                     = ""
 wx.includedir                   = ""
 wx.libdir                       = ""
 -- ----------------------------------------------------------------------------
+-- Thirdpary includes and libraries path
+-- ----------------------------------------------------------------------------
+wx.includes = {}
+
+wx.includes.libpng = nil
+wx.includes.libjpeg = nil
+wx.includes.libtiff = nil
+wx.includes.regex = nil
+wx.includes.zlib = nil
+wx.includes.expat = nil
+
+wx.libdirs = {}
+
+wx.libdirs.libpng = nil
+wx.libdirs.libjpeg = nil
+wx.libdirs.libtiff = nil
+wx.libdirs.regex = nil
+wx.libdirs.zlib = nil
+wx.libdirs.expat = nil
+-- ----------------------------------------------------------------------------
 -- Global compile options
 -- ----------------------------------------------------------------------------
 wx.shared                       = true
@@ -364,6 +384,13 @@ function wx.execute(command)
 end
 
 -------------------------------------------------------------------------------
+-- Print strings to stdout without new line in contrast to default print.
+-------------------------------------------------------------------------------
+function wx.print(text)
+    io.stdout:write(text)
+end
+
+-------------------------------------------------------------------------------
 -- Search for a header on standard unix locations and returns the path found.
 -- TODO: Add macosx standard paths.
 -------------------------------------------------------------------------------
@@ -374,15 +401,30 @@ function wx.unix.findheader(header)
         "/usr/local/include",
     }
     
+    local path
+    
+    wx.print("Searching for header " .. header .. "... ")
+    
     for i,dir in pairs(directories) do
         local result = wx.execute("find " .. dir .. " -print0 | grep -FzZ " .. "\"".. header .."\"")
         
         if #result > 0 then
-            return string.gsub(result[1], header, "")
+            path = string.gsub(result[1], "/" .. header, "")
+            if path == dir then
+                path = "standard"
+            end
         end
     end
     
-    return nil
+    if path ~= nil then
+        wx.print("found")
+    else
+        wx.print("not found")
+    end
+        
+    wx.print("\n")
+        
+    return path
 end
 
 -------------------------------------------------------------------------------
@@ -405,12 +447,17 @@ function wx.unix.findlib(library)
     library = string.gsub(library, ".a", "")
     library = "lib" .. library
     
+    wx.print("Searching for library " .. library .. "... ")
+    
     -- search static library
     for i,dir in pairs(directories) do
         local result = wx.execute("find " .. dir .. " -name " .. "\"".. library ..".a\" | grep java -v")
         
         if #result > 0 then
-            static = string.gsub(result[1], library .. ".a", "")
+            static = string.gsub(result[1], "/" .. library .. ".a", "")
+            if static == dir then
+                static = "standard"
+            end
             break
         end
     end
@@ -420,10 +467,21 @@ function wx.unix.findlib(library)
         local result = wx.execute("find " .. dir .. " -name " .. "\"".. library ..".so\" | grep java -v")
         
         if #result > 0 then
-            shared = string.gsub(result[1], library .. ".so", "")
+            shared = string.gsub(result[1], "/" .. library .. ".so", "")
+            if shared == dir then
+                shared = "standard"
+            end
             break
         end
     end
+    
+    if shared or static then
+        wx.print("found")
+    else
+        wx.print("not found")
+    end
+        
+    wx.print("\n")
     
     return {["shared"]=shared, ["static"]=static}
 end
@@ -433,25 +491,25 @@ end
 -- false if not installed
 -------------------------------------------------------------------------------
 function wx.unix.checklib(library, required)
-    local exists, output
+    local exists
     local available = true
     
-    output = "Checking for " .. library .. "..."
+    wx.print("Checking for " .. library .. "... ")
     exists = os.execute("pkg-config " .. library .. " --exists")
     
     if exists > 0 then
-        output = output .. " not found"
+        wx.print(" not found")
         available = false
         
         if required == true then
-            print("error: " .. output)
+            wx.print(" (required)\n")
             os.exit(1)
         end
     else
-        output = output .. " found"
+        wx.print(" found")
     end
     
-    print(output)
+    wx.print("\n")
     
     return available
 end
