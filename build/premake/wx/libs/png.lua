@@ -16,41 +16,41 @@ project "png"
     
     if wx.zlib == "builtin" then
         links { "wxzlib" }
-        includedirs { "../../src/zlib" }
+        includedirs { wx.srcdir .. "zlib" }
     else
         links { "z" }
     end
     
     includedirs
     {
-        "../../src/png"
+        wx.srcdir .. "png"
     }
     
     files
     {
         -- Headers
-        "../../src/png/pngconf.h",
-        "../../src/png/pngdebug.h",
-        "../../src/png/png.h",
-        "../../src/png/pnginfo.h",
-        "../../src/png/pnglibconf.h",
-        "../../src/png/pngpriv.h",
-        "../../src/png/pngstruct.h",
+        wx.srcdir .. "png/pngconf.h",
+        wx.srcdir .. "png/pngdebug.h",
+        wx.srcdir .. "png/png.h",
+        wx.srcdir .. "png/pnginfo.h",
+        wx.srcdir .. "png/pnglibconf.h",
+        wx.srcdir .. "png/pngpriv.h",
+        wx.srcdir .. "png/pngstruct.h",
 
         -- Sources
-        "../../src/png/png.c",
-        "../../src/png/pngerror.c",
-        "../../src/png/pngget.c",
-        "../../src/png/pngmem.c",
-        "../../src/png/pngpread.c",
-        "../../src/png/pngread.c",
-        "../../src/png/pngrio.c",
-        "../../src/png/pngrtran.c",
-        "../../src/png/pngrutil.c",
-        "../../src/png/pngset.c",
-        "../../src/png/pngtrans.c",
-        "../../src/png/pngwio.c",
-        "../../src/png/pngwrite.c",
-        "../../src/png/pngwtran.c",
-        "../../src/png/pngwutil.c"
+        wx.srcdir .. "png/png.c",
+        wx.srcdir .. "png/pngerror.c",
+        wx.srcdir .. "png/pngget.c",
+        wx.srcdir .. "png/pngmem.c",
+        wx.srcdir .. "png/pngpread.c",
+        wx.srcdir .. "png/pngread.c",
+        wx.srcdir .. "png/pngrio.c",
+        wx.srcdir .. "png/pngrtran.c",
+        wx.srcdir .. "png/pngrutil.c",
+        wx.srcdir .. "png/pngset.c",
+        wx.srcdir .. "png/pngtrans.c",
+        wx.srcdir .. "png/pngwio.c",
+        wx.srcdir .. "png/pngwrite.c",
+        wx.srcdir .. "png/pngwtran.c",
+        wx.srcdir .. "png/pngwutil.c"
     }

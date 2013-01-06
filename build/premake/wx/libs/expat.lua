@@ -16,32 +16,32 @@ project "expat"
     
     includedirs
     {
-        "../../src/expat/lib"
+        wx.srcdir .. "expat/lib"
     }
     
     files
     {
         -- Headers
-        "../../src/expat/lib/ascii.h",
-        "../../src/expat/lib/expat.h",
-        "../../src/expat/lib/latin1tab.h",
-        "../../src/expat/lib/os2config.h",
-        "../../src/expat/lib/xmlrole.h",
-        "../../src/expat/lib/asciitab.h",
-        "../../src/expat/lib/iasciitab.h",
-        "../../src/expat/lib/macconfig.h",
-        "../../src/expat/lib/utf8tab.h",
-        "../../src/expat/lib/xmltok.h",
-        "../../src/expat/lib/dosconfig.h",
-        "../../src/expat/lib/internal.h",
-        "../../src/expat/lib/nametab.h",
-        "../../src/expat/lib/winconfig.h",
-        "../../src/expat/lib/xmltok_impl.h",
+        wx.srcdir .. "expat/lib/ascii.h",
+        wx.srcdir .. "expat/lib/expat.h",
+        wx.srcdir .. "expat/lib/latin1tab.h",
+        wx.srcdir .. "expat/lib/os2config.h",
+        wx.srcdir .. "expat/lib/xmlrole.h",
+        wx.srcdir .. "expat/lib/asciitab.h",
+        wx.srcdir .. "expat/lib/iasciitab.h",
+        wx.srcdir .. "expat/lib/macconfig.h",
+        wx.srcdir .. "expat/lib/utf8tab.h",
+        wx.srcdir .. "expat/lib/xmltok.h",
+        wx.srcdir .. "expat/lib/dosconfig.h",
+        wx.srcdir .. "expat/lib/internal.h",
+        wx.srcdir .. "expat/lib/nametab.h",
+        wx.srcdir .. "expat/lib/winconfig.h",
+        wx.srcdir .. "expat/lib/xmltok_impl.h",
         
         -- Sources
-        "../../src/expat/lib/xmlparse.c",
-        "../../src/expat/lib/xmlrole.c",
-        "../../src/expat/lib/xmltok.c"
+        wx.srcdir .. "expat/lib/xmlparse.c",
+        wx.srcdir .. "expat/lib/xmlrole.c",
+        wx.srcdir .. "expat/lib/xmltok.c"
     }
     
     configuration {"vs*", "windows"}

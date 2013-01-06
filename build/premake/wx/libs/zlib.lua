@@ -16,34 +16,34 @@ project "zlib"
     
     includedirs
     {
-        "../../src/zlib"
+        wx.srcdir .. "zlib"
     }
     
     files
     {
         -- Headers
-        "../../src/zlib/crc32.h",
-        "../../src/zlib/inffast.h",
-        "../../src/zlib/inflate.h",
-        "../../src/zlib/trees.h",
-        "../../src/zlib/zlib.h",
-        "../../src/zlib/deflate.h",
-        "../../src/zlib/inffixed.h",
-        "../../src/zlib/inftrees.h",
-        "../../src/zlib/zconf.h",
-        "../../src/zlib/zutil.h",
+        wx.srcdir .. "zlib/crc32.h",
+        wx.srcdir .. "zlib/inffast.h",
+        wx.srcdir .. "zlib/inflate.h",
+        wx.srcdir .. "zlib/trees.h",
+        wx.srcdir .. "zlib/zlib.h",
+        wx.srcdir .. "zlib/deflate.h",
+        wx.srcdir .. "zlib/inffixed.h",
+        wx.srcdir .. "zlib/inftrees.h",
+        wx.srcdir .. "zlib/zconf.h",
+        wx.srcdir .. "zlib/zutil.h",
 
         -- Sources
-        "../../src/zlib/adler32.c",
-        "../../src/zlib/compress.c",
-        "../../src/zlib/crc32.c",
-        "../../src/zlib/gzio.c",
-        "../../src/zlib/uncompr.c",
-        "../../src/zlib/deflate.c",
-        "../../src/zlib/trees.c",
-        "../../src/zlib/zutil.c",
-        "../../src/zlib/inflate.c",
-        "../../src/zlib/infback.c",
-        "../../src/zlib/inftrees.c",
-        "../../src/zlib/inffast.c"
+        wx.srcdir .. "zlib/adler32.c",
+        wx.srcdir .. "zlib/compress.c",
+        wx.srcdir .. "zlib/crc32.c",
+        wx.srcdir .. "zlib/gzio.c",
+        wx.srcdir .. "zlib/uncompr.c",
+        wx.srcdir .. "zlib/deflate.c",
+        wx.srcdir .. "zlib/trees.c",
+        wx.srcdir .. "zlib/zutil.c",
+        wx.srcdir .. "zlib/inflate.c",
+        wx.srcdir .. "zlib/infback.c",
+        wx.srcdir .. "zlib/inftrees.c",
+        wx.srcdir .. "zlib/inffast.c"
     }

@@ -16,20 +16,20 @@ project "regex"
     
     includedirs
     {
-        "../../src/regex"
+        wx.srcdir .. "regex"
     }
     
     files
     {
         -- Headers
-        "../../src/regex/regcustom.h",
-        "../../src/regex/regerrs.h",
-        "../../src/regex/regex.h",
-        "../../src/regex/regguts.h",
+        wx.srcdir .. "regex/regcustom.h",
+        wx.srcdir .. "regex/regerrs.h",
+        wx.srcdir .. "regex/regex.h",
+        wx.srcdir .. "regex/regguts.h",
         
         -- Sources
-        "../../src/regex/regcomp.c",
-        "../../src/regex/regexec.c",
-        "../../src/regex/regerror.c",
-        "../../src/regex/regfree.c"
+        wx.srcdir .. "regex/regcomp.c",
+        wx.srcdir .. "regex/regexec.c",
+        wx.srcdir .. "regex/regerror.c",
+        wx.srcdir .. "regex/regfree.c"
     }
