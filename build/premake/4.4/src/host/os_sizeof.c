@@ -1,7 +1,7 @@
 /**
- * \file   os_chdir.c
+ * \file   os_sizeof.c
  * \brief  Change the current working directory.
- * \author Copyright (c) 2002-2008 Jason Perkins and the Premake project
+ * \author Copyright (c) 2013 Jefferson González and the Premake project
  */
 
 #include "premake.h"
@@ -104,8 +104,8 @@ int os_sizeof(lua_State* L)
     else
     {
         lua_pushnil(L);
-		lua_pushfstring(L, "undefined type '%s'", type);
-		return 2;
+        lua_pushfstring(L, "undefined type '%s'", type);
+        return 2;
     }
 }
 
