@@ -120,6 +120,7 @@ OBJECTS := \
 	$(OBJDIR)/os_pathsearch.o \
 	$(OBJDIR)/os_rmdir.o \
 	$(OBJDIR)/os_stat.o \
+    $(OBJDIR)/os_sizeof.o \
 	$(OBJDIR)/os_uuid.o \
 	$(OBJDIR)/path_isabsolute.o \
 	$(OBJDIR)/premake.o \
@@ -253,6 +254,9 @@ $(OBJDIR)/os_rmdir.o: ../4.4/src/host/os_rmdir.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(CFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 $(OBJDIR)/os_stat.o: ../4.4/src/host/os_stat.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(CFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+$(OBJDIR)/os_sizeof.o: ../4.4/src/host/os_sizeof.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(CFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 $(OBJDIR)/os_uuid.o: ../4.4/src/host/os_uuid.c
