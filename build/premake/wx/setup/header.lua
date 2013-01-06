@@ -14,17 +14,17 @@
         header = wx.header("setup.h")
         value = myheader:getvalue("wxUSE_DEBUG_CONTEXT")
         header:setvalue("wxUSE_DEBUG_CONTEXT", "1")
+        header:undefine("wxUSE_DEBUG_CONTEXT")
+        header:define("wxUSE_DEBUG_CONTEXT")
+        header:comment("#define", "wxUSE_DEBUG_CONTEXT")
+        header:ucomment("#define", "wxUSE_DEBUG_CONTEXT", "1")
+        header:replace("#define", "wxUSE_DEBUG_CONTEXT", "#define wxBLAH '1'")
         header:setfile("another.h")
         
     Note:
     
-        Does not supports declarations like
-            #     define NAME my space seperated value
-            
-        Wors well wiht:
-            #define NAME my_value
-            #define NAME "my_value"
-            #define NAME 1
+        Does not retreives the value of macros like:
+            #define NAME my space seperated value
 --]]
 
 wx.setup = {}
@@ -88,7 +88,7 @@ function wx.setup.header:getvalue(macro)
                 
                 if c ~= " " and c ~= "\n" and c ~= "\t" and c ~= "\r" and C ~= "\0" then
                     currentword = currentword .. c
-                elseif currentword ~= "" then
+                elseif currentword ~= "" and currentword ~= "#" then
                     if currentword == "#define" then
                         definefound = true
                     elseif definefound and not macronamefound then
@@ -108,12 +108,69 @@ function wx.setup.header:getvalue(macro)
     end
 end
 
---
+--[[
+    Sets a new value for a given macro
+--]]
 function wx.setup.header:setvalue(macro, value)
+    self:replace(
+        "#define", 
+        macro, 
+        "#define " .. macro .. " " .. value
+    )
+end
+
+--[[
+    Undefines a given macro using #undef
+--]]
+function wx.setup.header:undefine(macro)
+    self:replace(
+        "#define", 
+        macro, 
+        "#undef " .. macro
+    )
+end
+
+--[[
+    Redefines an undefined macro
+--]]
+function wx.setup.header:define(macro, value)
+    self:replace(
+        "#undef", 
+        macro, 
+        "#define " .. macro .. " " .. value
+    )
+end
+
+--[[
+    Comments out a macro declaration
+--]]
+function wx.setup.header:comment(macrotype, macroname)
+    self:replace(
+        macrotype, 
+        macroname, 
+        "/* " .. macrotype .. " " .. macroname  .. " */"
+    )
+end
+
+--[[
+    Uncomment a macro declaration
+--]]
+function wx.setup.header:uncomment(macrotype, macroname, value)
+    self:replace(
+        macrotype, 
+        macroname, 
+        macrotype .. " " .. macroname  .. " " .. value
+    )
+end
+
+--[[
+    Replaces a whole line that containes a macro with a new value
+--]]
+function wx.setup.header:replace(macrotype, macroname, value)
     local line = ""
     local lines = {}
     local currentword = ""
-    local definefound = false
+    local macrotypefound = false
     
     self.file:seek("set")
     
@@ -132,14 +189,14 @@ function wx.setup.header:setvalue(macro, value)
                 
                 if c ~= " " and c ~= "\n" and c ~= "\t" and c ~= "\r" and C ~= "\0" then
                     currentword = currentword .. c
-                elseif currentword ~= "" then
-                    if currentword == "#define" then
-                        definefound = true
-                    elseif definefound then
-                        if currentword == macro then
+                elseif currentword ~= "" and currentword ~= "#" then
+                    if currentword == macrotype then
+                        macrotypefound = true
+                    elseif macrotypefound then
+                        if currentword == macroname then
                             
                             -- assign new value to macro
-                            lines[linenum] = "#define " .. macro .. " " .. value .. "\n"
+                            lines[linenum] = value .. "\n"
                             
                             -- copy rest of the file
                             while line do
@@ -165,7 +222,7 @@ function wx.setup.header:setvalue(macro, value)
                             
                             return true
                         else
-                            definefound = false
+                            macrotypefound = false
                         end
                     end
                     
