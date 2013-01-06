@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Name:        header.lua
--- Purpose:     Class to do simple manipulation of header files #define
+-- Purpose:     Class to do basic manipulation of header files #define
 -- Author:      Jefferson González
 -- Modified by:
 -- Created:     2013/01/05
@@ -15,9 +15,20 @@
         value = myheader:getvalue("wxUSE_DEBUG_CONTEXT")
         header:setvalue("wxUSE_DEBUG_CONTEXT", "1")
         header:setfile("another.h")
+        
+    Note:
+    
+        Does not supports declarations like
+            #     define NAME my space seperated value
+            
+        Wors well wiht:
+            #define NAME my_value
+            #define NAME "my_value"
+            #define NAME 1
 --]]
 
-wx.header = {}
+wx.setup = {}
+wx.setup.header = {}
 
 --[[
     Constructor
@@ -30,19 +41,19 @@ function mt.__call(this, file)
     
     return this
 end
-setmetatable(wx.header, mt)
+setmetatable(wx.setup.header, mt)
 
 --[[
     Gets the full path of current file
 --]]
-function wx.header:getfile()
+function wx.setup.header:getfile()
     return self.filename
 end
 
 --[[
     Assings a new file to the object
 --]]
-function wx.header:setfile(file)
+function wx.setup.header:setfile(file)
     if self.file then
         self.file:close()
     end
@@ -58,7 +69,7 @@ end
 --[[
     Gets the value of a macro definition
 --]]
-function wx.header:getvalue(macro)
+function wx.setup.header:getvalue(macro)
     local line = ""
     local currentword = ""
     local definefound = false
@@ -98,7 +109,7 @@ function wx.header:getvalue(macro)
 end
 
 --
-function wx.header:setvalue(macro, value)
+function wx.setup.header:setvalue(macro, value)
     local line = ""
     local lines = {}
     local currentword = ""
