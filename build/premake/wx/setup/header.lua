@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        header.lua
+-- Name:        wx/setup/header.lua
 -- Purpose:     Class to do basic manipulation of header files #define
 -- Author:      Jefferson González
 -- Modified by:

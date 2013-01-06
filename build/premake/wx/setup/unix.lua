@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        header.lua
+-- Name:        wx/setup/unix.lua
 -- Purpose:     Functions for unix based platforms
 -- Author:      Jefferson González
 -- Modified by:
