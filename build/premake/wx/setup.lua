@@ -18,10 +18,10 @@ require "wx.setup.header"
 -- ----------------------------------------------------------------------------
 wx.version                      = "2.9.5"
 wx.compiler                     = ""
-wx.includedir                   = "../../include"
+wx.includedir                   = "../../include/"
 wx.includedirs                  = { wx.includedir }
 wx.libdir                       = ""
-wx.srcdir                       = "../../src"
+wx.srcdir                       = "../../src/"
 wx.srcdirs                      = { wx.srcdir }
 -- ----------------------------------------------------------------------------
 -- Thirdpary includes and libraries path
