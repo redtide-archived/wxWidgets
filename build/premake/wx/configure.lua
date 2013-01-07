@@ -152,20 +152,43 @@ end
 -- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
+configuration "not enable-universal"
+    if os.get("windows") then
+        require "wx.msw.setup"
+        if os.is("not windows") then
+            -- Cross compiling
+            require "wx.wine.setup"
+        end
+    else
+        require "wx.unix.setup"
+        if os.get("macosx") then
+            require "wx.osx.setup"
+        end
+    end
+
 configuration "bsd"
+    require "wx.gtk.setup"
+
     defines{"__BSD__", "__WXGTK__"}
 
 configuration "linux"
+    require "wx.gtk.setup"
+
     defines{"__LINUX__", "__WXGTK__"}
 
 configuration "macosx"
+    require "wx.osx.setup"
+
     defines{"__DARWIN__", "__APPLE__", "__WXMAC__", "__WXOSX__"}
 
 configuration "solaris"
+    require "wx.motif.setup"
+
     defines{"__SOLARIS__", "__WXMOTIF__"}
 
 configuration "windows"
     defines{"__WINDOWS__", "__WIN32__", "__WXMSW__", "WIN32", "_WINDOWS"}
+
     if wx.unicode then
         defines{"UNICODE", "_UNICODE"}
     end

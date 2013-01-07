@@ -10,9 +10,27 @@
 -- ============================================================================
 wx = {}
 
-require "wx.setup.common"
-require "wx.setup.unix"
-require "wx.setup.header"
+require "wx.common"
+require "wx.header"
+
+-------------------------------------------------------------------------------
+-- Call other ports specific setups
+-------------------------------------------------------------------------------
+if os.get("windows") then
+    require "wx.msw.setup"
+
+    -- Cross compiling
+    if os.is("not windows") then
+        require "wx.wine.setup"
+    end
+else
+    require "wx.unix.setup"
+
+    if os.get("macosx") then
+        require "wx.osx.setup"
+    end
+end
+
 -- ----------------------------------------------------------------------------
 -- Main configuration options
 -- ----------------------------------------------------------------------------
@@ -24,7 +42,7 @@ wx.libdir                       = ""
 wx.srcdir                       = "../../src/"
 wx.srcdirs                      = { wx.srcdir }
 -- ----------------------------------------------------------------------------
--- Thirdpary includes and libraries path
+-- Third party includes and libraries path
 -- ----------------------------------------------------------------------------
 wx.includes = {}
 

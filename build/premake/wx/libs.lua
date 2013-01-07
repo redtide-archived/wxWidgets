@@ -9,6 +9,16 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 
+require "wx.libs.base"
+
+if wx.debugreport then
+    require "wx.libs.qa"
+end
+
+if wx.gui then
+    require "wx.libs.core"
+end
+
 if wx.aui then
     require "wx.libs.aui"
 end

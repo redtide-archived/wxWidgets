@@ -47,9 +47,7 @@ solution "wxWidgets"
 
 -- Load wx namespace defaults
     require "wx.setup"
-    
-    require "wx.unix.setup"
-    
+
 -- Load library checks
     require "wx.check"
 
