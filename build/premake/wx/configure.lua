@@ -264,6 +264,13 @@ configuration "enable-debug_info"
 
 configuration "enable-debug_gdb"
     wx.setoption("debug_gdb", true)
+
+-- ----------------------------------------------------------------------------
+-- Optional non GUI features
+-- ----------------------------------------------------------------------------
+configuration "enable-debugreport"
+    wx.setoption("debugreport", true)
+
 -- ----------------------------------------------------------------------------
 -- Optional "big" GUI features
 -- ----------------------------------------------------------------------------

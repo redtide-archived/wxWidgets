@@ -12,31 +12,26 @@
 project "aui"
     kind( wx.getprojectkind() )
 
-    includedirs
-    {
-        "../../include"
-    }
-
     files
     {
         -- Headers
-        "../../include/wx/aui/framemanager.h",
-        "../../include/wx/aui/dockart.h",
-        "../../include/wx/aui/floatpane.h",
-        "../../include/wx/aui/auibook.h",
-        "../../include/wx/aui/auibar.h",
-        "../../include/wx/aui/tabmdi.h",
-        "../../include/wx/aui/aui.h",
-        "../../include/wx/aui/tabart.h",
-        "../../include/wx/xrc/xh_auinotbk.h",
+        wx.includedir .. "wx/aui/framemanager.h",
+        wx.includedir .. "wx/aui/dockart.h",
+        wx.includedir .. "wx/aui/floatpane.h",
+        wx.includedir .. "wx/aui/auibook.h",
+        wx.includedir .. "wx/aui/auibar.h",
+        wx.includedir .. "wx/aui/tabmdi.h",
+        wx.includedir .. "wx/aui/aui.h",
+        wx.includedir .. "wx/aui/tabart.h",
+        wx.includedir .. "wx/xrc/xh_auinotbk.h",
 
         -- Sources
-        "../../src/aui/framemanager.cpp",
-        "../../src/aui/dockart.cpp",
-        "../../src/aui/floatpane.cpp",
-        "../../src/aui/auibook.cpp",
-        "../../src/aui/auibar.cpp",
-        "../../src/aui/tabmdi.cpp",
-        "../../src/aui/tabart.cpp",
-        "../../src/xrc/xh_auinotbk.cpp"
+        wx.srcdir .. "aui/framemanager.cpp",
+        wx.srcdir .. "aui/dockart.cpp",
+        wx.srcdir .. "aui/floatpane.cpp",
+        wx.srcdir .. "aui/auibook.cpp",
+        wx.srcdir .. "aui/auibar.cpp",
+        wx.srcdir .. "aui/tabmdi.cpp",
+        wx.srcdir .. "aui/tabart.cpp",
+        wx.srcdir .. "xrc/xh_auinotbk.cpp"
     }

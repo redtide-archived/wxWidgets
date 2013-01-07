@@ -14,6 +14,7 @@ project "qa"
     files
     {
         wx.includedir .. "wx/debugrpt.h",
+
         wx.srcdir     .. "common/debugrpt.cpp",
         wx.srcdir     .. "generic/dbgrptg.cpp"
     }

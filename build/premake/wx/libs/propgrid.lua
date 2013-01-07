@@ -11,31 +11,26 @@
 project "propgrid"
     kind( wx.getprojectkind() )
 
-    includedirs
-    {
-        "../../include"
-    }
-
     files
     {
         -- Headers
-        "../../include/wx/propgrid/advprops.h",
-        "../../include/wx/propgrid/editors.h",
-        "../../include/wx/propgrid/manager.h",
-        "../../include/wx/propgrid/property.h",
-        "../../include/wx/propgrid/propgrid.h",
-        "../../include/wx/propgrid/propgriddefs.h",
-        "../../include/wx/propgrid/propgridiface.h",
-        "../../include/wx/propgrid/propgridpagestate.h",
-        "../../include/wx/propgrid/props.h",
+        wx.includedir .. "wx/propgrid/advprops.h",
+        wx.includedir .. "wx/propgrid/editors.h",
+        wx.includedir .. "wx/propgrid/manager.h",
+        wx.includedir .. "wx/propgrid/property.h",
+        wx.includedir .. "wx/propgrid/propgrid.h",
+        wx.includedir .. "wx/propgrid/propgriddefs.h",
+        wx.includedir .. "wx/propgrid/propgridiface.h",
+        wx.includedir .. "wx/propgrid/propgridpagestate.h",
+        wx.includedir .. "wx/propgrid/props.h",
 
         -- Sources
-        "../../src/propgrid/advprops.cpp",
-        "../../src/propgrid/editors.cpp",
-        "../../src/propgrid/manager.cpp",
-        "../../src/propgrid/property.cpp",
-        "../../src/propgrid/propgrid.cpp",
-        "../../src/propgrid/propgridiface.cpp",
-        "../../src/propgrid/propgridpagestate.cpp",
-        "../../src/propgrid/props.cpp"
+        wx.srcdir .. "propgrid/advprops.cpp",
+        wx.srcdir .. "propgrid/editors.cpp",
+        wx.srcdir .. "propgrid/manager.cpp",
+        wx.srcdir .. "propgrid/property.cpp",
+        wx.srcdir .. "propgrid/propgrid.cpp",
+        wx.srcdir .. "propgrid/propgridiface.cpp",
+        wx.srcdir .. "propgrid/propgridpagestate.cpp",
+        wx.srcdir .. "propgrid/props.cpp"
     }
