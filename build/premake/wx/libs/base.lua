@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        "../../include/wx/libs/base.lua
+-- Name:        wx/libs/base.lua
 -- Purpose:     wxBase library project
 -- Author:      Andrea Zanellato
 -- Modified by:
@@ -10,506 +10,524 @@
 -- ============================================================================
 -- IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 -- ============================================================================
+
 project "base"
     kind( wx.getprojectkind() )
-
-    includedirs
-    {
-        "../../include"
-    }
-
-    files
-    {
--- ============================================================================
---                                  UNIX
--- ============================================================================
-        -- Files used on all Unix systems, including Darwin
-        if not wx.msw then
-            "../../include/wx/unix/app.h",
-            "../../include/wx/unix/apptbase.h",
-            "../../include/wx/unix/apptrait.h",
-            "../../include/wx/unix/chkconf.h",
-            "../../include/wx/unix/evtloop.h",
-            "../../include/wx/unix/evtloopsrc.h",
-            "../../include/wx/unix/pipe.h",
-            "../../include/wx/unix/stdpaths.h",
-            "../../include/wx/unix/stackwalk.h",
-            "../../include/wx/unix/tls.h",
-            "../../include/wx/unix/fswatcher_kqueue.h",
-            "../../src/common/fdiodispatcher.cpp",
-            "../../src/common/selectdispatcher.cpp",
-            "../../src/unix/appunix.cpp",
-            "../../src/unix/dir.cpp",
-            "../../src/unix/dlunix.cpp",
-            "../../src/unix/epolldispatcher.cpp",
-            "../../src/unix/evtloopunix.cpp",
-            "../../src/unix/fdiounix.cpp",
-            "../../src/unix/snglinst.cpp",
-            "../../src/unix/stackwalk.cpp",
-            "../../src/unix/stdpaths.cpp",
-            "../../src/unix/timerunx.cpp",
-            "../../src/unix/threadpsx.cpp",
-            "../../src/unix/utilsunx.cpp",
-            "../../src/unix/fswatcher_kqueue.cpp",
-
-        -- Files used on all Unix systems, including Darwin with any port but wxMac
-        -- (this is really an aberration, we should also use these files for wxMac,
-        -- it's not done because of some OS 9 support leftovers only now).
-
-        -- Premake4: Included because doesn't supports MacOS 9.
-            "../../include/wx/unix/execute.h",
-            "../../include/wx/unix/mimetype.h",
-            "../../src/unix/mimetype.cpp",
-
-        -- Files used on all non-Darwin Unix systems (because Darwin provides other,
-        -- better, native equivalents of the functionality they implement
-        -- (e.g. CFSocket instead of BSD sockets) or doesn't provide it at all
-        -- (epoll, backtrace())
-            if not wx.osx then
-                "../../include/wx/unix/fswatcher_inotify.h",
-                "../../src/unix/fswatcher_inotify.cpp",
-            else
--- ============================================================================
---                                  OSX
--- ============================================================================
-                -- Used on Mac OS X wxMac base, and Mac OS X darwin base
-                "../../include/wx/osx/core/cfdataref.h",
-                "../../include/wx/osx/core/cfref.h",
-                "../../include/wx/osx/core/cfstring.h",
-                "../../include/wx/osx/core/hid.h",
-                "../../include/wx/osx/core/evtloop.h",
-                "../../include/wx/osx/core/objcid.h",
-                "../../include/wx/osx/core/private.h",
-                "../../include/wx/osx/core/stdpaths.h",
-
-                "../../src/osx/core/cfstring.cpp",
-                "../../src/osx/core/evtloop_cf.cpp",
-                "../../src/osx/core/stdpaths_cf.cpp",
-                "../../src/osx/core/strconv_cf.cpp",
-                "../../src/osx/core/utilsexc_base.cpp",
-
-                if wx.carbon then
-                    -- Base and GUI files used by OS X
-                    "../../src/osx/carbon/utils.cpp",
-                    "../../src/osx/carbon/uma.cpp",
-                else
-                    -- Base files used by OS X ports (not Carbon)
-                    "../../src/osx/core/mimetype.cpp",
-                end
-
-                if wx.cocoa then
-                    "../../src/osx/cocoa/utils.mm",
-                end
-
-                if wx.iphone then
-                    "../../src/osx/iphone/utils.mm",
-                end
-            end
-        else
--- ============================================================================
---                                  Windows
--- ============================================================================
-            -- wxMSW headers
-            "../../include/wx/msw/apptrait.h",
-            "../../include/wx/msw/apptbase.h",
-            "../../include/wx/msw/chkconf.h",
-            "../../include/wx/msw/crashrpt.h",
-            "../../include/wx/msw/dde.h",
-            "../../include/wx/msw/debughlp.h",
-            "../../include/wx/msw/evtloopconsole.h",
-            "../../include/wx/msw/gccpriv.h",
-            "../../include/wx/msw/libraries.h",
-            "../../include/wx/msw/mimetype.h",
-            "../../include/wx/msw/mslu.h",
-            "../../include/wx/msw/private.h",
-            "../../include/wx/msw/regconf.h",
-            "../../include/wx/msw/registry.h",
-            "../../include/wx/msw/seh.h",
-            "../../include/wx/msw/stackwalk.h",
-            "../../include/wx/msw/stdpaths.h",
-            "../../include/wx/msw/winundef.h",
-            "../../include/wx/msw/wrapcctl.h",
-            "../../include/wx/msw/wrapcdlg.h",
-            "../../include/wx/msw/wrapwin.h",
-            "../../include/wx/msw/fswatcher.h",
-
-            -- wxMSW sources
-            "../../src/msw/basemsw.cpp",
-            "../../src/msw/crashrpt.cpp",
-            "../../src/msw/debughlp.cpp",
-            "../../src/msw/dde.cpp",
-            "../../src/msw/dir.cpp",
-            "../../src/msw/dlmsw.cpp",
-            "../../src/msw/evtloopconsole.cpp",
-            "../../src/msw/mimetype.cpp",
-            "../../src/msw/power.cpp",
-            "../../src/msw/regconf.cpp",
-            "../../src/msw/registry.cpp",
-            "../../src/msw/snglinst.cpp",
-            "../../src/msw/stackwalk.cpp",
-            "../../src/msw/stdpaths.cpp",
-            "../../src/msw/thread.cpp",
-            "../../src/msw/timer.cpp",
-            "../../src/msw/utils.cpp",
-            "../../src/msw/utilsexc.cpp",
-            "../../src/msw/fswatcher.cpp",
-
-            if wx.gui then
-                "../../src/msw/main.cpp",
-                "../../src/msw/mslu.cpp",
-                "../../src/msw/volume.cpp",
-            end
-
-            if wx.wince then
-                "../../include/wx/msw/wince/time.h",
-                "../../include/wx/msw/wince/chkconf.h",
-                "../../src/msw/wince/time.cpp",
-            end
-        end
-
--- ============================================================================
---                                  OS2 (Currently not supported)
--- ============================================================================
-    --[[
-        if wx.os2 then
-            "../../include/wx/unix/app.h",
-            "../../include/wx/os2/apptbase.h",
-            "../../include/wx/os2/apptrait.h",
-            "../../include/wx/unix/evtloop.h",
-            "../../include/wx/os2/mimetype.h",
-            "../../include/wx/os2/private.h",
-            "../../include/wx/os2/stdpaths.h",
-            "../../include/wx/os2/chkconf.h",
-            "../../include/wx/os2/wxrsc.h",
-
-            "../../src/common/fdiodispatcher.cpp",
-            "../../src/common/selectdispatcher.cpp",
-            "../../src/unix/appunix.cpp",
-            "../../src/unix/evtloopunix.cpp",
-            "../../src/unix/timerunx.cpp",
-            "../../src/os2/dir.cpp",
-            "../../src/os2/mimetype.cpp",
-            "../../src/os2/snglinst.cpp",
-            "../../src/os2/stdpaths.cpp",
-            "../../src/os2/thread.cpp",
-            "../../src/os2/utils.cpp",
-            "../../src/os2/utilsexc.cpp",
-        end
-    --]]
--- ============================================================================
---                                  MSDOS (Currently not supported)
--- ============================================================================
-    --[[
-        if wx.msdos then
-            "../../include/wx/msdos/mimetype.h",
-
-            "../../src/msdos/dir.cpp",
-            "../../src/msdos/mimetype.cpp",
-            "../../src/msdos/utilsdos.cpp",
-        end
-    --]]
 -- ============================================================================
 --                                  Common
 -- ============================================================================
-        "../../include/wx/afterstd.h",
-        "../../include/wx/any.h",
-        "../../include/wx/anystr.h",
-        "../../include/wx/app.h",
-        "../../include/wx/apptrait.h",
-        "../../include/wx/archive.h",
-        "../../include/wx/arrimpl.cpp",
-        "../../include/wx/arrstr.h",
-        "../../include/wx/atomic.h",
-        "../../include/wx/base64.h",
-        "../../include/wx/beforestd.h",
-        "../../include/wx/buffer.h",
-        "../../include/wx/build.h",
-        "../../include/wx/chartype.h",
-        "../../include/wx/checkeddelete.h",
-        "../../include/wx/chkconf.h",
-        "../../include/wx/clntdata.h",
-        "../../include/wx/cmdargs.h",
-        "../../include/wx/cmdline.h",
-        "../../include/wx/confbase.h",
-        "../../include/wx/config.h",
-        "../../include/wx/convauto.h",
-        "../../include/wx/containr.h",
-        "../../include/wx/cpp.h",
-        "../../include/wx/crt.h",
-        "../../include/wx/datetime.h",
-        "../../include/wx/datstrm.h",
-        "../../include/wx/dde.h",
-        "../../include/wx/debug.h",
-        "../../include/wx/defs.h",
-        "../../include/wx/dir.h",
-        "../../include/wx/dlimpexp.h",
-        "../../include/wx/dlist.h",
-        "../../include/wx/dynarray.h",
-        "../../include/wx/dynlib.h",
-        "../../include/wx/dynload.h",
-        "../../include/wx/encconv.h",
-        "../../include/wx/event.h",
-        "../../include/wx/eventfilter.h",
-        "../../include/wx/evtloop.h",
-        "../../include/wx/except.h",
-        "../../include/wx/features.h",
-        "../../include/wx/flags.h",
-        "../../include/wx/ffile.h",
-        "../../include/wx/file.h",
-        "../../include/wx/fileconf.h",
-        "../../include/wx/filefn.h",
-        "../../include/wx/filename.h",
-        "../../include/wx/filesys.h",
-        "../../include/wx/fontenc.h",
-        "../../include/wx/fontmap.h",
-        "../../include/wx/fs_arc.h",
-        "../../include/wx/fs_filter.h",
-        "../../include/wx/fs_mem.h",
-        "../../include/wx/fs_zip.h",
-        "../../include/wx/hash.h",
-        "../../include/wx/hashmap.h",
-        "../../include/wx/hashset.h",
-        "../../include/wx/html/forcelnk.h",
-        "../../include/wx/iconloc.h",
-        "../../include/wx/init.h",
-        "../../include/wx/intl.h",
-        "../../include/wx/iosfwrap.h",
-        "../../include/wx/ioswrap.h",
-        "../../include/wx/ipc.h",
-        "../../include/wx/ipcbase.h",
-        "../../include/wx/kbdstate.h",
-        "../../include/wx/language.h",
-        "../../include/wx/link.h",
-        "../../include/wx/list.h",
-        "../../include/wx/listimpl.cpp",
-        "../../include/wx/log.h",
-        "../../include/wx/longlong.h",
-        "../../include/wx/math.h",
-        "../../include/wx/memconf.h",
-        "../../include/wx/memory.h",
-        "../../include/wx/memtext.h",
-        "../../include/wx/mimetype.h",
-        "../../include/wx/module.h",
-        "../../include/wx/mousestate.h",
-        "../../include/wx/msgout.h",
-        "../../include/wx/msgqueue.h",
-        "../../include/wx/mstream.h",
-        "../../include/wx/numformatter.h",
-        "../../include/wx/object.h",
-        "../../include/wx/platform.h",
-        "../../include/wx/platinfo.h",
-        "../../include/wx/power.h",
-        "../../include/wx/process.h",
-        "../../include/wx/ptr_scpd.h",
-        "../../include/wx/ptr_shrd.h",
-        "../../include/wx/recguard.h",
-        "../../include/wx/regex.h",
-        "../../include/wx/rtti.h",
-        "../../include/wx/scopedarray.h",
-        "../../include/wx/scopedptr.h",
-        "../../include/wx/scopeguard.h",
-        "../../include/wx/sharedptr.h",
-        "../../include/wx/snglinst.h",
-        "../../include/wx/sstream.h",
-        "../../include/wx/stack.h",
-        "../../include/wx/stackwalk.h",
-        "../../include/wx/stdpaths.h",
-        "../../include/wx/stdstream.h",
-        "../../include/wx/stockitem.h",
-        "../../include/wx/stopwatch.h",
-        "../../include/wx/strconv.h",
-        "../../include/wx/stream.h",
-        "../../include/wx/string.h",
-        "../../include/wx/stringimpl.h",
-        "../../include/wx/stringops.h",
-        "../../include/wx/strvararg.h",
-        "../../include/wx/sysopt.h",
-        "../../include/wx/tarstrm.h",
-        "../../include/wx/textbuf.h",
-        "../../include/wx/textfile.h",
-        "../../include/wx/thread.h",
-        "../../include/wx/thrimpl.cpp",
-        "../../include/wx/time.h",
-        "../../include/wx/timer.h",
-        "../../include/wx/tls.h",
-        "../../include/wx/tokenzr.h",
-        "../../include/wx/tracker.h",
-        "../../include/wx/translation.h",
-        "../../include/wx/txtstrm.h",
-        "../../include/wx/typeinfo.h",
-        "../../include/wx/types.h",
-        "../../include/wx/unichar.h",
-        "../../include/wx/uri.h",
-        "../../include/wx/ustring.h",
-        "../../include/wx/utils.h",
-        "../../include/wx/variant.h",
-        "../../include/wx/vector.h",
-        "../../include/wx/version.h",
-        "../../include/wx/versioninfo.h",
-        "../../include/wx/volume.h",
-        "../../include/wx/weakref.h",
-        "../../include/wx/wfstream.h",
-        "../../include/wx/wx.h",
-        "../../include/wx/wxchar.h",
-        "../../include/wx/wxcrt.h",
-        "../../include/wx/wxcrtbase.h",
-        "../../include/wx/wxcrtvararg.h",
-        "../../include/wx/wxprec.h",
-        "../../include/wx/xlocale.h",
-        "../../include/wx/xti.h",
-        "../../include/wx/xti2.h",
-        "../../include/wx/xtistrm.h",
-        "../../include/wx/xtictor.h",
-        "../../include/wx/xtihandler.h",
-        "../../include/wx/xtiprop.h",
-        "../../include/wx/xtitypes.h",
-        "../../include/wx/zipstrm.h",
-        "../../include/wx/zstream.h",
-        "../../include/wx/meta/convertible.h",
-        "../../include/wx/meta/if.h",
-        "../../include/wx/meta/implicitconversion.h",
-        "../../include/wx/meta/int2type.h",
-        "../../include/wx/meta/movable.h",
-        "../../include/wx/meta/pod.h",
-        "../../include/wx/meta/removeref.h",
-        "../../include/wx/fswatcher.h",
-        "../../include/wx/generic/fswatcher.h",
+    files
+    {
+        wx.includedir .. "wx/afterstd.h",
+        wx.includedir .. "wx/any.h",
+        wx.includedir .. "wx/anystr.h",
+        wx.includedir .. "wx/app.h",
+        wx.includedir .. "wx/apptrait.h",
+        wx.includedir .. "wx/archive.h",
+        wx.includedir .. "wx/arrimpl.cpp",
+        wx.includedir .. "wx/arrstr.h",
+        wx.includedir .. "wx/atomic.h",
+        wx.includedir .. "wx/base64.h",
+        wx.includedir .. "wx/beforestd.h",
+        wx.includedir .. "wx/buffer.h",
+        wx.includedir .. "wx/build.h",
+        wx.includedir .. "wx/chartype.h",
+        wx.includedir .. "wx/checkeddelete.h",
+        wx.includedir .. "wx/chkconf.h",
+        wx.includedir .. "wx/clntdata.h",
+        wx.includedir .. "wx/cmdargs.h",
+        wx.includedir .. "wx/cmdline.h",
+        wx.includedir .. "wx/confbase.h",
+        wx.includedir .. "wx/config.h",
+        wx.includedir .. "wx/convauto.h",
+        wx.includedir .. "wx/containr.h",
+        wx.includedir .. "wx/cpp.h",
+        wx.includedir .. "wx/crt.h",
+        wx.includedir .. "wx/datetime.h",
+        wx.includedir .. "wx/datstrm.h",
+        wx.includedir .. "wx/dde.h",
+        wx.includedir .. "wx/debug.h",
+        wx.includedir .. "wx/defs.h",
+        wx.includedir .. "wx/dir.h",
+        wx.includedir .. "wx/dlimpexp.h",
+        wx.includedir .. "wx/dlist.h",
+        wx.includedir .. "wx/dynarray.h",
+        wx.includedir .. "wx/dynlib.h",
+        wx.includedir .. "wx/dynload.h",
+        wx.includedir .. "wx/encconv.h",
+        wx.includedir .. "wx/event.h",
+        wx.includedir .. "wx/eventfilter.h",
+        wx.includedir .. "wx/evtloop.h",
+        wx.includedir .. "wx/except.h",
+        wx.includedir .. "wx/features.h",
+        wx.includedir .. "wx/flags.h",
+        wx.includedir .. "wx/ffile.h",
+        wx.includedir .. "wx/file.h",
+        wx.includedir .. "wx/fileconf.h",
+        wx.includedir .. "wx/filefn.h",
+        wx.includedir .. "wx/filename.h",
+        wx.includedir .. "wx/filesys.h",
+        wx.includedir .. "wx/fontenc.h",
+        wx.includedir .. "wx/fontmap.h",
+        wx.includedir .. "wx/fs_arc.h",
+        wx.includedir .. "wx/fs_filter.h",
+        wx.includedir .. "wx/fs_mem.h",
+        wx.includedir .. "wx/fs_zip.h",
+        wx.includedir .. "wx/hash.h",
+        wx.includedir .. "wx/hashmap.h",
+        wx.includedir .. "wx/hashset.h",
+        wx.includedir .. "wx/html/forcelnk.h",
+        wx.includedir .. "wx/iconloc.h",
+        wx.includedir .. "wx/init.h",
+        wx.includedir .. "wx/intl.h",
+        wx.includedir .. "wx/iosfwrap.h",
+        wx.includedir .. "wx/ioswrap.h",
+        wx.includedir .. "wx/ipc.h",
+        wx.includedir .. "wx/ipcbase.h",
+        wx.includedir .. "wx/kbdstate.h",
+        wx.includedir .. "wx/language.h",
+        wx.includedir .. "wx/link.h",
+        wx.includedir .. "wx/list.h",
+        wx.includedir .. "wx/listimpl.cpp",
+        wx.includedir .. "wx/log.h",
+        wx.includedir .. "wx/longlong.h",
+        wx.includedir .. "wx/math.h",
+        wx.includedir .. "wx/memconf.h",
+        wx.includedir .. "wx/memory.h",
+        wx.includedir .. "wx/memtext.h",
+        wx.includedir .. "wx/mimetype.h",
+        wx.includedir .. "wx/module.h",
+        wx.includedir .. "wx/mousestate.h",
+        wx.includedir .. "wx/msgout.h",
+        wx.includedir .. "wx/msgqueue.h",
+        wx.includedir .. "wx/mstream.h",
+        wx.includedir .. "wx/numformatter.h",
+        wx.includedir .. "wx/object.h",
+        wx.includedir .. "wx/platform.h",
+        wx.includedir .. "wx/platinfo.h",
+        wx.includedir .. "wx/power.h",
+        wx.includedir .. "wx/process.h",
+        wx.includedir .. "wx/ptr_scpd.h",
+        wx.includedir .. "wx/ptr_shrd.h",
+        wx.includedir .. "wx/recguard.h",
+        wx.includedir .. "wx/regex.h",
+        wx.includedir .. "wx/rtti.h",
+        wx.includedir .. "wx/scopedarray.h",
+        wx.includedir .. "wx/scopedptr.h",
+        wx.includedir .. "wx/scopeguard.h",
+        wx.includedir .. "wx/sharedptr.h",
+        wx.includedir .. "wx/snglinst.h",
+        wx.includedir .. "wx/sstream.h",
+        wx.includedir .. "wx/stack.h",
+        wx.includedir .. "wx/stackwalk.h",
+        wx.includedir .. "wx/stdpaths.h",
+        wx.includedir .. "wx/stdstream.h",
+        wx.includedir .. "wx/stockitem.h",
+        wx.includedir .. "wx/stopwatch.h",
+        wx.includedir .. "wx/strconv.h",
+        wx.includedir .. "wx/stream.h",
+        wx.includedir .. "wx/string.h",
+        wx.includedir .. "wx/stringimpl.h",
+        wx.includedir .. "wx/stringops.h",
+        wx.includedir .. "wx/strvararg.h",
+        wx.includedir .. "wx/sysopt.h",
+        wx.includedir .. "wx/tarstrm.h",
+        wx.includedir .. "wx/textbuf.h",
+        wx.includedir .. "wx/textfile.h",
+        wx.includedir .. "wx/thread.h",
+        wx.includedir .. "wx/thrimpl.cpp",
+        wx.includedir .. "wx/time.h",
+        wx.includedir .. "wx/timer.h",
+        wx.includedir .. "wx/tls.h",
+        wx.includedir .. "wx/tokenzr.h",
+        wx.includedir .. "wx/tracker.h",
+        wx.includedir .. "wx/translation.h",
+        wx.includedir .. "wx/txtstrm.h",
+        wx.includedir .. "wx/typeinfo.h",
+        wx.includedir .. "wx/types.h",
+        wx.includedir .. "wx/unichar.h",
+        wx.includedir .. "wx/uri.h",
+        wx.includedir .. "wx/ustring.h",
+        wx.includedir .. "wx/utils.h",
+        wx.includedir .. "wx/variant.h",
+        wx.includedir .. "wx/vector.h",
+        wx.includedir .. "wx/version.h",
+        wx.includedir .. "wx/versioninfo.h",
+        wx.includedir .. "wx/volume.h",
+        wx.includedir .. "wx/weakref.h",
+        wx.includedir .. "wx/wfstream.h",
+        wx.includedir .. "wx/wx.h",
+        wx.includedir .. "wx/wxchar.h",
+        wx.includedir .. "wx/wxcrt.h",
+        wx.includedir .. "wx/wxcrtbase.h",
+        wx.includedir .. "wx/wxcrtvararg.h",
+        wx.includedir .. "wx/wxprec.h",
+        wx.includedir .. "wx/xlocale.h",
+        wx.includedir .. "wx/xti.h",
+        wx.includedir .. "wx/xti2.h",
+        wx.includedir .. "wx/xtistrm.h",
+        wx.includedir .. "wx/xtictor.h",
+        wx.includedir .. "wx/xtihandler.h",
+        wx.includedir .. "wx/xtiprop.h",
+        wx.includedir .. "wx/xtitypes.h",
+        wx.includedir .. "wx/zipstrm.h",
+        wx.includedir .. "wx/zstream.h",
+        wx.includedir .. "wx/meta/convertible.h",
+        wx.includedir .. "wx/meta/if.h",
+        wx.includedir .. "wx/meta/implicitconversion.h",
+        wx.includedir .. "wx/meta/int2type.h",
+        wx.includedir .. "wx/meta/movable.h",
+        wx.includedir .. "wx/meta/pod.h",
+        wx.includedir .. "wx/meta/removeref.h",
+        wx.includedir .. "wx/fswatcher.h",
+        wx.includedir .. "wx/generic/fswatcher.h",
 
-        "../../src/common/any.cpp",
-        "../../src/common/appbase.cpp",
-        "../../src/common/arcall.cpp",
-        "../../src/common/arcfind.cpp",
-        "../../src/common/archive.cpp",
-        "../../src/common/arrstr.cpp",
-        "../../src/common/base64.cpp",
-        "../../src/common/clntdata.cpp",
-        "../../src/common/cmdline.cpp",
-        "../../src/common/config.cpp",
-        "../../src/common/convauto.cpp",
-        "../../src/common/datetime.cpp",
-        "../../src/common/datetimefmt.cpp",
-        "../../src/common/datstrm.cpp",
-        "../../src/common/dircmn.cpp",
-        "../../src/common/dynarray.cpp",
-        "../../src/common/dynlib.cpp",
-        "../../src/common/dynload.cpp",
-        "../../src/common/encconv.cpp",
-        "../../src/common/evtloopcmn.cpp",
-        "../../src/common/extended.c",
-        "../../src/common/ffile.cpp",
-        "../../src/common/file.cpp",
-        "../../src/common/fileback.cpp",
-        "../../src/common/fileconf.cpp",
-        "../../src/common/filefn.cpp",
-        "../../src/common/filename.cpp",
-        "../../src/common/filesys.cpp",
-        "../../src/common/filtall.cpp",
-        "../../src/common/filtfind.cpp",
-        "../../src/common/fmapbase.cpp",
-        "../../src/common/fs_arc.cpp",
-        "../../src/common/fs_filter.cpp",
-        "../../src/common/hash.cpp",
-        "../../src/common/hashmap.cpp",
-        "../../src/common/init.cpp",
-        "../../src/common/intl.cpp",
-        "../../src/common/ipcbase.cpp",
-        "../../src/common/languageinfo.cpp",
-        "../../src/common/list.cpp",
-        "../../src/common/log.cpp",
-        "../../src/common/longlong.cpp",
-        "../../src/common/memory.cpp",
-        "../../src/common/mimecmn.cpp",
-        "../../src/common/module.cpp",
-        "../../src/common/mstream.cpp",
-        "../../src/common/numformatter.cpp",
-        "../../src/common/object.cpp",
-        "../../src/common/platinfo.cpp",
-        "../../src/common/powercmn.cpp",
-        "../../src/common/process.cpp",
-        "../../src/common/regex.cpp",
-        "../../src/common/stdpbase.cpp",
-        "../../src/common/sstream.cpp",
-        "../../src/common/stdstream.cpp",
-        "../../src/common/stopwatch.cpp",
-        "../../src/common/strconv.cpp",
-        "../../src/common/stream.cpp",
-        "../../src/common/string.cpp",
-        "../../src/common/stringimpl.cpp",
-        "../../src/common/stringops.cpp",
-        "../../src/common/strvararg.cpp",
-        "../../src/common/sysopt.cpp",
-        "../../src/common/tarstrm.cpp",
-        "../../src/common/textbuf.cpp",
-        "../../src/common/textfile.cpp",
-        "../../src/common/time.cpp",
-        "../../src/common/timercmn.cpp",
-        "../../src/common/timerimpl.cpp",
-        "../../src/common/tokenzr.cpp",
-        "../../src/common/translation.cpp",
-        "../../src/common/txtstrm.cpp",
-        "../../src/common/unichar.cpp",
-        "../../src/common/uri.cpp",
-        "../../src/common/ustring.cpp",
-        "../../src/common/variant.cpp",
-        "../../src/common/wfstream.cpp",
-        "../../src/common/wxcrt.cpp",
-        "../../src/common/wxprintf.cpp",
-        "../../src/common/xlocale.cpp",
-        "../../src/common/xti.cpp",
-        "../../src/common/xtistrm.cpp",
-        "../../src/common/zipstrm.cpp",
-        "../../src/common/zstream.cpp",
-        "../../src/common/fswatchercmn.cpp",
-        "../../src/generic/fswatcherg.cpp",
+        wx.srcdir .. "common/any.cpp",
+        wx.srcdir .. "common/appbase.cpp",
+        wx.srcdir .. "common/arcall.cpp",
+        wx.srcdir .. "common/arcfind.cpp",
+        wx.srcdir .. "common/archive.cpp",
+        wx.srcdir .. "common/arrstr.cpp",
+        wx.srcdir .. "common/base64.cpp",
+        wx.srcdir .. "common/clntdata.cpp",
+        wx.srcdir .. "common/cmdline.cpp",
+        wx.srcdir .. "common/config.cpp",
+        wx.srcdir .. "common/convauto.cpp",
+        wx.srcdir .. "common/datetime.cpp",
+        wx.srcdir .. "common/datetimefmt.cpp",
+        wx.srcdir .. "common/datstrm.cpp",
+        wx.srcdir .. "common/dircmn.cpp",
+        wx.srcdir .. "common/dynarray.cpp",
+        wx.srcdir .. "common/dynlib.cpp",
+        wx.srcdir .. "common/dynload.cpp",
+        wx.srcdir .. "common/encconv.cpp",
+        wx.srcdir .. "common/evtloopcmn.cpp",
+        wx.srcdir .. "common/extended.c",
+        wx.srcdir .. "common/ffile.cpp",
+        wx.srcdir .. "common/file.cpp",
+        wx.srcdir .. "common/fileback.cpp",
+        wx.srcdir .. "common/fileconf.cpp",
+        wx.srcdir .. "common/filefn.cpp",
+        wx.srcdir .. "common/filename.cpp",
+        wx.srcdir .. "common/filesys.cpp",
+        wx.srcdir .. "common/filtall.cpp",
+        wx.srcdir .. "common/filtfind.cpp",
+        wx.srcdir .. "common/fmapbase.cpp",
+        wx.srcdir .. "common/fs_arc.cpp",
+        wx.srcdir .. "common/fs_filter.cpp",
+        wx.srcdir .. "common/hash.cpp",
+        wx.srcdir .. "common/hashmap.cpp",
+        wx.srcdir .. "common/init.cpp",
+        wx.srcdir .. "common/intl.cpp",
+        wx.srcdir .. "common/ipcbase.cpp",
+        wx.srcdir .. "common/languageinfo.cpp",
+        wx.srcdir .. "common/list.cpp",
+        wx.srcdir .. "common/log.cpp",
+        wx.srcdir .. "common/longlong.cpp",
+        wx.srcdir .. "common/memory.cpp",
+        wx.srcdir .. "common/mimecmn.cpp",
+        wx.srcdir .. "common/module.cpp",
+        wx.srcdir .. "common/mstream.cpp",
+        wx.srcdir .. "common/numformatter.cpp",
+        wx.srcdir .. "common/object.cpp",
+        wx.srcdir .. "common/platinfo.cpp",
+        wx.srcdir .. "common/powercmn.cpp",
+        wx.srcdir .. "common/process.cpp",
+        wx.srcdir .. "common/regex.cpp",
+        wx.srcdir .. "common/stdpbase.cpp",
+        wx.srcdir .. "common/sstream.cpp",
+        wx.srcdir .. "common/stdstream.cpp",
+        wx.srcdir .. "common/stopwatch.cpp",
+        wx.srcdir .. "common/strconv.cpp",
+        wx.srcdir .. "common/stream.cpp",
+        wx.srcdir .. "common/string.cpp",
+        wx.srcdir .. "common/stringimpl.cpp",
+        wx.srcdir .. "common/stringops.cpp",
+        wx.srcdir .. "common/strvararg.cpp",
+        wx.srcdir .. "common/sysopt.cpp",
+        wx.srcdir .. "common/tarstrm.cpp",
+        wx.srcdir .. "common/textbuf.cpp",
+        wx.srcdir .. "common/textfile.cpp",
+        wx.srcdir .. "common/time.cpp",
+        wx.srcdir .. "common/timercmn.cpp",
+        wx.srcdir .. "common/timerimpl.cpp",
+        wx.srcdir .. "common/tokenzr.cpp",
+        wx.srcdir .. "common/translation.cpp",
+        wx.srcdir .. "common/txtstrm.cpp",
+        wx.srcdir .. "common/unichar.cpp",
+        wx.srcdir .. "common/uri.cpp",
+        wx.srcdir .. "common/ustring.cpp",
+        wx.srcdir .. "common/variant.cpp",
+        wx.srcdir .. "common/wfstream.cpp",
+        wx.srcdir .. "common/wxcrt.cpp",
+        wx.srcdir .. "common/wxprintf.cpp",
+        wx.srcdir .. "common/xlocale.cpp",
+        wx.srcdir .. "common/xti.cpp",
+        wx.srcdir .. "common/xtistrm.cpp",
+        wx.srcdir .. "common/zipstrm.cpp",
+        wx.srcdir .. "common/zstream.cpp",
+        wx.srcdir .. "common/fswatchercmn.cpp",
+        wx.srcdir .. "generic/fswatcherg.cpp",
 
-        -- BASE_AND_GUI_CMN_SRC
-        "../../src/common/event.cpp",
-        "../../src/common/fs_mem.cpp",
-        "../../src/common/msgout.cpp",
-        "../../src/common/utilscmn.cpp",
--- ============================================================================
---                                  wxNet (part of wxBase)
--- ============================================================================
-        if not wx.msw then
-            "../../src/msw/sockmsw.cpp",
-            "../../src/msw/urlmsw.cpp",
-            if wx.wince then
-                "../../include/wx/msw/wince/net.h",
-                "../../src/msw/wince/net.cpp",
-            end
-        else
-            "../../src/common/socketiohandler.cpp",
-            "../../src/unix/sockunix.cpp",
-        end
+        -- wxBase and wxCore common files
+        wx.srcdir .. "common/event.cpp",
+        wx.srcdir .. "common/fs_mem.cpp",
+        wx.srcdir .. "common/msgout.cpp",
+        wx.srcdir .. "common/utilscmn.cpp",
 
-        if wx.osx then
-            "../../src/osx/core/sockosx.cpp",
-        end
---[[
-        if wx.os2 then
-            "../../src/unix/sockunix.cpp"
-        end
-]]--
-        "../../include/wx/fs_inet.h",
-        "../../include/wx/protocol/file.h",
-        "../../include/wx/protocol/ftp.h",
-        "../../include/wx/protocol/http.h",
-        "../../include/wx/protocol/log.h",
-        "../../include/wx/protocol/protocol.h",
-        "../../include/wx/sckaddr.h",
-        "../../include/wx/sckipc.h",
-        "../../include/wx/sckstrm.h",
-        "../../include/wx/socket.h",
-        "../../include/wx/url.h",
+        -- wxNet (part of wxBase)
+        wx.includedir .. "wx/fs_inet.h",
+        wx.includedir .. "wx/protocol/file.h",
+        wx.includedir .. "wx/protocol/ftp.h",
+        wx.includedir .. "wx/protocol/http.h",
+        wx.includedir .. "wx/protocol/log.h",
+        wx.includedir .. "wx/protocol/protocol.h",
+        wx.includedir .. "wx/sckaddr.h",
+        wx.includedir .. "wx/sckipc.h",
+        wx.includedir .. "wx/sckstrm.h",
+        wx.includedir .. "wx/socket.h",
+        wx.includedir .. "wx/url.h",
 
-        "../../src/common/fs_inet.cpp",
-        "../../src/common/ftp.cpp",
-        "../../src/common/http.cpp",
-        "../../src/common/protocol.cpp",
-        "../../src/common/sckaddr.cpp",
-        "../../src/common/sckfile.cpp",
-        "../../src/common/sckipc.cpp",
-        "../../src/common/sckstrm.cpp",
-        "../../src/common/socket.cpp",
-        "../../src/common/url.cpp"
+        wx.srcdir .. "common/fs_inet.cpp",
+        wx.srcdir .. "common/ftp.cpp",
+        wx.srcdir .. "common/http.cpp",
+        wx.srcdir .. "common/protocol.cpp",
+        wx.srcdir .. "common/sckaddr.cpp",
+        wx.srcdir .. "common/sckfile.cpp",
+        wx.srcdir .. "common/sckipc.cpp",
+        wx.srcdir .. "common/sckstrm.cpp",
+        wx.srcdir .. "common/socket.cpp",
+        wx.srcdir .. "common/url.cpp"
     }
+-- ============================================================================
+--                                  UNIX
+-- ============================================================================
+--  Files used on all Unix systems, including Darwin
+    if not wx.msw then
+        files
+        {
+            wx.includedir .. "wx/unix/app.h",
+            wx.includedir .. "wx/unix/apptbase.h",
+            wx.includedir .. "wx/unix/apptrait.h",
+            wx.includedir .. "wx/unix/chkconf.h",
+            wx.includedir .. "wx/unix/evtloop.h",
+            wx.includedir .. "wx/unix/evtloopsrc.h",
+            wx.includedir .. "wx/unix/pipe.h",
+            wx.includedir .. "wx/unix/stdpaths.h",
+            wx.includedir .. "wx/unix/stackwalk.h",
+            wx.includedir .. "wx/unix/tls.h",
+            wx.includedir .. "wx/unix/fswatcher_kqueue.h",
+            wx.srcdir .. "common/fdiodispatcher.cpp",
+            wx.srcdir .. "common/selectdispatcher.cpp",
+            wx.srcdir .. "unix/appunix.cpp",
+            wx.srcdir .. "unix/dir.cpp",
+            wx.srcdir .. "unix/dlunix.cpp",
+            wx.srcdir .. "unix/epolldispatcher.cpp",
+            wx.srcdir .. "unix/evtloopunix.cpp",
+            wx.srcdir .. "unix/fdiounix.cpp",
+            wx.srcdir .. "unix/snglinst.cpp",
+            wx.srcdir .. "unix/stackwalk.cpp",
+            wx.srcdir .. "unix/stdpaths.cpp",
+            wx.srcdir .. "unix/timerunx.cpp",
+            wx.srcdir .. "unix/threadpsx.cpp",
+            wx.srcdir .. "unix/utilsunx.cpp",
+            wx.srcdir .. "unix/fswatcher_kqueue.cpp",
+
+            -- wxNet
+            wx.srcdir .. "common/socketiohandler.cpp",
+            wx.srcdir .. "unix/sockunix.cpp",
+
+-- Files used on all Unix systems, including Darwin with any port but wxMac
+-- (this is really an aberration, we should also use these files for wxMac,
+-- it's not done because of some OS 9 support leftovers only now).
+-- Premake4: Included because doesn't supports MacOS 9.
+
+            wx.includedir .. "wx/unix/execute.h",
+            wx.includedir .. "wx/unix/mimetype.h",
+            wx.srcdir .. "unix/mimetype.cpp"
+        }
+
+-- Files used on all non-Darwin Unix systems (because Darwin provides other,
+-- better, native equivalents of the functionality they implement
+-- (e.g. CFSocket instead of BSD sockets) or doesn't provide it at all
+-- (epoll, backtrace())
+        if not wx.osx then
+            files
+            {
+                wx.includedir .. "wx/unix/fswatcher_inotify.h",
+                wx.srcdir .. "unix/fswatcher_inotify.cpp"
+            }
+        else
+-- ============================================================================
+--                                  OSX
+-- ============================================================================
+            -- Used on MacOSX wxMac base, and MacOSX Darwin base
+            files
+            {
+                wx.includedir .. "wx/osx/core/cfdataref.h",
+                wx.includedir .. "wx/osx/core/cfref.h",
+                wx.includedir .. "wx/osx/core/cfstring.h",
+                wx.includedir .. "wx/osx/core/hid.h",
+                wx.includedir .. "wx/osx/core/evtloop.h",
+                wx.includedir .. "wx/osx/core/objcid.h",
+                wx.includedir .. "wx/osx/core/private.h",
+                wx.includedir .. "wx/osx/core/stdpaths.h",
+
+                wx.srcdir .. "osx/core/cfstring.cpp",
+                wx.srcdir .. "osx/core/evtloop_cf.cpp",
+                wx.srcdir .. "osx/core/stdpaths_cf.cpp",
+                wx.srcdir .. "osx/core/strconv_cf.cpp",
+                wx.srcdir .. "osx/core/utilsexc_base.cpp",
+
+                -- wxNet
+                wx.srcdir .. "osx/core/sockosx.cpp"
+            }
+
+            if wx.carbon then files
+            {
+                -- wxBase and wxCore files used by OSX
+                wx.srcdir .. "osx/carbon/utils.cpp",
+                wx.srcdir .. "osx/carbon/uma.cpp"
+            }
+            else files
+            {
+                -- wxBase files used by OSX ports (not Carbon)
+                wx.srcdir .. "osx/core/mimetype.cpp"
+            }
+            end
+
+            if wx.cocoa then files
+            {
+                wx.srcdir .. "osx/cocoa/utils.mm"
+            }
+            end
+
+            if wx.iphone then files
+            {
+                wx.srcdir .. "osx/iphone/utils.mm"
+            }
+            end
+        end
+    else
+-- ============================================================================
+--                                  Windows
+-- ============================================================================
+        files
+        {
+            wx.includedir .. "wx/msw/apptrait.h",
+            wx.includedir .. "wx/msw/apptbase.h",
+            wx.includedir .. "wx/msw/chkconf.h",
+            wx.includedir .. "wx/msw/crashrpt.h",
+            wx.includedir .. "wx/msw/dde.h",
+            wx.includedir .. "wx/msw/debughlp.h",
+            wx.includedir .. "wx/msw/evtloopconsole.h",
+            wx.includedir .. "wx/msw/gccpriv.h",
+            wx.includedir .. "wx/msw/libraries.h",
+            wx.includedir .. "wx/msw/mimetype.h",
+            wx.includedir .. "wx/msw/mslu.h",
+            wx.includedir .. "wx/msw/private.h",
+            wx.includedir .. "wx/msw/regconf.h",
+            wx.includedir .. "wx/msw/registry.h",
+            wx.includedir .. "wx/msw/seh.h",
+            wx.includedir .. "wx/msw/stackwalk.h",
+            wx.includedir .. "wx/msw/stdpaths.h",
+            wx.includedir .. "wx/msw/winundef.h",
+            wx.includedir .. "wx/msw/wrapcctl.h",
+            wx.includedir .. "wx/msw/wrapcdlg.h",
+            wx.includedir .. "wx/msw/wrapwin.h",
+            wx.includedir .. "wx/msw/fswatcher.h",
+
+            wx.srcdir .. "msw/basemsw.cpp",
+            wx.srcdir .. "msw/crashrpt.cpp",
+            wx.srcdir .. "msw/debughlp.cpp",
+            wx.srcdir .. "msw/dde.cpp",
+            wx.srcdir .. "msw/dir.cpp",
+            wx.srcdir .. "msw/dlmsw.cpp",
+            wx.srcdir .. "msw/evtloopconsole.cpp",
+            wx.srcdir .. "msw/mimetype.cpp",
+            wx.srcdir .. "msw/power.cpp",
+            wx.srcdir .. "msw/regconf.cpp",
+            wx.srcdir .. "msw/registry.cpp",
+            wx.srcdir .. "msw/snglinst.cpp",
+            wx.srcdir .. "msw/stackwalk.cpp",
+            wx.srcdir .. "msw/stdpaths.cpp",
+            wx.srcdir .. "msw/thread.cpp",
+            wx.srcdir .. "msw/timer.cpp",
+            wx.srcdir .. "msw/utils.cpp",
+            wx.srcdir .. "msw/utilsexc.cpp",
+            wx.srcdir .. "msw/fswatcher.cpp",
+
+            -- wxNet
+            wx.srcdir .. "msw/sockmsw.cpp",
+            wx.srcdir .. "msw/urlmsw.cpp"
+        }
+
+        if wx.gui then files
+        {
+            -- Common with wxCore
+            wx.srcdir .. "msw/main.cpp",
+            wx.srcdir .. "msw/mslu.cpp",
+            wx.srcdir .. "msw/volume.cpp"
+        }
+        end
+
+        if wx.wince then files
+        {
+            wx.includedir .. "wx/msw/wince/time.h",
+            wx.includedir .. "wx/msw/wince/chkconf.h",
+            wx.srcdir .. "msw/wince/time.cpp",
+
+            -- wxNet
+            wx.includedir .. "wx/msw/wince/net.h",
+            wx.srcdir .. "msw/wince/net.cpp"
+        }
+        end
+    end
+-- ============================================================================
+--                                  OS2 (Currently not supported)
+-- ============================================================================
+--[[
+    if wx.os2 then files
+    {
+        wx.includedir .. "wx/unix/app.h",
+        wx.includedir .. "wx/os2/apptbase.h",
+        wx.includedir .. "wx/os2/apptrait.h",
+        wx.includedir .. "wx/unix/evtloop.h",
+        wx.includedir .. "wx/os2/mimetype.h",
+        wx.includedir .. "wx/os2/private.h",
+        wx.includedir .. "wx/os2/stdpaths.h",
+        wx.includedir .. "wx/os2/chkconf.h",
+        wx.includedir .. "wx/os2/wxrsc.h",
+
+        wx.srcdir .. "common/fdiodispatcher.cpp",
+        wx.srcdir .. "common/selectdispatcher.cpp",
+        wx.srcdir .. "unix/appunix.cpp",
+        wx.srcdir .. "unix/evtloopunix.cpp",
+        wx.srcdir .. "unix/timerunx.cpp",
+        wx.srcdir .. "os2/dir.cpp",
+        wx.srcdir .. "os2/mimetype.cpp",
+        wx.srcdir .. "os2/snglinst.cpp",
+        wx.srcdir .. "os2/stdpaths.cpp",
+        wx.srcdir .. "os2/thread.cpp",
+        wx.srcdir .. "os2/utils.cpp",
+        wx.srcdir .. "os2/utilsexc.cpp",
+
+        -- wxNet (part of wxBase)
+        wx.srcdir .. "unix/sockunix.cpp"
+    }
+    end
+-- ]]
+-- ============================================================================
+--                                  MSDOS (Currently not supported)
+-- ============================================================================
+--[[
+    if wx.msdos then files
+    {
+        wx.includedir .. "wx/msdos/mimetype.h",
+
+        wx.srcdir .. "msdos/dir.cpp",
+        wx.srcdir .. "msdos/mimetype.cpp",
+        wx.srcdir .. "msdos/utilsdos.cpp"
+    }
+    end
+--]]
