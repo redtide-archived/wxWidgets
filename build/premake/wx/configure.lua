@@ -270,6 +270,18 @@ configuration "enable-debug_gdb"
 configuration "enable-aui"
     wx.setoption("aui", true)
     defines{"wxUSE_AUI=1"}
+
+-- ----------------------------------------------------------------------------
+-- Optional Packages
+-- ----------------------------------------------------------------------------
+configuration "with-libmspack"
+    wx.setoption("libmspack", 1)
+    defines{"wxUSE_LIBMSPACK=1"}
+
+configuration "not with-libmspack"
+    wx.setoption("libmspack", 0)
+    defines{"wxUSE_LIBMSPACK=0"}
+
 -------------------------------------------------------------------------------
 -- Debug configuration
 -------------------------------------------------------------------------------
