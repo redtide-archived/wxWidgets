@@ -16,7 +16,7 @@ require "wx.header"
 -------------------------------------------------------------------------------
 -- Call other ports specific setups
 -------------------------------------------------------------------------------
-if os.get("windows") then
+if os.get == "windows" then
     require "wx.msw.setup"
 
     -- Cross compiling
@@ -26,7 +26,7 @@ if os.get("windows") then
 else
     require "wx.unix.setup"
 
-    if os.get("macosx") then
+    if os.get == "macosx" then
         require "wx.osx.setup"
     end
 end

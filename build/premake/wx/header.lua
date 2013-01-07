@@ -27,7 +27,6 @@
             #define NAME my space seperated value
 --]]
 
-wx = {}
 wx.header = {}
 
 --[[
