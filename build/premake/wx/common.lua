@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/setup/common.lua
+-- Name:        wx/common.lua
 -- Purpose:     wx Lua namespace, common/generic functions
 -- Author:      Andrea Zanellato, Jefferson González
 -- Modified by:

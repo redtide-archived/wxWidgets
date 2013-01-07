@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/setup/header.lua
+-- Name:        wx/header.lua
 -- Purpose:     Class to do basic manipulation of header files #define
 -- Author:      Jefferson González
 -- Modified by:
@@ -27,8 +27,8 @@
             #define NAME my space seperated value
 --]]
 
-wx.setup = {}
-wx.setup.header = {}
+wx = {}
+wx.header = {}
 
 --[[
     Constructor
@@ -41,19 +41,19 @@ function mt.__call(this, file)
     
     return this
 end
-setmetatable(wx.setup.header, mt)
+setmetatable(wx.header, mt)
 
 --[[
     Gets the full path of current file
 --]]
-function wx.setup.header:getfile()
+function wx.header:getfile()
     return self.filename
 end
 
 --[[
     Assings a new file to the object
 --]]
-function wx.setup.header:setfile(file)
+function wx.header:setfile(file)
     if self.file then
         self.file:close()
     end
@@ -69,7 +69,7 @@ end
 --[[
     Gets the value of a macro definition
 --]]
-function wx.setup.header:getvalue(macro)
+function wx.header:getvalue(macro)
     local line = ""
     local currentword = ""
     local definefound = false
@@ -111,7 +111,7 @@ end
 --[[
     Sets a new value for a given macro
 --]]
-function wx.setup.header:setvalue(macro, value)
+function wx.header:setvalue(macro, value)
     self:replace(
         "#define", 
         macro, 
@@ -122,7 +122,7 @@ end
 --[[
     Undefines a given macro using #undef
 --]]
-function wx.setup.header:undefine(macro)
+function wx.header:undefine(macro)
     self:replace(
         "#define", 
         macro, 
@@ -133,7 +133,7 @@ end
 --[[
     Redefines an undefined macro
 --]]
-function wx.setup.header:define(macro, value)
+function wx.header:define(macro, value)
     self:replace(
         "#undef", 
         macro, 
@@ -144,7 +144,7 @@ end
 --[[
     Comments out a macro declaration
 --]]
-function wx.setup.header:comment(macrotype, macroname)
+function wx.header:comment(macrotype, macroname)
     self:replace(
         macrotype, 
         macroname, 
@@ -155,7 +155,7 @@ end
 --[[
     Uncomment a macro declaration
 --]]
-function wx.setup.header:uncomment(macrotype, macroname, value)
+function wx.header:uncomment(macrotype, macroname, value)
     self:replace(
         macrotype, 
         macroname, 
@@ -166,7 +166,7 @@ end
 --[[
     Replaces a whole line that containes a macro with a new value
 --]]
-function wx.setup.header:replace(macrotype, macroname, value)
+function wx.header:replace(macrotype, macroname, value)
     local line = ""
     local lines = {}
     local currentword = ""
