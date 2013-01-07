@@ -21,14 +21,10 @@ solution "wxWidgets"
 -- Make directory to hold the setup.h    
     os.mkdir("../../build/" .. _ACTION .. "/wx")
     
--- Create default setup.h based on setup0.h
-    if os.get() == "bsd" or os.get() == "linux" then
-        os.copyfile("../../include/wx/gtk/setup0.h", "../../build/" .. _ACTION .. "/wx/setup.h")
-    elseif os.get() == "macosx" then
-        os.copyfile("../../include/osx/setup0.h", "../../build/" .. _ACTION .. "/wx/setup.h")
-    elseif os.get() == "solaris" then
-        os.copyfile("../../include/motif/setup0.h", "../../build/" .. _ACTION .. "/wx/setup.h")
-    elseif os.get() == "windows" then
+-- Create default setup.h
+    if os.get() ~= "windows" then
+        os.copyfile("../../setup.h.in", "../../build/" .. _ACTION .. "/wx/setup.h")
+    else
         os.copyfile("../../include/msw/setup0.h", "../../build/" .. _ACTION .. "/wx/setup.h")
     end
 
