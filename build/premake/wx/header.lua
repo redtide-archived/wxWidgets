@@ -12,19 +12,14 @@
     Example usage:
     
         header = wx.header("setup.h")
-        value = myheader:getvalue("wxUSE_DEBUG_CONTEXT")
+        value = header:getvalue("wxUSE_DEBUG_CONTEXT")
         header:setvalue("wxUSE_DEBUG_CONTEXT", "1")
         header:undefine("wxUSE_DEBUG_CONTEXT")
-        header:define("wxUSE_DEBUG_CONTEXT")
+        header:define("wxUSE_DEBUG_CONTEXT", "1")
         header:comment("#define", "wxUSE_DEBUG_CONTEXT")
-        header:ucomment("#define", "wxUSE_DEBUG_CONTEXT", "1")
+        header:uncomment("#define", "wxUSE_DEBUG_CONTEXT", "1")
         header:replace("#define", "wxUSE_DEBUG_CONTEXT", "#define wxBLAH '1'")
         header:setfile("another.h")
-        
-    Note:
-    
-        Does not retreives the value of macros like:
-            #define NAME my space seperated value
 --]]
 
 wx.header = {}
@@ -78,14 +73,17 @@ function wx.header:getvalue(macro)
     
     while line do
         line = self.file:read()
-        line = line .. "\n" --Append new line to know where it ends
         
         if line and #line > 0 then
+            line = line .. "\n" --Append new line to know where it ends
+            
             local count = #line
             for i=1, count do
                 local c = string.sub(line, i, i)
                 
                 if c ~= " " and c ~= "\n" and c ~= "\t" and c ~= "\r" and C ~= "\0" then
+                    currentword = currentword .. c
+                elseif definefound and macronamefound and currentword ~= "" and c ~= "\n" then
                     currentword = currentword .. c
                 elseif currentword ~= "" and currentword ~= "#" then
                     if currentword == "#define" then
@@ -97,7 +95,7 @@ function wx.header:getvalue(macro)
                             definefound = false
                         end
                     elseif definefound and macronamefound then
-                        return currentword
+                        return currentword:match("^%s*(.-)%s*$")
                     end
                     
                     currentword = ""
@@ -105,6 +103,8 @@ function wx.header:getvalue(macro)
             end
         end
     end
+    
+    return nil
 end
 
 --[[
@@ -130,14 +130,25 @@ function wx.header:undefine(macro)
 end
 
 --[[
-    Redefines an undefined macro
+    Redefines an undefined macro or appends it after the header guard
+    if not found.
 --]]
-function wx.header:define(macro, value)
-    self:replace(
+function wx.header:define(macro, value, header_guard)
+    local replacement = "#define " .. macro .. " " .. value
+    
+    local found = self:replace(
         "#undef", 
         macro, 
-        "#define " .. macro .. " " .. value
+        replacement
     )
+    
+    if not found and header_guard and not self:getvalue(macro) then
+        self:replace(
+            "#define", 
+            header_guard, 
+            "#define " .. header_guard .. "\n\n" .. replacement
+        )
+    end
 end
 
 --[[
