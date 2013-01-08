@@ -14,14 +14,14 @@ require "wx.libs.base"
 if wx.debugreport then   require "wx.libs.qa" end
 
 if wx.gui then           require "wx.libs.core"
-    if     wx.gtk   then require "wx.libs.gtk"
+--  if     wx.gtk   then require "wx.libs.gtk"
 --  elseif wx.msdos then require "wx.libs.msdos"
-    elseif wx.msw   then require "wx.libs.msw"
+--  elseif wx.msw   then require "wx.libs.msw"
 --  elseif wx.os2   then require "wx.libs.os2"
-    elseif wx.osx   then require "wx.libs.osx"
-    elseif wx.univ  then require "wx.libs.univ"
-    elseif wx.x11   then require "wx.libs.x11"
-    end
+--  elseif wx.osx   then require "wx.libs.osx"
+--  elseif wx.univ  then require "wx.libs.univ"
+--  elseif wx.x11   then require "wx.libs.x11"
+--  end
 end
 
 if wx.zlib  == "builtin" then require "wx.libs.zlib"  end

@@ -341,11 +341,10 @@ wx.autoidman                    = false
 -- Call other ports specific setups
 -------------------------------------------------------------------------------
 local scriptdir = os.getcwd() .. "/wx"
-print( scriptdir )
 local ports     = wx.scandir( scriptdir, "dirs" )
 
 for index, port in pairs( ports ) do
-    if port ~= "libs" or port ~= "." or port ~= ".." then
+    if port ~= "libs" and port ~= "." and port ~= ".." then
         local path = "wx." .. port .. ".setup"
         require( path )
     end
