@@ -59,6 +59,67 @@ function wx.execute(command)
     return lines
 end
 
+--[[
+    Get a table array with the content of a directory.
+    @param string dir The directory to scan.
+    @param string content The type of content to retrieve "files", "dirs" or nil for everything
+    @return table
+--]]
+function wx.scandir(dir, contenttype)
+    local dircontent = {}
+    local newcontent = {}
+    
+    dir = wx.rtrim(dir, "/")
+    dir = wx.rtrim(dir, "\\")
+    
+    dir = dir .. "/"
+    
+    if _OS == "windows" then
+        dircontent = wx.execute('dir "'..dir..'" /b')
+    else
+        dircontent = wx.execute('ls -a "'..dir..'"')
+    end
+    
+    local index = 1
+    if contenttype and contenttype == "files" then
+        for _,value in pairs(dircontent) do
+            if not os.isdir(dir .. value) then
+                newcontent[index] = value
+                index = index + 1
+            end
+        end
+        return newcontent
+    elseif contenttype and contenttype == "dirs" then
+        for _,value in pairs(dircontent) do
+            if os.isdir(dir .. value) then
+                newcontent[index] = value
+                index = index + 1
+            end
+        end
+        return newcontent
+    end
+    
+    return dircontent
+end
+
+--[[
+    Trims a specific character from the end of the input specified.
+    @param string input A strint to trim.
+    @param string char A single character to trim.
+    @return string right trimmed version of the string
+--]]
+function wx.rtrim(input, char)
+    local result = input
+    local output = input:match("(.-)" .. char .. "$")
+    
+    while output do
+        if output then result = output end
+        output = output:match("(.-)" .. char .. "$")
+    end
+    
+    return result
+end
+
 -------------------------------------------------------------------------------
 -- Print strings to stdout without new line in contrast to default print.
 -------------------------------------------------------------------------------
