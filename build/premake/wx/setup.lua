@@ -23,6 +23,7 @@ wx.includedirs                  = { wx.includedir }
 wx.libdir                       = ""
 wx.srcdir                       = "../../src/"
 wx.srcdirs                      = { wx.srcdir }
+wx.setuph                       = wx.header("../../build/" .. _ACTION .. "/wx/setup.h")
 -- ----------------------------------------------------------------------------
 -- Third party includes and libraries path
 -- ----------------------------------------------------------------------------
@@ -79,9 +80,9 @@ wx.all_features                 = true
 -- ----------------------------------------------------------------------------
 -- External libraries
 -- ----------------------------------------------------------------------------
-wx.libpng                       = 0
-wx.libjpeg                      = 0
-wx.libtiff                      = 0
+wx.libpng                       = true
+wx.libjpeg                      = true
+wx.libtiff                      = true
 wx.libxpm                       = 0
 wx.libiconv                     = 0
 wx.libmspack                    = 0
@@ -90,9 +91,9 @@ wx.opengl                       = 0
 
 wx.dmalloc                      = 0
 wx.sdl                          = 0
-wx.regex                        = 0
-wx.zlib                         = 0
-wx.expat                        = 0
+wx.regex                        = true
+wx.zlib                         = true
+wx.expat                        = true
 -- ----------------------------------------------------------------------------
 -- Debugging options
 -- ----------------------------------------------------------------------------
