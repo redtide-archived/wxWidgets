@@ -18,11 +18,7 @@ os.chdir("../../")
 wx.rootdir                      = os.getcwd()
 os.chdir("build/premake")
 
--- Set the solution location (that is the build base dir)
 wx.builddir                     = wx.rootdir .. "/build/" .. _ACTION
-location( wx.builddir )
-
-print( os.getcwd() )
 
 -- Set the build target dir
 wx.libdir                       = wx.builddir .. "/lib"

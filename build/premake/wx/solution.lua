@@ -13,11 +13,8 @@ solution "wx"
     language            "C++"
     configurations      {"Debug", "Release"}
 
--- wx table
+-- Init wx table
     wx = {}
-
--- Set premake as current working directory
-    os.chdir("../")
 
 -- Load options
     require "wx.options"
@@ -30,6 +27,9 @@ solution "wx"
 
 -- Init wx table defaults
     require "wx.init"
+
+-- Set the solution location, that is the build base dir.
+    location( wx.builddir )
 
 -- Temporary workaround
     targetdir( wx.libdir )

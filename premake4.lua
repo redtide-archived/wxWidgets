@@ -8,10 +8,10 @@
 -- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
+
+-- Set premake as current working directory
+os.chdir( os.getcwd() .. "/build/premake/" )
+
 if _ACTION ~= nil and _ACTION ~= "help" then
-    dofile(os.getcwd() .. "/build/premake/wx/solution.lua")
-else
-    dofile(os.getcwd() .. "/build/premake/wx/options.lua")
+    require "wx.solution"
 end
-
-

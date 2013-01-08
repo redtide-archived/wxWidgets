@@ -3,7 +3,7 @@
 #   Name:        premake_gen.sh
 #   Purpose:     POSIX Premake 4 build and wxWidgets configuration script.
 #   Author:      Andrea Zanellato
-#   Modified by: 
+#   Modified by:
 #   Created:     2011/10/22
 #   Revision:    $ID$
 #   Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
@@ -32,7 +32,7 @@ if [ ! -e "build/premake/$platform/bin/release/premake4" ]; then
     make CONFIG=Release -C./build/premake/$platform
 fi
 
-# Run premake4 with user's parameters
+# Run premake4 with user's parameters or show help
 if [ ! $1 = "--help" ]; then
     ./build/premake/$platform/bin/release/premake4 $@
 else
