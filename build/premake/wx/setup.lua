@@ -13,24 +13,6 @@ wx = {}
 require "wx.common"
 require "wx.header"
 
--------------------------------------------------------------------------------
--- Call other ports specific setups
--------------------------------------------------------------------------------
-if os.get == "windows" then
-    require "wx.msw.setup"
-
-    -- Cross compiling
-    if os.is("not windows") then
-        require "wx.wine.setup"
-    end
-else
-    require "wx.unix.setup"
-
-    if os.get == "macosx" then
-        require "wx.osx.setup"
-    end
-end
-
 -- ----------------------------------------------------------------------------
 -- Main configuration options
 -- ----------------------------------------------------------------------------
@@ -354,3 +336,17 @@ wx.ico_cur                      = false
 -- under MSW, it should be off by default on the other platforms
 -------------------------------------------------------------------------------
 wx.autoidman                    = false
+
+-------------------------------------------------------------------------------
+-- Call other ports specific setups
+-------------------------------------------------------------------------------
+local scriptdir = os.getcwd() .. "/wx"
+print( scriptdir )
+local ports     = wx.scandir( scriptdir, "dirs" )
+
+for index, port in pairs( ports ) do
+    if port ~= "libs" or port ~= "." or port ~= ".." then
+        local path = "wx." .. port .. ".setup"
+        require( path )
+    end
+end
