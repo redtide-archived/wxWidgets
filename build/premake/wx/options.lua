@@ -154,7 +154,8 @@ newoption
 newoption
 {
     trigger     = "disable-gui",
-    description = "don't build GUI parts of the library"
+    description = "don't build GUI parts of the library",
+    default     = "yes" -- same as saying default is enable
 }
 newoption
 {
@@ -1250,7 +1251,8 @@ newoption
 newoption
 {
     trigger     = "enable-image",
-    description = "use wxImage class"
+    description = "use wxImage class",
+    default     = "yes" -- We should store the default action taken
 }
 newoption
 {
@@ -1318,7 +1320,9 @@ newoption
 newoption
 {
     trigger     = "enable-webviewie",
-    description = "use wxWebView IE backend (Win32 only)"
+    description = "use wxWebView IE backend (Win32 only)",
+    platforms   = {"windows"}, -- We should store platforms if the flag is not generic for easier configuration later.
+    default     = "yes"
 }
 newoption
 {

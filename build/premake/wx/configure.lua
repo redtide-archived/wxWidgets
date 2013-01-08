@@ -76,8 +76,17 @@ configuration "disable-tls"
 -- ----------------------------------------------------------------------------
 -- Global build options
 -- ----------------------------------------------------------------------------
-configuration "disable-gui"
-    wx.setoption("gui", false)
+wx.feature(
+    "gui",
+    [[
+        wx.setuph:setvalue("wxUSE_GUI", "1")
+        wx.gui = true
+    ]],
+    [[
+        wx.setuph:setvalue("wxUSE_GUI", "0")
+        wx.gui = false
+    ]]
+)
 
 configuration "enable-monolithic"
     wx.setoption("monolithic", true)
@@ -97,39 +106,39 @@ configuration "disable-all-features"
 -- Third party library options
 -- ----------------------------------------------------------------------------
 configuration "not with-zlib"
-    defines{"wxUSE_ZLIB=1"}
+    wx.setuph:setvalue("wxUSE_ZLIB", "1") -- FIXME: can't do this
     
 configuration "with-zlib"
     wx.setoption("zlib")
 if wx.zlib ~= "no" then
-    defines{"wxUSE_ZLIB=1"}
+    wx.setuph:setvalue("wxUSE_ZLIB", "1")
 end
 
 configuration "not with-libpng"
-    defines{"wxUSE_LIBPNG=1"}
+    wx.setuph:setvalue("wxUSE_LIBPNG", "1") -- FIXME: can't do this
 
 configuration "with-libpng"
     wx.setoption("libpng")
 if wx.libpng ~= "no" then
-    defines{"wxUSE_LIBPNG=1"}
+    wx.setuph:setvalue("wxUSE_LIBPNG", "1")
 end
 
 configuration "not with-libjpeg"
-    defines{"wxUSE_LIBJPEG=1"}
+    wx.setuph:setvalue("wxUSE_LIBJPEG", "1") -- FIXME: can't do this
     
 configuration "with-libjpeg"
     wx.setoption("libjpeg")
 if wx.libjpeg ~= "no" then
-    defines{"wxUSE_LIBJPEG=1"}
+    wx.setuph:setvalue("wxUSE_LIBJPEG", "1")
 end
 
 configuration "not with-libtiff"
-    defines{"wxUSE_LIBTIFF=1"}
+    wx.setuph:setvalue("wxUSE_LIBTIFF", "1") -- FIXME: can't do this
 
 configuration "with-libtiff"
     wx.setoption("libtiff")
 if wx.libtiff ~= "no" then
-    defines{"wxUSE_LIBTIFF=1"}
+    wx.setuph:setvalue("wxUSE_LIBTIFF", "1")
 end
 
 configuration "not with-expat"
@@ -142,12 +151,12 @@ if wx.expat ~= "no" then
 end
 
 configuration "not with-regex"
-    defines{"wxUSE_REGEX=1"}
+    wx.setuph:setvalue("wxUSE_REGEX", "1") -- FIXME: can't do this
 
 configuration "with-regex"
     wx.setoption("regex")
 if wx.regex ~= "no" then
-    defines{"wxUSE_REGEX=1"}
+    wx.setuph:setvalue("wxUSE_REGEX", "1")
 end
 -- ----------------------------------------------------------------------------
 -- Ports configurations
@@ -264,6 +273,20 @@ configuration "enable-debug_info"
 
 configuration "enable-debug_gdb"
     wx.setoption("debug_gdb", true)
+
+-- ----------------------------------------------------------------------------
+-- Optional features
+-- ----------------------------------------------------------------------------
+wx.feature(
+    "image",
+    [[
+        wx.setuph:setvalue("wxUSE_IMAGE", "1")
+        wx.image = true
+    ]],
+    [[
+        wx.setuph:setvalue("wxUSE_IMAGE", "0")
+    ]]
+)
 
 -- ----------------------------------------------------------------------------
 -- Optional non GUI features
