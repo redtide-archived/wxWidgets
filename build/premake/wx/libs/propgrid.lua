@@ -8,12 +8,12 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
+
 project "propgrid"
     kind( wx.getprojectkind() )
 
     files
     {
-        -- Headers
         wx.includedir .. "wx/propgrid/advprops.h",
         wx.includedir .. "wx/propgrid/editors.h",
         wx.includedir .. "wx/propgrid/manager.h",
@@ -24,7 +24,6 @@ project "propgrid"
         wx.includedir .. "wx/propgrid/propgridpagestate.h",
         wx.includedir .. "wx/propgrid/props.h",
 
-        -- Sources
         wx.srcdir .. "propgrid/advprops.cpp",
         wx.srcdir .. "propgrid/editors.cpp",
         wx.srcdir .. "propgrid/manager.cpp",

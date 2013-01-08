@@ -8,7 +8,7 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx = {}
+
 
 require "wx.common"
 require "wx.header"
@@ -17,33 +17,36 @@ require "wx.header"
 -- Main configuration options
 -- ----------------------------------------------------------------------------
 wx.version                      = "2.9.5"
-wx.compiler                     = ""
+wx.compiler                     = nil
 wx.includedir                   = "../../include/"
 wx.includedirs                  = { wx.includedir }
-wx.libdir                       = ""
+wx.libdir                       = nil
 wx.srcdir                       = "../../src/"
 wx.srcdirs                      = { wx.srcdir }
-wx.setuph                       = wx.header("../../build/" .. _ACTION .. "/wx/setup.h")
+
+-- TODO: See solution.lua:37
+local setuphpath = "../" .. _ACTION .. "/lib/wx/include/wx/setup.h"
+wx.setuph                       = wx.header( setuphpath )
 -- ----------------------------------------------------------------------------
 -- Third party includes and libraries path
 -- ----------------------------------------------------------------------------
 wx.includes = {}
 
-wx.includes.libpng = nil
-wx.includes.libjpeg = nil
-wx.includes.libtiff = nil
-wx.includes.regex = nil
-wx.includes.zlib = nil
-wx.includes.expat = nil
+wx.includes.libpng              = nil
+wx.includes.libjpeg             = nil
+wx.includes.libtiff             = nil
+wx.includes.regex               = nil
+wx.includes.zlib                = nil
+wx.includes.expat               = nil
 
 wx.libdirs = {}
 
-wx.libdirs.libpng = nil
-wx.libdirs.libjpeg = nil
-wx.libdirs.libtiff = nil
-wx.libdirs.regex = nil
-wx.libdirs.zlib = nil
-wx.libdirs.expat = nil
+wx.libdirs.libpng               = nil
+wx.libdirs.libjpeg              = nil
+wx.libdirs.libtiff              = nil
+wx.libdirs.regex                = nil
+wx.libdirs.zlib                 = nil
+wx.libdirs.expat                = nil
 -- ----------------------------------------------------------------------------
 -- Global compile options
 -- ----------------------------------------------------------------------------
@@ -339,14 +342,6 @@ wx.ico_cur                      = false
 wx.autoidman                    = false
 
 -------------------------------------------------------------------------------
--- Call other ports specific setups
+-- Call other port specific setups
 -------------------------------------------------------------------------------
-local scriptdir = os.getcwd() .. "/wx"
-local ports     = wx.scandir( scriptdir, "dirs" )
-
-for index, port in pairs( ports ) do
-    if port ~= "libs" and port ~= "." and port ~= ".." then
-        local path = "wx." .. port .. ".setup"
-        require( path )
-    end
-end
+wx.requireports()

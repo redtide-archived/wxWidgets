@@ -1,21 +1,22 @@
 -- ============================================================================
--- Name:        wx/libs/qa.lua
--- Purpose:     wxQA (Quality Assurance) library project (wxDebugReport)
+-- Name:        wx/libs/stc.lua
+-- Purpose:     wxSTC (wxStyledTextCtrl) library project
 -- Author:      Andrea Zanellato
 -- Modified by:
--- Created:     2013/01/06
+-- Created:     2013/01/08
 -- RCS-ID:      $Id$
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
 
-project "qa"
+project "stc"
     kind( wx.getprojectkind() )
 
     files
     {
-        wx.includedir .. "wx/debugrpt.h",
+        wx.includedir .. "wx/stc/stc.h",
 
-        wx.srcdir     .. "common/debugrpt.cpp",
-        wx.srcdir     .. "generic/dbgrptg.cpp"
+        wx.srcdir     .. "src/stc/stc.cpp",
+        wx.srcdir     .. "src/stc/PlatWX.cpp",
+        wx.srcdir     .. "src/stc/ScintillaWX.cpp"
     }

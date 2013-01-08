@@ -8,7 +8,7 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
--- IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
+-- IMPORTANT:   Please read docs/tech/tn0016.txt before modifying this file!
 -- ============================================================================
 
 project "base"
@@ -351,12 +351,11 @@ project "base"
 -- better, native equivalents of the functionality they implement
 -- (e.g. CFSocket instead of BSD sockets) or doesn't provide it at all
 -- (epoll, backtrace())
-        if not wx.osx then
-            files
-            {
-                wx.includedir .. "wx/unix/fswatcher_inotify.h",
-                wx.srcdir .. "unix/fswatcher_inotify.cpp"
-            }
+        if not wx.osx then files
+        {
+            wx.includedir .. "wx/unix/fswatcher_inotify.h",
+            wx.srcdir .. "unix/fswatcher_inotify.cpp"
+        }
         else
 -- ============================================================================
 --                                  OSX

@@ -8,38 +8,32 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
+
 project "ribbon"
     kind( wx.getprojectkind() )
 
-    includedirs
-    {
-        "../../include"
-    }
-
     files
     {
-        -- Headers
-        "../../include/wx/ribbon/art.h",
-        "../../include/wx/ribbon/art_internal.h",
-        "../../include/wx/ribbon/bar.h",
-        "../../include/wx/ribbon/buttonbar.h",
-        "../../include/wx/ribbon/control.h",
-        "../../include/wx/ribbon/gallery.h",
-        "../../include/wx/ribbon/page.h",
-        "../../include/wx/ribbon/panel.h",
-        "../../include/wx/ribbon/toolbar.h",
-        "../../include/wx/xrc/xh_ribbon.h",
+        wx.includedir .. "wx/ribbon/art.h",
+        wx.includedir .. "wx/ribbon/art_internal.h",
+        wx.includedir .. "wx/ribbon/bar.h",
+        wx.includedir .. "wx/ribbon/buttonbar.h",
+        wx.includedir .. "wx/ribbon/control.h",
+        wx.includedir .. "wx/ribbon/gallery.h",
+        wx.includedir .. "wx/ribbon/page.h",
+        wx.includedir .. "wx/ribbon/panel.h",
+        wx.includedir .. "wx/ribbon/toolbar.h",
+        wx.includedir .. "wx/xrc/xh_ribbon.h",
 
-        -- Sources
-        "../../src/ribbon/art_internal.cpp",
-        "../../src/ribbon/art_msw.cpp",
-        "../../src/ribbon/art_aui.cpp",
-        "../../src/ribbon/bar.cpp",
-        "../../src/ribbon/buttonbar.cpp",
-        "../../src/ribbon/control.cpp",
-        "../../src/ribbon/gallery.cpp",
-        "../../src/ribbon/page.cpp",
-        "../../src/ribbon/panel.cpp",
-        "../../src/ribbon/toolbar.cpp",
-        "../../src/xrc/xh_ribbon.cpp"
+        wx.srcdir .. "ribbon/art_internal.cpp",
+        wx.srcdir .. "ribbon/art_msw.cpp",
+        wx.srcdir .. "ribbon/art_aui.cpp",
+        wx.srcdir .. "ribbon/bar.cpp",
+        wx.srcdir .. "ribbon/buttonbar.cpp",
+        wx.srcdir .. "ribbon/control.cpp",
+        wx.srcdir .. "ribbon/gallery.cpp",
+        wx.srcdir .. "ribbon/page.cpp",
+        wx.srcdir .. "ribbon/panel.cpp",
+        wx.srcdir .. "ribbon/toolbar.cpp",
+        wx.srcdir .. "xrc/xh_ribbon.cpp"
     }

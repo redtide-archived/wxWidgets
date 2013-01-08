@@ -14,7 +14,6 @@ project "aui"
 
     files
     {
-        -- Headers
         wx.includedir .. "wx/aui/framemanager.h",
         wx.includedir .. "wx/aui/dockart.h",
         wx.includedir .. "wx/aui/floatpane.h",
@@ -25,7 +24,6 @@ project "aui"
         wx.includedir .. "wx/aui/tabart.h",
         wx.includedir .. "wx/xrc/xh_auinotbk.h",
 
-        -- Sources
         wx.srcdir .. "aui/framemanager.cpp",
         wx.srcdir .. "aui/dockart.cpp",
         wx.srcdir .. "aui/floatpane.cpp",
