@@ -5,7 +5,7 @@
 -- Modified by:
 -- Created:     2012/12/17
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
 
@@ -13,14 +13,14 @@ solution "wxWidgets"
     language            "C++"
     location            ( "../../build/" .. _ACTION )
     configurations      {"Debug", "Release"}
-    
+
     -- Temporary workaround
     targetdir           ( "../../build/" .. _ACTION .. "/libs" )
-    libdirs             { "../../build/" .. _ACTION .. "/libs" } 
-    
--- Make directory to hold the setup.h    
+    libdirs             { "../../build/" .. _ACTION .. "/libs" }
+
+-- Make directory to hold the setup.h
     os.mkdir("../../build/" .. _ACTION .. "/wx")
-    
+
 -- Create default setup.h
     if os.get() ~= "windows" then
         os.copyfile("../../setup.h.in", "../../build/" .. _ACTION .. "/wx/setup.h")
@@ -33,7 +33,7 @@ solution "wxWidgets"
     {
         -- wx includes
         "../../include",
-        
+
         -- include directory with setup.h
         "../../build/" .. _ACTION
     }

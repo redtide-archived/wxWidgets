@@ -1,11 +1,11 @@
 -- ============================================================================
--- Name:        wx-config.lua
+-- Name:        wx/config.lua
 -- Purpose:     Premake4 wx-config command
--- Author:      Andrea Zanellato
--- Modified by:
+-- Author:      laurent.humbertclaude@gmail.com, v.krishnakumar@gmail.com
+-- Modified by: Andrea Zanellato <redtide.wx@gmail.com>
 -- Created:     2012/12/16
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+-- Copyright:
 -- Licence:     wxWindows licence
 -- ============================================================================
 newoption
@@ -53,7 +53,7 @@ end
 -----------------------------------------------------------------------------
 -- The wx.configure parameters:
 --         Debug    : "yes" use debug version of wxWidgets. Default to "no"
---         Host     : 
+--         Host     :
 --         Universal: use universal configuration. Default to "no"
 --         Libs     : a list of wx libraries that you want to link with.
 --                     eg: "aui,media,html"

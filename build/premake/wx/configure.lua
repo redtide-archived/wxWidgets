@@ -1,11 +1,11 @@
 -- ============================================================================
--- Name:        configure.lua
+-- Name:        wx/configure.lua
 -- Purpose:     wxWidgets build configuration
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2012/12/17
 -- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <widgets.wx@gmail.com>
+-- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
 -- ----------------------------------------------------------------------------
@@ -107,7 +107,7 @@ configuration "disable-all-features"
 -- ----------------------------------------------------------------------------
 configuration "not with-zlib"
     wx.setuph:setvalue("wxUSE_ZLIB", "1") -- FIXME: can't do this
-    
+
 configuration "with-zlib"
     wx.setoption("zlib")
 if wx.zlib ~= "no" then
@@ -125,7 +125,7 @@ end
 
 configuration "not with-libjpeg"
     wx.setuph:setvalue("wxUSE_LIBJPEG", "1") -- FIXME: can't do this
-    
+
 configuration "with-libjpeg"
     wx.setoption("libjpeg")
 if wx.libjpeg ~= "no" then

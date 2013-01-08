@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        options.lua
+-- Name:        wx/options.lua
 -- Purpose:     wxWidgets configure options
 -- Author:      Andrea Zanellato
 -- Modified by:
