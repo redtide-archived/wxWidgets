@@ -18,6 +18,110 @@ function wx.getprojectkind()
     end
 end
 
+--[[
+    To facilitate the action taken if a wxWidgets feature 
+    is enabled or disabled (--enable-FEATURE, --disable-FEATURE).
+    @param name Name of the feature without enable or disable prepended.
+    @param active String of lua code executed if the feature is enabled.
+    @param inactive String of lua code executed if the feature is disabled.
+    @return true if feature enabled, false if disabled.
+--]]
+function wx.feature(name, active, inactive)
+    local default -- The default value of the feature (yes=enabled or no=disabled)
+    local platforms -- The platforms where the feature is supported
+    
+    -- Check how the feature was defined (enable or disable)
+    local enabled = type(premake.option.get("enable-"..name)) == "table"
+    local disabled = type(premake.option.get("disable-"..name)) == "table"
+    
+    -- Retreive the feature parameters depending on how it was defined
+    if enabled then
+        default = premake.option.get("enable-"..name).default
+        platforms = premake.option.get("enable-"..name).platforms
+    elseif disabled then
+        default = premake.option.get("disable-"..name).default
+        platforms = premake.option.get("disable-"..name).platforms
+    end
+    
+    --[[
+        If the feature is only applicable to certain platforms
+        it shouldn't be processed.
+    --]]
+    if platforms then
+        if not table.contains(platforms, os.get()) then
+            return false
+        end
+    end
+    
+    if not enabled and not disabled then
+        error(string.format("Invalid feature '%s' specified.", name))
+    end
+    
+    -- Set current value of the feature assigned on the command line
+    enabled = _OPTIONS["enable-"..name]
+    disabled = _OPTIONS["disable-"..name]
+    
+    if (default == "yes" or enabled) and enabled ~= "no" and not disabled then
+        if type(active) == "string" then 
+            assert(
+                loadstring(active),
+                string.format(
+                    "Syntax error on active code for '%s' feature",
+                    name
+                )
+            )()
+        end
+        return true
+    else
+        if type(inactive) == "string" then
+            assert(
+                loadstring(inactive),
+                string.format(
+                    "Syntax error on inactive code for '%s' feature",
+                    name
+                )
+            )()
+        end
+        return false
+    end
+end
+
+--[[
+    Function that should be used on check.lua when a feature can be
+    enabled after a series of checks.
+    @param name Name of the feature without disable- or enable- prefix
+--]]
+function wx.enablefeature(name)
+    if premake.option.get("enable-"..name) then
+        premake.option.get("enable-"..name).default = "yes"
+    elseif premake.option.get("disable-"..name) then
+        premake.option.get("disable-"..name).default = "yes"
+    else
+        error(string.format("Invalid feature '%s' specified.", name))
+    end
+    
+    _OPTIONS["enable-"..name] = "yes"
+    _OPTIONS["disable-"..name] = nil
+end
+
+--[[
+    Function that should be used on check.lua when a feature has to be
+    disabled after a series of checks.
+    @param name Name of the feature without disable- or enable- prefix
+--]]
+function wx.disablefeature(name)
+    if premake.option.get("enable-"..name) then
+        premake.option.get("enable-"..name).default = "no"
+    elseif premake.option.get("disable-"..name) then
+        premake.option.get("disable-"..name).default = "no"
+    else
+        error(string.format("Invalid feature '%s' specified.", name))
+    end
+    
+    _OPTIONS["enable-"..name] = nil
+    _OPTIONS["disable-"..name] = "yes"
+end
+
 -------------------------------------------------------------------------------
 -- Sets a wx option based on the current configuration been checked
 -------------------------------------------------------------------------------

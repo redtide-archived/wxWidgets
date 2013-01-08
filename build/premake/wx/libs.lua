@@ -28,7 +28,7 @@ if wx.zlib  == "builtin" then require "wx.libs.zlib"  end
 if wx.expat == "builtin" then require "wx.libs.expat" end
 if wx.regex == "builtin" then require "wx.libs.regex" end
 
-if wx.gui then
+if wx.gui and wx.image then
     if wx.libpng  == "builtin" then require "wx.libs.png"  end
     if wx.libjpeg == "builtin" then require "wx.libs.jpeg" end
     if wx.libtiff == "builtin" then require "wx.libs.tiff" end
