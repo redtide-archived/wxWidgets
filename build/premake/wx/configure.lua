@@ -76,7 +76,7 @@ configuration "disable-tls"
 -- ----------------------------------------------------------------------------
 -- Global build options
 -- ----------------------------------------------------------------------------
-wx.feature(
+wx.feature.eval(
     "gui",
     [[
         wx.setuph:setvalue("wxUSE_GUI", "1")
@@ -277,7 +277,7 @@ configuration "enable-debug_gdb"
 -- ----------------------------------------------------------------------------
 -- Optional features
 -- ----------------------------------------------------------------------------
-wx.feature(
+wx.feature.eval(
     "image",
     [[
         wx.setuph:setvalue("wxUSE_IMAGE", "1")
