@@ -56,6 +56,7 @@ int os_chdir(lua_State* L);
 int os_copyfile(lua_State* L);
 int os_getcwd(lua_State* L);
 int os_getversion(lua_State* L);
+int os_host(lua_State* L);
 int os_is64bit(lua_State* L);
 int os_isdir(lua_State* L);
 int os_isfile(lua_State* L);
