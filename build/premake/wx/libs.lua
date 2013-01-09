@@ -35,6 +35,7 @@ if wx.gui and wx.image then
 end
 
 if wx.aui      then require "wx.lib.aui"      end
+if wx.media    then require "wx.lib.media"    end
 if wx.propgrid then require "wx.lib.propgrid" end
 if wx.ribbon   then require "wx.lib.ribbon"   end
 if wx.stc      then require "wx.lib.stc"      end

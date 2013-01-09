@@ -28,6 +28,12 @@ solution "wx"
 -- Init wx table defaults
     require "wx.init"
 
+-- Load library checks
+    require "wx.check"
+
+-- Setup configuration
+    require "wx.setup"
+
 -- Set the solution location, that is the build base dir.
     location( wx.builddir )
 
@@ -41,12 +47,6 @@ solution "wx"
     {
         wx.includedir, wx.setuphdir
     }
-
--- Setup configuration
-    require "wx.setup"
-
--- Load library checks
-    require "wx.check"
 
 -- Load configuration
     require "wx.configure"

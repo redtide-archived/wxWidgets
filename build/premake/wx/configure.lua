@@ -297,6 +297,9 @@ configuration "enable-aui"
     wx.setoption("aui", true)
     defines{"wxUSE_AUI=1"}
 
+configuration "enable-mediactrl"
+    wx.setoption("media", true)
+    defines{"wxUSE_MEDIACTRL=1"}
 -- ----------------------------------------------------------------------------
 -- Optional Packages
 -- ----------------------------------------------------------------------------
