@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/qa.lua
+-- Name:        wx/lib/qa.lua
 -- Purpose:     wxQA (Quality Assurance) library project (wxDebugReport)
 -- Author:      Andrea Zanellato
 -- Modified by:

@@ -1,18 +1,12 @@
 -- ============================================================================
--- Name:        wx/lib/media.lua
--- Purpose:     wxMedia library project (currently including only wxMediaCtrl)
+-- Name:        wx/bins.lua
+-- Purpose:     Load wxWidgets binary projects
 -- Author:      Andrea Zanellato
 -- Modified by:
--- Created:     2013/01/08
+-- Created:     2013/01/09
 -- RCS-ID:      $Id$
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
 
-project "media"
-    kind( wx.getprojectkind() )
-
-    files
-    {
-
-    }
+require "wx.bin.config"

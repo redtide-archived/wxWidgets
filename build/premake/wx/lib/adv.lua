@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/adv.lua
+-- Name:        wx/lib/adv.lua
 -- Purpose:     wxAdv (wxAdvanced) library project
 -- Author:      Andrea Zanellato
 -- Modified by:

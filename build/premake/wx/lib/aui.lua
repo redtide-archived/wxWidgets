@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/aui.lua
+-- Name:        wx/lib/aui.lua
 -- Purpose:     wxAui library project
 -- Author:      Andrea Zanellato
 -- Modified by:

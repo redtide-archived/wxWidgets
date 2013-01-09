@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Name:        wx/init.lua
--- Purpose:     Pre-setup script
+-- Purpose:     Pre-setup, wx table init
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2013/01/08
@@ -15,41 +15,26 @@ wx.version                      = "2.9.5"
 wx.compiler                     = nil
 
 os.chdir("../../")
-wx.rootdir                      = os.getcwd()
+wx.srcrootdir                   = os.getcwd()
 os.chdir("build/premake")
 
-wx.builddir                     = wx.rootdir .. "/build/" .. _ACTION
+wx.builddir                     = wx.srcrootdir .. "/build/" .. _ACTION
 
 -- Set the build target dir
 wx.libdir                       = wx.builddir .. "/lib"
 os.mkdir( wx.libdir )
 
-wx.includedir                   = wx.rootdir .. "/include/"
+wx.includedir                   = wx.srcrootdir .. "/include/"
 wx.includedirs                  = { wx.includedir }
 
-wx.srcdir                       = wx.rootdir .. "/src/"
+wx.srcdir                       = wx.srcrootdir .. "/src/"
 wx.srcdirs                      = { wx.srcdir }
 -- ----------------------------------------------------------------------------
 -- setup.h stuff
 -- ----------------------------------------------------------------------------
 wx.setuph                       = nil
-
--- Make the directory to hold the setup.h
-os.mkdir( wx.libdir .. "/wx" )
-os.mkdir( wx.libdir .. "/wx/include" )
-
---[[
-    TODO: setup.h should be located, at least on unix, in:
-    <wx.libdir>/wx/include/<port>-<encoding>-<version>/wx/ e.g.:
-    <wx.libdir>/wx/include/gtk2-unicode-2.9/wx/setup.h
-
-    for now just <wx.libdir>/wx/include/wx/setup.h
---]]
-
-os.mkdir( wx.libdir .. "/wx/include/wx" )
-
-wx.setuphdir                    = wx.libdir .. "/wx/include/wx"
-wx.setuphpath                   = wx.setuphdir .. "/setup.h"
+wx.setuphdir                    = nil
+wx.setuphpath                   = nil
 -- ----------------------------------------------------------------------------
 -- Third party includes and libraries path
 -- ----------------------------------------------------------------------------

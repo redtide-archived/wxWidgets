@@ -51,5 +51,6 @@ solution "wx"
 -- Load configuration
     require "wx.configure"
 
--- Load libs
+-- Load library and binary projects
     require "wx.libs"
+    require "wx.bins"

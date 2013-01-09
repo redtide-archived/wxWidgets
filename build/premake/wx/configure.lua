@@ -161,7 +161,11 @@ end
 -- ----------------------------------------------------------------------------
 -- Ports configurations
 -- ----------------------------------------------------------------------------
+--[[
 configuration "not enable-universal"
+
+    TODO: ports are now loaded dinamically
+
     if os.get("windows") then
         require "wx.msw.setup"
         if os.is("not windows") then
@@ -174,25 +178,17 @@ configuration "not enable-universal"
             require "wx.osx.setup"
         end
     end
-
+--]]
 configuration "bsd"
-    require "wx.gtk.setup"
-
     defines{"__BSD__", "__WXGTK__"}
 
 configuration "linux"
-    require "wx.gtk.setup"
-
     defines{"__LINUX__", "__WXGTK__"}
 
 configuration "macosx"
-    require "wx.osx.setup"
-
     defines{"__DARWIN__", "__APPLE__", "__WXMAC__", "__WXOSX__"}
 
 configuration "solaris"
-    require "wx.motif.setup"
-
     defines{"__SOLARIS__", "__WXMOTIF__"}
 
 configuration "windows"

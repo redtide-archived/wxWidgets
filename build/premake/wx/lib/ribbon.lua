@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/ribbon.lua
+-- Name:        wx/lib/ribbon.lua
 -- Purpose:     wxRibbon library project
 -- Author:      Andrea Zanellato
 -- Modified by:

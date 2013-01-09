@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/core.lua
+-- Name:        wx/lib/core.lua
 -- Purpose:     wxCore library project
 -- Author:      Andrea Zanellato
 -- Modified by:

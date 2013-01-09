@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/propgrid.lua
+-- Name:        wx/lib/propgrid.lua
 -- Purpose:     wxPropertyGrid library project
 -- Author:      Andrea Zanellato
 -- Modified by:

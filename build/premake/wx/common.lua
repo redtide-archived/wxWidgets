@@ -10,7 +10,7 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 
---- Returns the project kind based on wx.shared bool value
+--- Returns the project kind
 function wx.getprojectkind(isapp)
     if isapp then
         if wx.gui then
@@ -19,29 +19,60 @@ function wx.getprojectkind(isapp)
             return "ConsoleApp"
         end
     end
-  
+
     if wx.shared then
         return "SharedLib"
     else
         return "StaticLib"
     end
-    
+
     error("Could not retrieve project kind.")
 end
 
---- Utility to load dynamically all wx/<port>/setup.lua files.
+--- Utility to load dynamically all wx/toolkit/<port>/setup.lua files.
 function wx.requireports()
-    local scriptdir = os.getcwd() .. "/wx"
+    local scriptdir = os.getcwd() .. "/wx/toolkit"
     local ports     = wx.scandir( scriptdir, "dirs" )
 
     for index, port in pairs( ports ) do
-        if port ~= "lib" and port ~= "." and port ~= ".." then
-            local path = "wx." .. port .. ".setup"
+        if port ~= "." and port ~= ".." then
+            local path = "wx.toolkit." .. port .. ".setup"
             require( path )
         end
     end
 end
 
+--- Utility to get the current wx.toolkit.
+-- TODO: check with wx.feature
+function wx.getport()
+    if _OPTIONS["with-msw"] then
+        return "msw"
+    elseif _OPTIONS["with-gtk"] then
+        local version = _OPTIONS["with-gtk"]
+        if version == "any" then version = 1 end
+        return "gtk" .. version
+    elseif _OPTIONS["with-motif"] then
+        return "motif"
+    end
+
+    local osname = os.get()
+    if osname == "windows" then
+        -- TODO: gtk under windows
+        return "msw"
+    end
+
+    return "gtk2"
+end
+
+--- Utility to get the current encoding.
+-- TODO: check with wx.feature
+function wx.getencoding()
+    if _OPTIONS["disable-unicode"] then
+        return "ansi"
+    end
+
+    return "unicode"
+end
 -------------------------------------------------------------------------------
 -- Sets a wx option based on the current configuration been checked
 -------------------------------------------------------------------------------
@@ -161,19 +192,19 @@ function wx.feature.add(name, description, ison, enable, platforms)
     if not name or not description then
         error("Missing required parameters.")
     end
-    
+
     local default_status = "yes"
-    
+
     if ison == false then
         default_status="no"
     end
-    
-    local trigger="enable-"..name 
-    
-    if enable == false then 
-        trigger = "disable-"..name 
+
+    local trigger="enable-"..name
+
+    if enable == false then
+        trigger = "disable-"..name
     end
-        
+
     newoption
     {
         ["trigger"]     = trigger,
@@ -258,11 +289,11 @@ end
 -----------------------------------------------------------------------------]]
 function wx.feature.enable(enabled)
     local value = "yes"
-    
+
     if enabled == false then
         value = "no"
     end
-    
+
     if premake.option.get("enable-"..name) then
         premake.option.get("enable-"..name).default = value
     elseif premake.option.get("disable-"..name) then
@@ -270,7 +301,7 @@ function wx.feature.enable(enabled)
     else
         error(string.format("Invalid feature '%s' specified.", name))
     end
-    
+
     if value == "yes" then
         _OPTIONS["enable-"..name] = "yes"
         _OPTIONS["disable-"..name] = nil

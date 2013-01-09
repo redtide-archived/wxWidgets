@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/stc.lua
+-- Name:        wx/lib/stc.lua
 -- Purpose:     wxSTC (wxStyledTextCtrl) library project
 -- Author:      Andrea Zanellato
 -- Modified by:

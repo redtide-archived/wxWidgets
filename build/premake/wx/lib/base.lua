@@ -1,5 +1,5 @@
 -- ============================================================================
--- Name:        wx/libs/base.lua
+-- Name:        wx/lib/base.lua
 -- Purpose:     wxBase library project
 -- Author:      Andrea Zanellato
 -- Modified by:
