@@ -11,12 +11,14 @@
 
 project "stc"
     kind( wx.getprojectkind() )
-
+-- ============================================================================
+--                                  Common
+-- ============================================================================
     files
     {
         wx.includedir .. "wx/stc/stc.h",
 
-        wx.srcdir     .. "src/stc/stc.cpp",
-        wx.srcdir     .. "src/stc/PlatWX.cpp",
-        wx.srcdir     .. "src/stc/ScintillaWX.cpp"
+        wx.srcdir     .. "stc/stc.cpp",
+        wx.srcdir     .. "stc/PlatWX.cpp",
+        wx.srcdir     .. "stc/ScintillaWX.cpp"
     }

@@ -1,6 +1,6 @@
 -- ============================================================================
--- Name:        wx/lib/media.lua
--- Purpose:     wxMedia library project (currently including only wxMediaCtrl)
+-- Name:        wx/lib/webview.lua
+-- Purpose:     wxWebView library project
 -- Author:      Andrea Zanellato
 -- Modified by:
 -- Created:     2013/01/09
@@ -9,52 +9,50 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 
-project "media"
+project "webview"
     kind( wx.getprojectkind() )
 -- ============================================================================
 --                                  Common
 -- ============================================================================
     files
     {
-        wx.includedir .. "wx/mediactrl.h",
-        wx.srcdir     .. "common/mediactrlcmn.cpp"
+        wx.includedir .. "wx/webview.h",
+        wx.includedir .. "wx/webviewarchivehandler.h",
+        wx.includedir .. "wx/webviewfshandler.h",
+
+        wx.srcdir .. "common/webview.cpp",
+        wx.srcdir .. "common/webviewarchivehandler.cpp",
+        wx.srcdir .. "common/webviewfshandler.cpp"
     }
 -- ============================================================================
---                                  Windows
+--                                  GTK
 -- ============================================================================
-    if wx.msw then files
+    if wx.gtk then files
     {
-        wx.srcdir .. "msw/mediactrl_am.cpp",
-        wx.srcdir .. "msw/mediactrl_wmp10.cpp",
-        wx.srcdir .. "msw/mediactrl_qt.cpp"
+        wx.includedir .. "wx/gtk/webviewhistoryitem_webkit.h",
+        wx.includedir .. "wx/gtk/webview_webkit.h",
+
+        wx.srcdir .. "gtk/webview_webkit.cpp"
     }
 -- ============================================================================
 --                                  OSX
 -- ============================================================================
-    elseif wx.osx then
-        if wx.carbon then files
-        {
-            wx.srcdir .. "osx/carbon/mediactrl.cpp"
-        }
-        end
-
-        if wx.cocoa then files
-        {
-            wx.srcdir .. "osx/cocoa/mediactrl.mm"
-        }
-        end
--- ============================================================================
---                                  Old COCOA
--- ============================================================================
-    elseif wx.old_cocoa then files
+    elseif wx.osx then files
     {
-        wx.srcdir .. "cocoa/mediactrl.mm"
+        wx.includedir .. "wx/osx/webviewhistoryitem_webkit.h",
+        wx.includedir .. "wx/osx/webview_webkit.h",
+
+        wx.srcdir .. "osx/webview_webkit.mm"
     }
 -- ============================================================================
---                                  UNIX
+--                                  Windows
 -- ============================================================================
-    else files
+    elseif wx.msw then files
     {
-        wx.srcdir .. "unix/mediactrl.cpp"
+        wx.includedir .. "wx/msw/webviewhistoryitem_ie.h",
+        wx.includedir .. "wx/msw/webview_ie.h",
+        wx.includedir .. "wx/msw/webview_missing.h",
+
+        wx.srcdir .. "msw/webview_ie.cpp"
     }
     end

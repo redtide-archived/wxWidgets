@@ -31,8 +31,8 @@ end
 
 --- Utility to load dynamically all wx/toolkit/<port>/setup.lua files.
 function wx.requireports()
-    local scriptdir = os.getcwd() .. "/wx/toolkit"
-    local ports     = wx.scandir( scriptdir, "dirs" )
+    local portdir = os.getcwd() .. "/wx/toolkit"
+    local ports   = wx.scandir( portdir, "dirs" )
 
     for index, port in pairs( ports ) do
         if port ~= "." and port ~= ".." then
@@ -129,7 +129,7 @@ function wx.scandir(dir, contenttype)
 
     dir = dir .. "/"
 
-    if os.host() == "windows" then
+    if _OS == "windows" then
         dircontent = wx.execute('dir "'..dir..'" /b')
     else
         dircontent = wx.execute('ls -a "'..dir..'"')
