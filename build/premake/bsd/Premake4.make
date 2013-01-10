@@ -68,7 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/os_copyfile.o \
 	$(OBJDIR)/os_getcwd.o \
 	$(OBJDIR)/os_getversion.o \
-    $(OBJDIR)/os_host.o \
+    $(OBJDIR)/os_gethost.o \
 	$(OBJDIR)/os_is64bit.o \
 	$(OBJDIR)/os_isdir.o \
 	$(OBJDIR)/os_isfile.o \
@@ -189,7 +189,7 @@ $(OBJDIR)/os_getcwd.o: ../4.4/src/host/os_getcwd.c
 $(OBJDIR)/os_getversion.o: ../4.4/src/host/os_getversion.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(CFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/os_host.o: ../4.4/src/host/os_host.c
+$(OBJDIR)/os_gethost.o: ../4.4/src/host/os_gethost.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(CFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 $(OBJDIR)/os_is64bit.o: ../4.4/src/host/os_is64bit.c
