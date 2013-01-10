@@ -104,7 +104,7 @@ project "adv"
 -- ============================================================================
 --                                  UNIX
 -- ============================================================================
-    if wx.gtk or wx.motif or wx.x11 then files
+    if wx.gtk == 1 or wx.motif or wx.x11 or wx.osx then files
     {
         wx.includedir .. "wx/unix/joystick.h",
         wx.includedir .. "wx/unix/sound.h",
@@ -114,79 +114,131 @@ project "adv"
         wx.srcdir .. "unix/joystick.cpp",
         wx.srcdir .. "unix/sound.cpp",
         wx.srcdir .. "unix/taskbarx11.cpp"
+
+        if not wx.x11 then files
+        {
+            wx.includedir .. "wx/generic/animate.h",
+            wx.srcdir     .. "generic/animateg.cpp"
+        }
+        end
     }
     end -- wx.unix_common
 -- ============================================================================
---                                  OSX
+--                                  GTK
 -- ============================================================================
-    if wx.cocoa then files
+    if wx.gtk == 1 then files
     {
-        wx.includedir .. "wx/generic/animate.h",
-        wx.includedir .. "wx/osx/dataview.h",
-        wx.includedir .. "wx/osx/datectrl.h",
-        wx.includedir .. "wx/osx/datetimectrl.h",
-        wx.includedir .. "wx/osx/dvrenderer.h",
-        wx.includedir .. "wx/osx/dvrenderers.h",
-        wx.includedir .. "wx/osx/joystick.h",
-        wx.includedir .. "wx/osx/sound.h",
-        wx.includedir .. "wx/osx/taskbarosx.h",
-        wx.includedir .. "wx/osx/timectrl.h",
-        wx.includedir .. "wx/osx/core/joystick.h",
-        wx.includedir .. "wx/osx/cocoa/dataview.h",
-
-        wx.srcdir .. "common/taskbarcmn.cpp",
-        wx.srcdir .. "generic/animateg.cpp",
-        wx.srcdir .. "osx/datetimectrl_osx.cpp",
-        wx.srcdir .. "osx/datectrl_osx.cpp",
-        wx.srcdir .. "osx/sound_osx.cpp",
-        wx.srcdir .. "osx/timectrl_osx.cpp",
-        wx.srcdir .. "osx/carbon/sound.cpp",
-        wx.srcdir .. "osx/core/sound.cpp",
-        wx.srcdir .. "osx/cocoa/aboutdlg.mm",
-        wx.srcdir .. "osx/dataview_osx.cpp",
-        wx.srcdir .. "osx/cocoa/dataview.mm",
-        wx.srcdir .. "osx/cocoa/datetimectrl.mm",
-        wx.srcdir .. "osx/cocoa/taskbar.mm",
-        wx.srcdir .. "osx/core/hidjoystick.cpp",
+        wx.srcdir .. "gtk1/eggtrayicon.c",
+        wx.srcdir .. "gtk1/taskbar.cpp"
     }
-    end -- wx.cocoa
-
-    if wx.carbon then files
+    elseif wx.gtk > 1 then files
     {
+        wx.includedir .. "wx/gtk/animate.h",
+        wx.includedir .. "wx/gtk/bmpcbox.h",
+        wx.includedir .. "wx/gtk/calctrl.h",
+        wx.includedir .. "wx/gtk/dataview.h",
+        wx.includedir .. "wx/gtk/dvrenderer.h",
+        wx.includedir .. "wx/gtk/dvrenderers.h",
+        wx.includedir .. "wx/gtk/hyperlink.h",
+        wx.includedir .. "wx/gtk/notifmsg.h",
+        wx.includedir .. "wx/gtk/taskbar.h",
+
+        wx.srcdir .. "gtk/aboutdlg.cpp",
+        wx.srcdir .. "gtk/animate.cpp",
+        wx.srcdir .. "gtk/bmpcbox.cpp",
+        wx.srcdir .. "gtk/calctrl.cpp",
+        wx.srcdir .. "gtk/dataview.cpp",
+        wx.srcdir .. "gtk/hyperlink.cpp",
+        wx.srcdir .. "gtk/notifmsg.cpp",
+        wx.srcdir .. "gtk/taskbar.cpp"
+
+        if wx.gtk == 2 then files
+        {
+            wx.includedir .. "wx/gtk/hildon/notifmsg.h",
+
+            wx.srcdir .. "gtk/eggtrayicon.c",
+            wx.srcdir .. "gtk/hildon/notifmsg.cpp"
+        }
+        end
+    }
+    end
+-- ============================================================================
+--                                  OSX / Old Cocoa
+-- ============================================================================
+    if wx.osx then
+        files
+        {
+            wx.includedir .. "wx/osx/sound.h",
+            wx.srcdir     .. "osx/sound_osx.cpp",
+        }
+
+        if wx.carbon then files
+        {
+            wx.includedir .. "wx/osx/dataview.h",
+            wx.includedir .. "wx/osx/dvrenderer.h",
+            wx.includedir .. "wx/osx/dvrenderers.h",
+            wx.includedir .. "wx/osx/joystick.h",
+            wx.includedir .. "wx/osx/taskbarosx.h",
+            wx.includedir .. "wx/osx/carbon/drawer.h",
+            wx.includedir .. "wx/osx/carbon/dataview.h",
+            wx.includedir .. "wx/osx/core/joystick.h",
+
+            wx.srcdir .. "common/taskbarcmn.cpp",
+            wx.srcdir .. "osx/carbon/aboutdlg.cpp",
+            wx.srcdir .. "osx/carbon/drawer.cpp",
+            wx.srcdir .. "osx/dataview_osx.cpp",
+            wx.srcdir .. "osx/carbon/dataview.cpp",
+            wx.srcdir .. "osx/carbon/sound.cpp",
+            wx.srcdir .. "osx/carbon/taskbar.cpp",
+            wx.srcdir .. "osx/core/hidjoystick.cpp"
+        }
+        end -- wx.carbon
+
+        if wx.cocoa then files
+        {
+            wx.includedir .. "wx/osx/dataview.h",
+            wx.includedir .. "wx/osx/datectrl.h",
+            wx.includedir .. "wx/osx/datetimectrl.h",
+            wx.includedir .. "wx/osx/dvrenderer.h",
+            wx.includedir .. "wx/osx/dvrenderers.h",
+            wx.includedir .. "wx/osx/joystick.h",
+            wx.includedir .. "wx/osx/taskbarosx.h",
+            wx.includedir .. "wx/osx/timectrl.h",
+            wx.includedir .. "wx/osx/core/joystick.h",
+            wx.includedir .. "wx/osx/cocoa/dataview.h",
+
+            wx.srcdir .. "common/taskbarcmn.cpp",
+            wx.srcdir .. "osx/datetimectrl_osx.cpp",
+            wx.srcdir .. "osx/datectrl_osx.cpp",
+            wx.srcdir .. "osx/timectrl_osx.cpp",
+            wx.srcdir .. "osx/carbon/sound.cpp",
+            wx.srcdir .. "osx/core/sound.cpp",
+            wx.srcdir .. "osx/cocoa/aboutdlg.mm",
+            wx.srcdir .. "osx/dataview_osx.cpp",
+            wx.srcdir .. "osx/cocoa/dataview.mm",
+            wx.srcdir .. "osx/cocoa/datetimectrl.mm",
+            wx.srcdir .. "osx/cocoa/taskbar.mm",
+            wx.srcdir .. "osx/core/hidjoystick.cpp",
+        }
+        end -- wx.cocoa
+
+        if wx.iphone then files
+        {
+            wx.srcdir .. "osx/core/sound.cpp"
+        }
+        end
+    else if wx.old_cocoa then files
+    {
+        wx.includedir .. "wx/cocoa/taskbar.h",
         wx.includedir .. "wx/generic/animate.h",
-        wx.includedir .. "wx/osx/dataview.h",
-        wx.includedir .. "wx/osx/dvrenderer.h",
-        wx.includedir .. "wx/osx/dvrenderers.h",
-        wx.includedir .. "wx/osx/joystick.h",
-        wx.includedir .. "wx/osx/sound.h",
-        wx.includedir .. "wx/osx/taskbarosx.h",
-        wx.includedir .. "wx/osx/carbon/drawer.h",
-        wx.includedir .. "wx/osx/carbon/dataview.h",
         wx.includedir .. "wx/osx/core/joystick.h",
 
+        wx.srcdir .. "cocoa/taskbar.mm",
         wx.srcdir .. "common/taskbarcmn.cpp",
         wx.srcdir .. "generic/animateg.cpp",
-        wx.srcdir .. "osx/carbon/aboutdlg.cpp",
-        wx.srcdir .. "osx/carbon/drawer.cpp",
-        wx.srcdir .. "osx/dataview_osx.cpp",
-        wx.srcdir .. "osx/carbon/dataview.cpp",
-        wx.srcdir .. "osx/sound_osx.cpp",
-        wx.srcdir .. "osx/carbon/sound.cpp",
-        wx.srcdir .. "osx/carbon/taskbar.cpp",
         wx.srcdir .. "osx/core/hidjoystick.cpp"
-    }
-    end -- wx.carbon
-
-    if wx.iphone then files
     {
-        wx.includedir .. "wx/generic/animate.h",
-        wx.includedir .. "wx/osx/sound.h",
-
-        wx.srcdir .. "generic/animateg.cpp",
-        wx.srcdir .. "osx/sound_osx.cpp",
-        wx.srcdir .. "osx/core/sound.cpp"
-    }
-    end -- wx.iphone
+    end
 -- ============================================================================
 --                                  Universal
 -- ============================================================================
@@ -255,10 +307,9 @@ project "adv"
         if not wx.wince then files
         {
             wx.includedir .. "wx/msw/joystick.h",
-            wx.srcdir .. "msw/joystick.cpp"
+            wx.srcdir     .. "msw/joystick.cpp"
         } -- not wx.wince
     end -- wx.msw
-
 -- ============================================================================
 --                                  OS2 (Currently not supported)
 -- ============================================================================
