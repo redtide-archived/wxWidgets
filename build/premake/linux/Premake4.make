@@ -68,7 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/os_copyfile.o \
 	$(OBJDIR)/os_getcwd.o \
 	$(OBJDIR)/os_getversion.o \
-    $(OBJDIR)/os_host.o \
+    $(OBJDIR)/os_gethost.o \
 	$(OBJDIR)/os_is64bit.o \
 	$(OBJDIR)/os_isdir.o \
 	$(OBJDIR)/os_isfile.o \

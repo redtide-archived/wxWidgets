@@ -21,7 +21,7 @@ os.mkdir( wx.setuphdir )
 if os.get() ~= "windows" then
     os.copyfile( wx.srcrootdir .. "/setup.h.in", wx.setuphpath )
 else
-    os.copyfile( wx.srcrootdir .. "/include/msw/setup0.h", wx.setuphpath )
+    os.copyfile( wx.srcrootdir .. "/include/wx/msw/setup0.h", wx.setuphpath )
 end
 
 wx.setuph = wx.header( wx.setuphpath )
