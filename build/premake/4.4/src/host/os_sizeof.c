@@ -1,6 +1,6 @@
 /**
  * \file   os_sizeof.c
- * \brief  Change the current working directory.
+ * \brief  Gets the amount of bytes for a given standard c data type.
  * \author Copyright (c) 2013 Jefferson González and the Premake project
  */
 
@@ -55,7 +55,6 @@ int os_sizeof(lua_State* L)
             result = getsizeofunix(type, bits);
     }
     
-    /* returns 0 if nothing found */
     lua_pushnumber(L, result);
     return 1;
 }
