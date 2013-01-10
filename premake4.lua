@@ -14,4 +14,8 @@ os.chdir( os.getcwd() .. "/build/premake/" )
 
 if _ACTION ~= nil and _ACTION ~= "help" then
     require "wx.solution"
+elseif _OPTIONS["premake-only"] == nil then
+    wx = {}
+    require "wx.common"
+    require "wx.options"
 end

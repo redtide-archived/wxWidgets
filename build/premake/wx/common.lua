@@ -188,7 +188,13 @@ end
 -------------------------------------------------------------------------------
 wx.feature = {}
 
-function wx.feature.add(name, description, ison, enable, platforms)
+function wx.feature.add(params)
+    local name          = params.name
+    local description   = params.description
+    local ison          = params.ison
+    local enable        = params.enable
+    local platforms     = params.platforms
+    
     if not name or not description then
         error("Missing required parameters.")
     end
@@ -211,6 +217,7 @@ function wx.feature.add(name, description, ison, enable, platforms)
         ["description"] = description,
         ["platforms"] = platforms,
         ["default"] = default_status,
+        ["value"] = params.value
     }
 end
 
