@@ -129,7 +129,7 @@ function wx.scandir(dir, contenttype)
 
     dir = dir .. "/"
 
-    if _OS == "windows" then
+    if os.gethost() == "windows" then
         dircontent = wx.execute('dir "'..dir..'" /b')
     else
         dircontent = wx.execute('ls -a "'..dir..'"')
