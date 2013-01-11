@@ -8,4 +8,4 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.directfb = true
+wx.directfb = false

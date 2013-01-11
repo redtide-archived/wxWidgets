@@ -8,8 +8,6 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
--- IMPORTANT:   Please read docs/tech/tn0016.txt before modifying this file!
--- ============================================================================
 
 project "base"
     kind( wx.getprojectkind() )

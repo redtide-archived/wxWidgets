@@ -25,7 +25,7 @@ if wx.libtiff == "builtin" then require "wx.lib.tiff"     end
 
 end
 
-if wx.gui                  then require "wx.lib.core"
+if wx.gui                  then -- require "wx.lib.core"
 
 -- TODO: Check for wxAdv?
 if wx.aui                  then require "wx.lib.aui"      end

@@ -8,20 +8,21 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.gtk                          = true
-wx.gtk_exec_prefix              = ""
-wx.gtk_prefix                   = ""
-wx.gtktest                      = false
-wx.gtk_version                  = "2"
+
+    wx.gtk             = true
+    wx.gtk_exec_prefix = ""
+    wx.gtk_prefix      = ""
+    wx.gtktest         = false
+    wx.gtk_version     = "2"
 -- ----------------------------------------------------------------------------
 -- External libraries
 -- ----------------------------------------------------------------------------
-wx.hildon                       = false
-wx.gpe                          = false
-wx.gtkprint                     = false
-wx.gnomeprint                   = false
-wx.gnomevfs                     = false
+    wx.hildon          = false
+    wx.gpe             = false
+    wx.gtkprint        = false
+    wx.gnomeprint      = false
+    wx.gnomevfs        = false
 -- ----------------------------------------------------------------------------
 -- Optional "big" GUI features
 -- ----------------------------------------------------------------------------
-wx.gstreamer8                   = false
+    wx.gstreamer8      = false

@@ -8,19 +8,17 @@
 -- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
 -- Licence:     wxWindows licence
 -- ============================================================================
-wx.osx                          = true
-wx.osx_carbon                   = false
-wx.osx_cocoa                    = true
-wx.old_cocoa                    = false
-wx.osx_iphone                   = false
-wx.carbon                       = wx.osx_carbon
-wx.cocoa                        = wx.osx_cocoa
-wx.iphone                       = wx.osx_iphone
-wx.mac                          = wx.osx
+if os.is("macosx") then
+    wx.osx                = true
+    wx.carbon             = false
+    wx.cocoa              = false
+    wx.iphone             = false
+    wx.old_cocoa          = false
 -- ----------------------------------------------------------------------------
 -- Global compile options
 -- ----------------------------------------------------------------------------
-wx.universal_binary             = false
-wx.macosx_arch                  = ""
-wx.macosx_sdk                   = ""
-wx.macosx_version_min           = ""
+    wx.universal_binary   = ""
+    wx.macosx_arch        = ""
+    wx.macosx_sdk         = ""
+    wx.macosx_version_min = ""
+end
