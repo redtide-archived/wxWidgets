@@ -94,12 +94,28 @@ newoption
 newoption
 {
     trigger     = "toolkit",
-    value       = "TOOLKIT"
+    value       = "TOOLKIT",
+    description =
+    {
+        "Specify a (POSIX  extended) regex of the toolkits to match.",
+        "The toolkit is responsible for the look and feel",
+        "of the compiled application. eg. gtk, gtk2, motif, msw.",
+        "If unspecified the default is to prefer the system default toolkit,",
+        "but to match any toolkit in the absence of a stricter specification."
+    }
 }
 newoption
 {
     trigger     = "version",
-    value       = "VERSION"
+    value       = "VERSION",
+    description =
+    {
+        "Without the optional argument, return the wxWidgets version.",
+        "If the argument is supplied it specifies a (POSIX extended) regex",
+        "of the versions to match.",
+        "If unspecified  the default is to prefer the system default version,",
+        "but to match any version in the absence of a stricter specification."
+    }
 }
 newoption
 {
