@@ -13,9 +13,6 @@ solution "wx"
     language            "C++"
     configurations      {"Debug", "Release"}
 
--- Init wx table
-    wx = {}
-
 -- Load common functions used in later scripts
     require "wx.common"
     

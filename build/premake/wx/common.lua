@@ -10,7 +10,12 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 
---- Returns the project kind
+--[[===========================================================================
+    Returns the project kind for the selected wx build.
+
+    @param bool isapp Specify the project kind:
+                      @true application, @false (or nil) library
+    =======================================================================--]]
 function wx.getprojectkind(isapp)
     if isapp then
         if wx.gui then
@@ -27,6 +32,51 @@ function wx.getprojectkind(isapp)
     end
 
     error("Could not retrieve project kind.")
+end
+
+--[[===========================================================================
+    Returns the wx version in short, simple or full format,
+    e.g. 2.9, 2.9.5 or 2.9.5.0.
+
+    @param string form The version format to retrieve.
+    =======================================================================--]]
+function wx.getversion(form)
+    if form == "short" then
+        return string.sub(wx.version, 1, 3)
+    elseif form == "simple" then
+        return string.sub(wx.version, 1, 5)
+    else -- if option == "full"
+        return wx.version
+    end
+end
+
+--[[===========================================================================
+    Returns the prefix dir e.g. /usr or /usr/local or the CWD.
+
+    @param bool is_exec Set to @true to retrieve the exec prefix,
+                        @false or @nil otherwise.
+    =======================================================================--]]
+function wx.getprefix(is_exec)
+    local prefix = nil
+
+    -- Get dirs specified by user if any
+    if is_exec then
+        prefix = _OPTIONS["exec-prefix"]
+    else
+        prefix = _OPTIONS["prefix"]
+    end
+
+    -- No dir specified, use default
+    if not prefix then
+        return "/usr/local"
+    end
+
+    -- Check for valid dir
+    if os.isdir( prefix ) then
+        return prefix
+    end
+
+    error( "Not a valid dir: " .. prefix )
 end
 
 --- Utility to load dynamically all wx/toolkit/<port>/setup.lua files.
@@ -159,7 +209,7 @@ end
 
 --[[---------------------------------------------------------------------------
     Trims a specific character from the end of the input specified.
-    @param string input A strint to trim.
+    @param string input A string to trim.
     @param string char A single character to trim.
     @return string right trimmed version of the string
 -----------------------------------------------------------------------------]]

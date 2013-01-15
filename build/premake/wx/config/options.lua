@@ -29,7 +29,7 @@ newoption
 newoption
 {
     trigger     = "exec-prefix",
-    value       = "DIR"
+    value       = "DIR",
     description =
     {
         "Similar to --prefix, but acts on the exec-prefix.",
@@ -81,6 +81,21 @@ newoption
     =======================================================================]]--
 newoption
 {
+    trigger     = "chartype",
+    description = "Character type"
+}
+newoption
+{
+    trigger     = "debugtype",
+    description = "Debug type"
+}
+newoption
+{
+    trigger     = "flavour",
+    description = "Flavour"
+}
+newoption
+{
     trigger     = "host",
     value       = "HOST",
     description =
@@ -90,6 +105,11 @@ newoption
         "If unspecified, the default is to match only configurations native",
         "to the build machine."
     }
+}
+newoption
+{
+    trigger     = "linkage",
+    description = "Linkage"
 }
 newoption
 {
@@ -119,11 +139,8 @@ newoption
 }
 newoption
 {
-    trigger     = "widgetset"
-}
-newoption
-{
-    trigger     = "chartype"
+    trigger     = "widgetset",
+    description = "Widget set"
 }
 --[[===========================================================================
     Input options that accept only a yes or no argument.
@@ -134,24 +151,8 @@ newoption
    ========================================================================--]]
 newoption
 {
-    trigger     = "unicode",
-    value       = "yes|no"
-    accepted    =
-    {
-        {"yes", "Unicode (default)"},
-        {"no", "ANSI"}
-    },
-    description =
-    {
-        "Specify the default character type for the application.",
-        "If unspecified, the system default will be preferred,",
-        "but any type may match in the absence of a stricter specification."
-    }
-}
-newoption
-{
     trigger     = "debug",
-    value       = "yes|no"
+    value       = "yes|no",
     accepted    =
     {
         {"yes", "Debug build"},
@@ -172,7 +173,7 @@ newoption
 newoption
 {
     trigger     = "static",
-    value       = "yes|no"
+    value       = "yes|no",
     accepted    =
     {
         {"yes", "Static linking"},
@@ -192,13 +193,53 @@ newoption
 }
 newoption
 {
+    trigger     = "unicode",
+    value       = "yes|no",
+    accepted    =
+    {
+        {"yes", "Unicode (default)"},
+        {"no", "ANSI"}
+    },
+    description =
+    {
+        "Specify the default character type for the application.",
+        "If unspecified, the system default will be preferred,",
+        "but any type may match in the absence of a stricter specification."
+    }
+}
+newoption
+{
+    trigger     = "univ",
+    description = "Same as 'universal' option."
+}
+newoption
+{
     trigger     = "universal",
-    value       = "yes|no"
+    value       = "yes|no",
+    description = "wxUniversal",
     accepted    =
     {
         {"yes", "Use wxUniversal"},
         {"no", "Don't use wxUniversal"}
     }
+}
+--[[===========================================================================
+    Boolean options that do something or not.
+    =======================================================================]]--
+newoption
+{
+    trigger     = "selected_config",
+    description = "Selected configuration"
+}
+newoption
+{
+    trigger     = "no_rpath",
+    description = "No rpath"
+}
+newoption
+{
+    trigger     = "inplace",
+    description = "In-place"
 }
 --[[===========================================================================
     Compiler options
@@ -223,7 +264,7 @@ newoption
 }
 newoption
 {
-    trigger     = "cflags"
+    trigger     = "cflags",
     description = "Output parameters required by the C compiler."
 }
 newoption
@@ -234,7 +275,13 @@ newoption
 }
 newoption
 {
-    trigger     = "rescomp"
+    trigger     = "rescomp",
+    description = "Res comp"
+}
+newoption
+{
+    trigger     = "rezflags",
+    description = "Rez flags"
 }
 newoption
 {
@@ -262,7 +309,7 @@ newoption
     description = "Output link flags required for a wxWidgets application.",
     accepted    =
     {
-        {"all", "Used to import all libraries that have been compiled."}
+        {"all", "Used to import all libraries that have been compiled."},
         {"std", "Used to import all libraries that would be used by default if none were specified explicitly."},
         {"base", "wxBase contains mandatory classes that any wxWidgets code depends on."},
         {"net", "wxNet library: Classes for network access like wxSocket and wxURL."},
@@ -283,7 +330,8 @@ newoption
 }
 newoption
 {
-    trigger     = "gl_libs"
+    trigger     = "gl_libs",
+    description = "OpenGL libraries"
 }
 newoption
 {

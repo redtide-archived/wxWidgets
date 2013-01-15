@@ -11,14 +11,15 @@
 -- ----------------------------------------------------------------------------
 -- Main configuration options
 -- ----------------------------------------------------------------------------
-wx.version                      = "2.9.5"
+wx.version                      = "2.9.5.0"
 wx.compiler                     = nil
 
 os.chdir("../../")
 wx.srcrootdir                   = os.getcwd()
 os.chdir("build/premake")
 
-wx.builddir                     = wx.srcrootdir .. "/build/" .. _ACTION
+wx.builddir                     = "" -- TODO: set it from the cwd when calling premake_gen
+wx.prefix                       = wx.getprefix()
 
 -- Set the build target dir
 wx.libdir                       = wx.builddir .. "/lib"
