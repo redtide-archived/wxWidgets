@@ -9,16 +9,29 @@
 -- Licence:     wxWindows licence
 -- ============================================================================
 
+-- Init wx table
+wx = {}
+
+-- Set premake as current working directory
+os.chdir("../")
+
+-- Show help
+if _OPTIONS["help"] or _OPTIONS["h"] then
+--  require "wx.common"
+--  require "wx.options"
+    require "wx.config"
+end
+
 -- Wrong action
 if _ACTION and not premake.action.list[_ACTION] then
     error("Not a valid action: " .. _ACTION)
 end
 
--- Init wx table
-    wx = {}
+-- Load common functions used in later scripts
+    require "wx.common"
 
--- Set premake as current working directory
-    os.chdir("../")
+-- Load options
+    require "wx.options"
 
 if not _ACTION then
 -- No action == wx-config mode
