@@ -13,12 +13,6 @@ solution "wx"
     language            "C++"
     configurations      {"Debug", "Release"}
 
--- Load common functions used in later scripts
-    require "wx.common"
-    
--- Load options
-    require "wx.options"
-
 -- Load the header manipulation class
     require "wx.header"
 
