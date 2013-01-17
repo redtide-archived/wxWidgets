@@ -34,10 +34,12 @@ os.chdir("../")
 require "wx.help"
 
 if not wx.needhelp() then
-
     -- No action == wx-config mode
     if not _ACTION then
         require "wx.config"
+
+        -- Suppress further messages by premake
+        os.exit(0)
 
     -- Install files
     elseif _ACTION == "install" then

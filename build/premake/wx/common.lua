@@ -35,6 +35,20 @@ function wx.getprojectkind(is_app)
 end
 
 --[[===========================================================================
+    Returns the base name for the selected wx build e.g.: 'wx_mswud'.
+  =========================================================================--]]
+function wx.getbasename()
+    local port     = wx.getport()
+    local basename = "wx_" .. port .. wx.getencoding(true)
+
+    if port == "msw" and wx.debug then
+        basename = basename .. "d"
+    end
+
+    return basename
+end
+
+--[[===========================================================================
     Returns the wx version in short, simple or full format,
     e.g. 2.9, 2.9.5 or 2.9.5.0.
 
@@ -124,8 +138,19 @@ end
 
     @todo: check with wx.feature
   =========================================================================--]]
-function wx.getencoding()
-    if _OPTIONS["disable-unicode"] then return "ansi" end
+function wx.getencoding(as_prefix)
+
+    if _OPTIONS["disable-unicode"] then
+        if as_prefix then
+            return ""
+        end
+
+        return "ansi"
+    end
+
+    if as_prefix then
+        return "u"
+    end
 
     return "unicode"
 end
@@ -283,6 +308,7 @@ end
 --[[===========================================================================
     To facilitate the action taken if a wxWidgets feature
     is enabled or disabled (--enable-FEATURE, --disable-FEATURE).
+
     @param name Name of the feature without enable or disable prepended.
     @param active String of lua code executed if the feature is enabled.
     @param inactive String of lua code executed if the feature is disabled.

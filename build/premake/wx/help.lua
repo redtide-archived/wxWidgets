@@ -9,6 +9,9 @@
     Licence:     wxWindows licence
   =========================================================================--]]
 
+--[[===========================================================================
+    Show configuration help instructions
+  =========================================================================--]]
 function wx.showhelp()
 
     local help = {
@@ -69,19 +72,27 @@ function wx.showhelp()
     for index,line in pairs( help ) do print( line ) end
 end
 
+--[[===========================================================================
+    Show the appropriate help based on help option's values:
+    help=wx show configure help, help=config show wx-config help.
+    If no value is specified, show premake4 help.
+
+    @return @true if help option was specified, @false otherwise.
+  =========================================================================--]]
 function wx.needhelp()
 
     local help = _OPTIONS["help"]
 
     if help then
         if help == "wx" then
-            require "wx.help"
             wx.showhelp()
+
         elseif help == "config" then
             require "wx.config.help"
             wx.config.showhelp()
         end
 
+        -- Suppress further messages by premake
         if help ~= "" then os.exit(0) end
 
         return true

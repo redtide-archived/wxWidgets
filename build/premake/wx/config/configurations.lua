@@ -15,6 +15,4 @@ if _OPTIONS["version-full"] then print( wx.getversion() )         end
 
 if _OPTIONS["basename"]     then print( wx.getbasename() )        end
 
-if _OPTIONS["prefix"]       then
-    print( _OPTIONS["prefix"] )
-end
+if _OPTIONS["prefix"]       then print( _OPTIONS["prefix"] )      end

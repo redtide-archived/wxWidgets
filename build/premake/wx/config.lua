@@ -9,4 +9,14 @@
     Licence:     wxWindows licence
   =========================================================================--]]
 
+-- Load common functions
+require "wx.common"
+
+-- Init wx table defaults
+require "wx.init"
+
+-- Load options
 require "wx.config.options"
+
+-- Load configuration
+require "wx.config.configurations"
