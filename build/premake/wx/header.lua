@@ -1,16 +1,16 @@
--- ============================================================================
--- Name:        wx/header.lua
--- Purpose:     Class to do basic manipulation of header files #define
--- Author:      Jefferson González
--- Modified by:
--- Created:     2013/01/05
--- RCS-ID:      $Id$
--- Copyright:   (c) Jefferson González <jgmdev@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/header.lua
+    Purpose:     Class to do basic manipulation of header files #define
+    Author:      Jefferson González
+    Modified by:
+    Created:     2013/01/05
+    RCS-ID:      $Id$
+    Copyright:   (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 --[[
     Example usage:
-    
+
         header = wx.header("setup.h")
         value = header:getvalue("wxUSE_DEBUG_CONTEXT")
         header:setvalue("wxUSE_DEBUG_CONTEXT", "1")
@@ -32,7 +32,7 @@ function mt.__call(this, file)
     if file then
         this:setfile(file)
     end
-    
+
     return this
 end
 setmetatable(wx.header, mt)
@@ -51,9 +51,9 @@ function wx.header:setfile(file)
     if self.file then
         self.file:close()
     end
-    
+
     self.filename = file
-    
+
     self.file = assert(
         io.open(file),
         "Failed to open header file."
@@ -68,19 +68,19 @@ function wx.header:getvalue(macro)
     local currentword = ""
     local definefound = false
     local macronamefound = false
-    
+
     self.file:seek("set")
-    
+
     while line do
         line = self.file:read()
-        
+
         if line and #line > 0 then
             line = line .. "\n" --Append new line to know where it ends
-            
+
             local count = #line
             for i=1, count do
                 local c = string.sub(line, i, i)
-                
+
                 if c ~= " " and c ~= "\n" and c ~= "\t" and c ~= "\r" and C ~= "\0" then
                     currentword = currentword .. c
                 elseif definefound and macronamefound and currentword ~= "" and c ~= "\n" then
@@ -97,13 +97,13 @@ function wx.header:getvalue(macro)
                     elseif definefound and macronamefound then
                         return currentword:match("^%s*(.-)%s*$")
                     end
-                    
+
                     currentword = ""
                 end
             end
         end
     end
-    
+
     return nil
 end
 
@@ -112,8 +112,8 @@ end
 --]]
 function wx.header:setvalue(macro, value)
     self:replace(
-        "#define", 
-        macro, 
+        "#define",
+        macro,
         "#define " .. macro .. " " .. value
     )
 end
@@ -123,8 +123,8 @@ end
 --]]
 function wx.header:undefine(macro)
     self:replace(
-        "#define", 
-        macro, 
+        "#define",
+        macro,
         "#undef " .. macro
     )
 end
@@ -135,17 +135,17 @@ end
 --]]
 function wx.header:define(macro, value, header_guard)
     local replacement = "#define " .. macro .. " " .. value
-    
+
     local found = self:replace(
-        "#undef", 
-        macro, 
+        "#undef",
+        macro,
         replacement
     )
-    
+
     if not found and header_guard and not self:getvalue(macro) then
         self:replace(
-            "#define", 
-            header_guard, 
+            "#define",
+            header_guard,
             "#define " .. header_guard .. "\n\n" .. replacement
         )
     end
@@ -156,8 +156,8 @@ end
 --]]
 function wx.header:comment(macrotype, macroname)
     self:replace(
-        macrotype, 
-        macroname, 
+        macrotype,
+        macroname,
         "/* " .. macrotype .. " " .. macroname  .. " */"
     )
 end
@@ -167,8 +167,8 @@ end
 --]]
 function wx.header:uncomment(macrotype, macroname, value)
     self:replace(
-        macrotype, 
-        macroname, 
+        macrotype,
+        macroname,
         macrotype .. " " .. macroname  .. " " .. value
     )
 end
@@ -181,22 +181,22 @@ function wx.header:replace(macrotype, macroname, value)
     local lines = {}
     local currentword = ""
     local macrotypefound = false
-    
+
     self.file:seek("set")
-    
+
     local linenum = 1
-    
+
     while line do
         line = self.file:read()
-        
+
         if line then
             line = line .. "\n" --Append new line to know where it ends
             lines[linenum] = line
-            
+
             local count = #line
             for i=1, count do
                 local c = string.sub(line, i, i)
-                
+
                 if c ~= " " and c ~= "\n" and c ~= "\t" and c ~= "\r" and C ~= "\0" then
                     currentword = currentword .. c
                 elseif currentword ~= "" and currentword ~= "#" then
@@ -204,45 +204,45 @@ function wx.header:replace(macrotype, macroname, value)
                         macrotypefound = true
                     elseif macrotypefound then
                         if currentword == macroname then
-                            
+
                             -- assign new value to macro
                             lines[linenum] = value .. "\n"
-                            
+
                             -- copy rest of the file
                             while line do
                                 line = self.file:read()
                                 linenum = linenum + 1
-                                
+
                                 if line then
                                     line = line .. "\n"
                                     lines[linenum] = line
                                 end
                             end
-                            
+
                             -- write new changes
                             self.file:close()
                             self.file = io.open(self.filename, "w")
-                            
+
                             for i,v in pairs(lines) do
                                 self.file:write(lines[i])
                             end
-                            
+
                             -- reload file
                             self:setfile(self.filename)
-                            
+
                             return true
                         else
                             macrotypefound = false
                         end
                     end
-                    
+
                     currentword = ""
                 end
             end
         end
-        
+
         linenum = linenum + 1
     end
-    
+
     return nil
 end

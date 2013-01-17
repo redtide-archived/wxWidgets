@@ -7,7 +7,7 @@
     RCS-ID:      $Id$
     Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
     Licence:     wxWindows licence
-  ===========================================================================]]
+  =========================================================================--]]
 
 function wx.showhelp()
 
@@ -22,7 +22,7 @@ function wx.showhelp()
 "Defaults for the options are specified in brackets.",
 "",
 "Configuration:",
-"  -h, --help              display this help and exit",
+"  -h, --help=wx           display this help and exit",
 "      --help=short        display options specific to this package",
 "      --help=recursive    display the short help of all the included packages",
 "  -V, --version           display version information and exit",
@@ -67,4 +67,25 @@ function wx.showhelp()
 "  --psdir=DIR             ps documentation [DOCDIR]"}
 
     for index,line in pairs( help ) do print( line ) end
+end
+
+function wx.needhelp()
+
+    local help = _OPTIONS["help"]
+
+    if help then
+        if help == "wx" then
+            require "wx.help"
+            wx.showhelp()
+        elseif help == "config" then
+            require "wx.config.help"
+            wx.config.showhelp()
+        end
+
+        if help ~= "" then os.exit(0) end
+
+        return true
+    end
+
+    return false
 end

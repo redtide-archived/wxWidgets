@@ -1,13 +1,14 @@
--- ============================================================================
--- Name:        wx/libs.lua
--- Purpose:     Load wxWidgets optional libraries
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2013/01/02
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/lib.lua
+    Purpose:     Load wxWidgets optional libraries
+    Author:      Andrea Zanellato, Jefferson González
+    Modified by:
+    Created:     2013/01/02
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+                 (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 
 require "wx.lib.base"
 

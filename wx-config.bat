@@ -1,8 +1,8 @@
 REM ===========================================================================
-REM Name:        premake_gen.bat
+REM Name:        wx-config.bat
 REM Purpose:     Premake 4 build script for Windows.
 REM Author:      Andrea Zanellato
-REM Modified by: 
+REM Modified by:
 REM Created:     2011/10/22
 REM Revision:    $ID$
 REM Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>

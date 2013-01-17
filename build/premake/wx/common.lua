@@ -1,23 +1,23 @@
--- ============================================================================
--- Name:        wx/common.lua
--- Purpose:     wx Lua namespace, common/generic functions
--- Author:      Andrea Zanellato, Jefferson González
--- Modified by:
--- Created:     2012/12/17
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
---              (c) Jefferson González <jgmdev@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/common.lua
+    Purpose:     wx Lua namespace, common/generic functions
+    Author:      Andrea Zanellato, Jefferson González
+    Modified by:
+    Created:     2012/12/17
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+                 (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 
 --[[===========================================================================
     Returns the project kind for the selected wx build.
 
-    @param bool isapp Specify the project kind:
-                      @true application, @false (or nil) library
-    =======================================================================--]]
-function wx.getprojectkind(isapp)
-    if isapp then
+    @param bool is_app Specify the project kind:
+                       @true application, @false (or nil) library
+  =========================================================================--]]
+function wx.getprojectkind(is_app)
+    if is_app then
         if wx.gui then
             return "WindowedApp"
         else
@@ -39,15 +39,15 @@ end
     e.g. 2.9, 2.9.5 or 2.9.5.0.
 
     @param string form The version format to retrieve.
-    =======================================================================--]]
+  =========================================================================--]]
 function wx.getversion(form)
     if form == "short" then
         return string.sub(wx.version, 1, 3)
     elseif form == "simple" then
         return string.sub(wx.version, 1, 5)
-    else -- if option == "full"
-        return wx.version
     end
+
+    return wx.version -- if option == "full"
 end
 
 --[[===========================================================================
@@ -55,7 +55,7 @@ end
 
     @param bool is_exec Set to @true to retrieve the exec prefix,
                         @false or @nil otherwise.
-    =======================================================================--]]
+  =========================================================================--]]
 function wx.getprefix(is_exec)
     local prefix = nil
 
@@ -79,7 +79,9 @@ function wx.getprefix(is_exec)
     error( "Not a valid dir: " .. prefix )
 end
 
---- Utility to load dynamically all wx/toolkit/<port>/setup.lua files.
+--[[===========================================================================
+    Utility to load dynamically all wx/toolkit/<port>/setup.lua files.
+  =========================================================================--]]
 function wx.requireports()
     local portdir = os.getcwd() .. "/wx/toolkit"
     local ports   = wx.scandir( portdir, "dirs" )
@@ -92,8 +94,11 @@ function wx.requireports()
     end
 end
 
---- Utility to get the current wx.toolkit.
--- TODO: check with wx.feature
+--[[===========================================================================
+    Utility to get the current wx.toolkit.
+
+    @todo: check with wx.feature
+  =========================================================================--]]
 function wx.getport()
     if _OPTIONS["with-msw"] then
         return "msw"
@@ -114,18 +119,20 @@ function wx.getport()
     return "gtk2"
 end
 
---- Utility to get the current encoding.
--- TODO: check with wx.feature
+--[[===========================================================================
+    Utility to get the current encoding.
+
+    @todo: check with wx.feature
+  =========================================================================--]]
 function wx.getencoding()
-    if _OPTIONS["disable-unicode"] then
-        return "ansi"
-    end
+    if _OPTIONS["disable-unicode"] then return "ansi" end
 
     return "unicode"
 end
--------------------------------------------------------------------------------
--- Sets a wx option based on the current configuration been checked
--------------------------------------------------------------------------------
+
+--[[===========================================================================
+    Sets a wx option based on the current configuration been checked
+  =========================================================================--]]
 function wx.setoption(name, value)
     local configuration
 
@@ -148,9 +155,9 @@ function wx.setoption(name, value)
     end
 end
 
--------------------------------------------------------------------------------
--- Execute a command and return the result in a table
--------------------------------------------------------------------------------
+--[[===========================================================================
+    Execute a command and return the result in a table
+  =========================================================================--]]
 function wx.execute(command)
     local process = assert(io.popen(command), "Failed to execute: " .. command)
     local lines = {}
@@ -164,12 +171,13 @@ function wx.execute(command)
     return lines
 end
 
---[[---------------------------------------------------------------------------
+--[[===========================================================================
     Get a table array with the content of a directory.
+
     @param string dir The directory to scan.
     @param string content The type of content to retrieve "files", "dirs" or nil for everything.
     @return table
------------------------------------------------------------------------------]]
+  =========================================================================--]]
 function wx.scandir(dir, contenttype)
     local dircontent = {}
     local newcontent = {}
@@ -207,12 +215,13 @@ function wx.scandir(dir, contenttype)
     return dircontent
 end
 
---[[---------------------------------------------------------------------------
+--[[===========================================================================
     Trims a specific character from the end of the input specified.
+
     @param string input A string to trim.
     @param string char A single character to trim.
     @return string right trimmed version of the string
------------------------------------------------------------------------------]]
+  =========================================================================--]]
 function wx.rtrim(input, char)
     local result = input
     local output = input:match("(.-)" .. char .. "$")
@@ -225,17 +234,17 @@ function wx.rtrim(input, char)
     return result
 end
 
--------------------------------------------------------------------------------
--- Print strings to stdout without new line in contrast to default print.
--------------------------------------------------------------------------------
+--[[===========================================================================
+    Print strings to stdout without new line in contrast to default print.
+  =========================================================================--]]
 function wx.print(text)
     io.stdout:write(text)
     io.stdout:flush()
 end
 
--------------------------------------------------------------------------------
--- Functions to handle --enable/--disable features
--------------------------------------------------------------------------------
+--[[===========================================================================
+    Functions to handle --enable/--disable features
+  =========================================================================--]]
 wx.feature = {}
 
 function wx.feature.add(params)
@@ -244,7 +253,7 @@ function wx.feature.add(params)
     local ison          = params.ison
     local enable        = params.enable
     local platforms     = params.platforms
-    
+
     if not name or not description then
         error("Missing required parameters.")
     end
@@ -271,14 +280,14 @@ function wx.feature.add(params)
     }
 end
 
---[[---------------------------------------------------------------------------
+--[[===========================================================================
     To facilitate the action taken if a wxWidgets feature
     is enabled or disabled (--enable-FEATURE, --disable-FEATURE).
     @param name Name of the feature without enable or disable prepended.
     @param active String of lua code executed if the feature is enabled.
     @param inactive String of lua code executed if the feature is disabled.
     @return true if feature enabled, false if disabled.
------------------------------------------------------------------------------]]
+  =========================================================================--]]
 function wx.feature.eval(name, active, inactive)
     local default -- The default value of the feature (yes=enabled or no=disabled)
     local platforms -- The platforms where the feature is supported
@@ -339,11 +348,12 @@ function wx.feature.eval(name, active, inactive)
     end
 end
 
---[[---------------------------------------------------------------------------
-    Function that should be used on check.lua when a feature can be
-    enabled after a series of checks.
+--[[===========================================================================
+    Function that should be used on check.lua when a feature can be enabled
+    after a series of checks.
+
     @param name Name of the feature without disable- or enable- prefix
------------------------------------------------------------------------------]]
+  =========================================================================--]]
 function wx.feature.enable(enabled)
     local value = "yes"
 

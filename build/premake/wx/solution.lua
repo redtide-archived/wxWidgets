@@ -1,17 +1,24 @@
--- ============================================================================
--- Name:        wx/solution.lua
--- Purpose:     Premake4 wxWidgets solution
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2012/12/17
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/solution.lua
+    Purpose:     Premake4 wxWidgets solution
+    Author:      Andrea Zanellato, Jefferson González
+    Modified by:
+    Created:     2012/12/17
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+                 (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 
 solution "wx"
-    language            "C++"
-    configurations      {"Debug", "Release"}
+    language       "C++"
+    configurations{"Debug", "Release"}
+
+-- Load common functions used in later scripts
+    require "wx.common"
+
+-- Load options
+    require "wx.options"
 
 -- Load the header manipulation class
     require "wx.header"
@@ -43,5 +50,5 @@ solution "wx"
     require "wx.configure"
 
 -- Load library and binary projects
-    require "wx.libs"
-    require "wx.bins"
+    require "wx.lib"
+    require "wx.bin"

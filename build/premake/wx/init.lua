@@ -1,13 +1,14 @@
--- ============================================================================
--- Name:        wx/init.lua
--- Purpose:     Pre-setup, wx table init
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2013/01/08
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/init.lua
+    Purpose:     Pre-setup, wx table init
+    Author:      Andrea Zanellato
+    Modified by:
+    Created:     2013/01/08
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
+
 -- ----------------------------------------------------------------------------
 -- Main configuration options
 -- ----------------------------------------------------------------------------
@@ -18,7 +19,7 @@ os.chdir("../../")
 wx.srcrootdir                   = os.getcwd()
 os.chdir("build/premake")
 
-wx.builddir                     = "" -- TODO: set it from the cwd when calling premake_gen
+wx.builddir                     = _WORKING_DIR
 wx.prefix                       = wx.getprefix()
 
 -- Set the build target dir
@@ -206,8 +207,10 @@ wx.svg                          = false
 wx.webkit                       = false
 wx.webview                      = false
 
--- wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
--- can't be disabled, don't even provide an option to do it
+--[[
+    wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
+    can't be disabled, don't even provide an option to do it
+--]]
 wx.graphics_ctx                 = false
 -- ----------------------------------------------------------------------------
 -- IPC &c
@@ -217,9 +220,11 @@ wx.dnd                          = false
 -- ----------------------------------------------------------------------------
 -- Optional GUI controls
 -- ----------------------------------------------------------------------------
--- Even with --disable-controls, some may be enabled by an explicit
--- --enable-<control> later on the command line
--- but by default all will be disabled
+--[[
+    Even with --disable-controls, some may be enabled by an explicit
+    --enable-<control> later on the command line
+    but by default all will be disabled
+--]]
 wx.controls                     = false
 
 -- Features affecting multiple controls
@@ -344,10 +349,10 @@ wx.pnm                          = false
 wx.xpm                          = false
 wx.ico_cur                      = false
 
--------------------------------------------------------------------------------
--- This one is not really MSW-specific but it exists mainly to be turned off
--- under MSW, it should be off by default on the other platforms
--------------------------------------------------------------------------------
+--[[
+    This one is not really MSW-specific but it exists mainly to be turned off
+    under MSW, it should be off by default on the other platforms
+--]]
 wx.autoidman                    = false
 
 -------------------------------------------------------------------------------

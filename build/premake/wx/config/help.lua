@@ -9,6 +9,8 @@
     Licence:     wxWindows licence
   ===========================================================================]]
 
+wx.config = {}
+
 function wx.config.showhelp()
 
     local help = {

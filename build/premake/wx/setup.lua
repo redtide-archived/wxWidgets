@@ -1,13 +1,14 @@
--- ============================================================================
--- Name:        wx/setup.lua
--- Purpose:     Common setup
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2012/12/17
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/setup.lua
+    Purpose:     Common setup
+    Author:      Andrea Zanellato, Jefferson González
+    Modified by:
+    Created:     2012/12/17
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+                 (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 
 -- Make the directory to hold the setup.h
 local config = wx.getport() .. "-" .. wx.getencoding() .. "-" ..

@@ -1,12 +1,12 @@
 --[[===========================================================================
-    Name:        wx/config.lua
-    Purpose:     Premake4 wx-config command
+    Name:        wx/bin.lua
+    Purpose:     Load wxWidgets binary projects
     Author:      Andrea Zanellato
     Modified by:
-    Created:     2013/01/14
+    Created:     2013/01/09
     RCS-ID:      $Id$
     Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
     Licence:     wxWindows licence
   =========================================================================--]]
 
-require "wx.config.options"
+require "wx.bin.config"

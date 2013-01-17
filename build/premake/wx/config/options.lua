@@ -1,19 +1,19 @@
--- ============================================================================
--- Name:        wx/config/options.lua
--- Purpose:     wx-config options
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2013/01/12
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/config/options.lua
+    Purpose:     wx-config options
+    Author:      Andrea Zanellato
+    Modified by:
+    Created:     2013/01/12
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+    Licence:     wxWindows licence
+  ===========================================================================]]
 --- @todo The following will be replaced by some wx.config.option.add(option)
 --[[===========================================================================
     Installed root
         These options change or query the filesystem root for the operations
         listed below.
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "prefix",
@@ -22,7 +22,7 @@ newoption
     {
         "Without the optional argument, the current default prefix will be output.",
         "If the argument is supplied,",
-        "PREFIX will be searched for matching configs in place of the default.",
+        "DIR will be searched for matching configs in place of the default.",
         "You may use both forms in the same command."
     }
 }
@@ -40,7 +40,7 @@ newoption
     Query options
         These options return information about the wxWidgets default version
         and installed alternatives.
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "list",
@@ -78,7 +78,7 @@ newoption
     Feature options
         These  options select features which determine which wxWidgets
         configuration to use.
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "chartype",
@@ -148,7 +148,7 @@ newoption
     Notice that this includes "debug" but it is done only for compatibility,
     these options (i.e. --debug[=yes] or --debug=no) are completely ignored
     as there is no distinction between debug and release builds in wx any more.
-   ========================================================================--]]
+   ==========================================================================]]
 newoption
 {
     trigger     = "debug",
@@ -225,7 +225,7 @@ newoption
 }
 --[[===========================================================================
     Boolean options that do something or not.
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "selected_config",
@@ -245,7 +245,7 @@ newoption
     Compiler options
         These options generate output required to build an application
         using a particular wxWidgets configuration.
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "cc",
@@ -296,7 +296,7 @@ newoption
 }
 --[[===========================================================================
     Linker options
-    =======================================================================]]--
+    =========================================================================]]
 newoption
 {
     trigger     = "ld",

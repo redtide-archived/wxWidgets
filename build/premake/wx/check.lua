@@ -1,13 +1,13 @@
--- ============================================================================
--- Name:        wx/check.lua
--- Purpose:     Checks which libraries are available for use as other features
--- Author:      Jefferson González
--- Modified by:
--- Created:     2013/01/04
--- RCS-ID:      $Id$
--- Copyright:   (c) Jefferson González <jgmdev@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/check.lua
+    Purpose:     Checks which libraries are available for use as other features
+    Author:      Jefferson González
+    Modified by:
+    Created:     2013/01/04
+    RCS-ID:      $Id$
+    Copyright:   (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
 
 -----------------------------------------------------------------------------
 -- Checks for unix based systems

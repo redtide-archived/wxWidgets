@@ -1,13 +1,15 @@
--- ============================================================================
--- Name:        wx/options.lua
--- Purpose:     wxWidgets configure options
--- Author:      Andrea Zanellato
--- Modified by:
--- Created:     2012/12/16
--- RCS-ID:      $Id$
--- Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
--- Licence:     wxWindows licence
--- ============================================================================
+--[[===========================================================================
+    Name:        wx/options.lua
+    Purpose:     wxWidgets configure options
+    Author:      Andrea Zanellato, Jefferson González
+    Modified by:
+    Created:     2012/12/16
+    RCS-ID:      $Id$
+    Copyright:   (c) Andrea Zanellato <redtide.wx@gmail.com>
+                 (c) Jefferson González <jgmdev@gmail.com>
+    Licence:     wxWindows licence
+  =========================================================================--]]
+
 -- ----------------------------------------------------------------------------
 -- Global compile options
 -- ----------------------------------------------------------------------------
