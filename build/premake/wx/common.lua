@@ -379,8 +379,9 @@ end
     after a series of checks.
 
     @param name Name of the feature without disable- or enable- prefix
+    @param enabled Whether to enable or disable the feature
   =========================================================================--]]
-function wx.feature.enable(enabled)
+function wx.feature.enable(name, enabled)
     local value = "yes"
 
     if enabled == false then
