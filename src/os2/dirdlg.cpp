@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/14/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,7 +12,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dirdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
@@ -43,7 +42,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 
 int wxDirDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     // TODO
     return wxID_CANCEL;

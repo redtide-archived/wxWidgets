@@ -4,7 +4,6 @@
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-05-25
-// RCS-ID:      $Id$
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@
 #include "wx/msw/private.h"
 #endif
 
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, wxRibbonPanelEvent);
 
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonPanelEvent, wxCommandEvent)
 
@@ -776,7 +775,7 @@ void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
     }
     else if(IsExtButtonHovered())
     {
-        wxRibbonPanelEvent notification(wxEVT_COMMAND_RIBBONPANEL_EXTBUTTON_ACTIVATED, GetId());
+        wxRibbonPanelEvent notification(wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED, GetId());
         notification.SetEventObject(this);
         notification.SetPanel(this);
         ProcessEvent(notification);
@@ -936,7 +935,7 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
         HideExpanded();
         // Do not skip event, as the panel has been de-expanded, causing the
         // child with focus to be reparented (and hidden). If the event
-        // continues propogation then bad things happen.
+        // continues propagation then bad things happen.
     }
     else
     {

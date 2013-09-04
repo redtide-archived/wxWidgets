@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -360,7 +359,7 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
 
 bool wxButton::SendClickEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_BUTTON, GetId());
     event.SetEventObject(this);
 
     return ProcessCommand(event);

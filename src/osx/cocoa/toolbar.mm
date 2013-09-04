@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -305,7 +304,10 @@ private:
 
 @interface wxNSToolbarDelegate : NSObject wxOSX_10_6_AND_LATER(<NSToolbarDelegate>)
 {
+    bool m_isSelectable;
 }
+
+- (void)setSelectable:(bool) value;
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag;
 
@@ -363,6 +365,17 @@ private:
 
 @implementation wxNSToolbarDelegate
 
+- (id)init
+{
+    m_isSelectable = false;
+    return [super init];
+}
+
+- (void)setSelectable:(bool) value
+{
+    m_isSelectable = true;
+}
+
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
     wxUnusedVar(toolbar);
@@ -377,8 +390,10 @@ private:
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
-    wxUnusedVar(toolbar);
-    return nil;
+  if ( m_isSelectable )
+      return [[toolbar items] valueForKey:@"itemIdentifier"];
+  else
+      return nil;
 }
 
 - (NSToolbarItem*) toolbar:(NSToolbar*) toolbar itemForItemIdentifier:(NSString*) itemIdentifier willBeInsertedIntoToolbar:(BOOL) flag
@@ -1228,9 +1243,6 @@ bool wxToolBar::Realize()
     SetInitialSize( wxSize(m_minWidth, m_minHeight));
 
     SendSizeEventToParent();
-    wxWindow * const parent = GetParent();
-    if ( parent && !parent->IsBeingDeleted() )
-        parent->MacOnInternalSize();
     
     return true;
 }
@@ -1449,7 +1461,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #endif // wxOSX_USE_NATIVE_TOOLBAR
                 tool->SetControlHandle( controlHandle );
-                tool->UpdateImages();
+                if ( !(style & wxTB_NOICONS) )
+                    tool->UpdateImages();
                 tool->UpdateLabel();
 
                 if ( style & wxTB_NOICONS )
@@ -1608,5 +1621,24 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     }
     event.Skip();
 }
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+void wxToolBar::OSXSetSelectableTools(bool set)
+{
+    wxCHECK_RET( m_macToolbar, "toolbar must be non-NULL" );
+    [(wxNSToolbarDelegate*)[(NSToolbar*)m_macToolbar delegate] setSelectable:set];
+}
+
+void wxToolBar::OSXSelectTool(int toolId)
+{
+    wxToolBarToolBase *tool = FindById(toolId);
+    wxCHECK_RET( tool, "invalid tool ID" );
+    wxCHECK_RET( m_macToolbar, "toolbar must be non-NULL" );
+
+    wxString identifier = wxString::Format(wxT("%ld"), (long)tool);
+    wxCFStringRef cfidentifier(identifier, wxFont::GetDefaultEncoding());
+    [(NSToolbar*)m_macToolbar setSelectedItemIdentifier:cfidentifier.AsNSString()];
+}
+#endif // wxOSX_USE_NATIVE_TOOLBAR
 
 #endif // wxUSE_TOOLBAR

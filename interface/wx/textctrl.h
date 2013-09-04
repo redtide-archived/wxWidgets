@@ -2,7 +2,6 @@
 // Name:        textctrl.h
 // Purpose:     interface of wxTextAttr
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -938,7 +937,7 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
@@ -1133,14 +1132,14 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_UPDATED event, generated when the text
+        Respond to a @c wxEVT_TEXT event, generated when the text
         changes. Notice that this event will be sent when the text controls
         contents changes -- whether this is due to user input or comes from the
         program itself (for example, if wxTextCtrl::SetValue() is called); see
         wxTextCtrl::ChangeValue() for a function which does not send this event.
         This event is however not sent during the control creation.
     @event{EVT_TEXT_ENTER(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_ENTER event, generated when enter is
+        Respond to a @c wxEVT_TEXT_ENTER event, generated when enter is
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
         this event to be generated.
     @event{EVT_TEXT_URL(id, func)}
@@ -1224,11 +1223,6 @@ public:
                 const wxString& name = wxTextCtrlNameStr);
 
     /**
-        Copies the selected text to the clipboard and removes the selection.
-    */
-    virtual void Cut();
-
-    /**
         Resets the internal modified flag as if the current changes had been
         saved.
     */
@@ -1306,14 +1300,34 @@ public:
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
 
-    //@{
     /**
-        This function finds the character at the specified position expressed
-        in pixels.
+        Finds the position of the character at the specified point.
 
-        The two overloads of this method allow to find either the position of
-        the character, as an index into the text control contents, or its row
-        and column.
+        If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
+        character closest to this position are returned, otherwise the output
+        parameters are not modified.
+
+        Please note that this function is currently only implemented in wxUniv,
+        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        other ports.
+
+        @beginWxPerlOnly
+        In wxPerl this function takes only the @a pt argument and
+        returns a 3-element list (result, col, row).
+        @endWxPerlOnly
+
+        @param pt
+            The position of the point to check, in window device coordinates.
+        @param pos
+            Receives the position of the character at the given position. May
+            be @NULL.
+
+        @see PositionToXY(), XYToPosition()
+    */
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
+
+    /**
+        Finds the row and column of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
         character closest to this position are returned, otherwise the output
@@ -1336,17 +1350,12 @@ public:
         @param row
             Receives the row of the character at the given position. May be
             @NULL.
-        @param pos
-            Receives the position of the character at the given position. May
-            be @NULL.
 
         @see PositionToXY(), XYToPosition()
     */
-    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                     wxTextCoord *col,
                                     wxTextCoord *row) const;
-    //@}
 
     /**
         Returns @true if the text has been modified by user.
@@ -1560,6 +1569,33 @@ public:
     //@}
 };
 
+
+
+wxEventType wxEVT_TEXT;
+wxEventType wxEVT_TEXT_ENTER;
+wxEventType wxEVT_TEXT_URL;
+wxEventType wxEVT_TEXT_MAXLEN;
+
+
+class wxTextUrlEvent : public wxCommandEvent
+{
+public:
+    wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
+                   long start, long end);
+
+    wxTextUrlEvent(const wxTextUrlEvent& event);
+
+    // get the mouse event which happened over the URL
+    const wxMouseEvent& GetMouseEvent() const;
+
+    // get the start of the URL
+    long GetURLStart() const;
+
+    // get the end of the URL
+    long GetURLEnd() const;
+
+    virtual wxEvent *Clone() const;
+};
 
 
 /**

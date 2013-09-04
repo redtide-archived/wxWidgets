@@ -4,7 +4,6 @@
 // Author:      Ove Kaven
 // Modified by: Ron Lee, Francesco Montorsi
 // Created:     09/04/99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets copyright
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -584,11 +583,11 @@ int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
     const size_t len = buf.length();
     if ( outsize > len )
     {
-        memcpy(out, buf, (len+1) * sizeof(char));
+        memcpy(out, buf, len+1);
     }
     else // not enough space
     {
-        memcpy(out, buf, (outsize-1) * sizeof(char));
+        memcpy(out, buf, outsize-1);
         out[outsize-1] = '\0';
     }
 

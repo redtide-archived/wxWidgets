@@ -2,7 +2,6 @@
 // Name:        test.cpp
 // Purpose:     Test program for wxWidgets
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -296,7 +295,6 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
     virtual bool OnInit();
-    virtual int  OnRun();
     virtual int  OnExit();
 
     // used by events propagation test
@@ -305,6 +303,46 @@ public:
 
     void SetFilterEventFunc(FilterEventFunc f) { m_filterEventFunc = f; }
     void SetProcessEventFunc(ProcessEventFunc f) { m_processEventFunc = f; }
+
+    // In console applications we run the tests directly from the overridden
+    // OnRun(), but in the GUI ones we run them when we get the first call to
+    // our EVT_IDLE handler to ensure that we do everything from inside the
+    // main event loop. This is especially important under wxOSX/Cocoa where
+    // the main event loop is different from the others but it's also safer to
+    // do it like this in the other ports as we test the GUI code in the same
+    // context as it's used usually, in normal programs, and it might behave
+    // differently without the event loop.
+#if wxUSE_GUI
+    void OnIdle(wxIdleEvent& event)
+    {
+        if ( m_runTests )
+        {
+            m_runTests = false;
+
+#ifdef __WXOSX__
+            // we need to wait until the window is activated and fully ready
+            // otherwise no events can be posted
+            wxEventLoopBase* const loop = wxEventLoop::GetActive();
+            if ( loop )
+            {
+                loop->DispatchTimeout(1000);
+                loop->Yield();
+            }
+#endif // __WXOSX__
+
+            m_exitcode = RunTests();
+            ExitMainLoop();
+        }
+
+        event.Skip();
+    }
+#else // !wxUSE_GUI
+    virtual int OnRun()
+    {
+        m_exitcode = RunTests();
+        return m_exitcode;
+    }
+#endif // wxUSE_GUI/!wxUSE_GUI
 
 private:
     void List(Test *test, const string& parent = "") const;
@@ -318,6 +356,11 @@ private:
             runner.addTest(test);
     }
 
+    int RunTests();
+
+    // flag telling us whether we should run tests from our EVT_IDLE handler
+    bool m_runTests;
+
     // command lines options/parameters
     bool m_list;
     bool m_longlist;
@@ -326,12 +369,12 @@ private:
     wxArrayString m_registries;
     wxLocale *m_locale;
 
-    // event loop for GUI tests
-    wxEventLoop* m_eventloop;
-
     // event handling hooks
     FilterEventFunc m_filterEventFunc;
     ProcessEventFunc m_processEventFunc;
+
+    // the program exit code
+    int m_exitcode;
 };
 
 IMPLEMENT_APP_NO_MAIN(TestApp)
@@ -423,13 +466,15 @@ extern bool IsAutomaticTest()
         if ( !wxGetEnv("WX_TEST_USER", &username) )
             username = wxGetUserId();
 
-        s_isAutomatic = username.Lower().Matches("buildslave*");
+        username.MakeLower();
+        s_isAutomatic = username.Matches("buildslave*") ||
+                            username.Matches("sandbox*");
     }
 
     return s_isAutomatic == 1;
 }
 
-// helper of OnRun(): gets the test with the given name, returning NULL (and
+// helper of RunTests(): gets the test with the given name, returning NULL (and
 // not an empty test suite) if there is no such test
 static Test *GetTestByName(const wxString& name)
 {
@@ -458,11 +503,14 @@ TestApp::TestApp()
   : m_list(false),
     m_longlist(false)
 {
+    m_runTests = true;
+
     m_filterEventFunc = NULL;
     m_processEventFunc = NULL;
 
     m_locale = NULL;
-    m_eventloop = NULL;
+
+    m_exitcode = EXIT_SUCCESS;
 }
 
 // Init
@@ -472,14 +520,14 @@ bool TestApp::OnInit()
     if ( !TestAppBase::OnInit() )
         return false;
 
-    SetCLocale();
-
 #if wxUSE_GUI
     cout << "Test program for wxWidgets GUI features\n"
 #else
     cout << "Test program for wxWidgets non-GUI features\n"
 #endif
-         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
+         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
+         << "running under " << wxGetOsDescription()
+         << " as " << wxGetUserId() << std::endl;
 
     if ( m_detail )
     {
@@ -493,8 +541,7 @@ bool TestApp::OnInit()
     wxTestableFrame* frame = new wxTestableFrame();
     frame->Show();
 
-    m_eventloop = new wxEventLoop;
-    wxEventLoop::SetActive(m_eventloop);
+    Connect(wxEVT_IDLE, wxIdleEventHandler(TestApp::OnIdle));
 #endif // wxUSE_GUI
 
     return true;
@@ -585,15 +632,8 @@ bool TestApp::ProcessEvent(wxEvent& event)
 
 // Run
 //
-int TestApp::OnRun()
+int TestApp::RunTests()
 {
-#if wxUSE_GUI
-#ifdef __WXOSX__
-    // make sure there's always an autorelease pool ready
-    wxMacAutoreleasePool autoreleasepool;
-#endif
-#endif
-
 #if wxUSE_LOG
     // Switch off logging unless --verbose
     bool verbose = wxLog::GetVerbose();
@@ -673,11 +713,9 @@ int TestApp::OnExit()
 
 #if wxUSE_GUI
     delete GetTopWindow();
-    wxEventLoop::SetActive(NULL);
-    delete m_eventloop;
 #endif // wxUSE_GUI
 
-    return 0;
+    return m_exitcode;
 }
 
 // List the tests

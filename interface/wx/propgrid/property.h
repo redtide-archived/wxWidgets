@@ -2,7 +2,6 @@
 // Name:        property.h
 // Purpose:     interface of wxPGProperty
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -869,7 +868,7 @@ public:
         usually processes most events. Some, such as button press events of
         TextCtrlAndButton class, can be handled here. Also, if custom handling
         for regular events is desired, then that can also be done (for example,
-        wxSystemColourProperty custom handles @c wxEVT_COMMAND_CHOICE_SELECTED
+        wxSystemColourProperty custom handles @c wxEVT_CHOICE
         to display colour picker dialog when 'custom' selection is made).
 
         If the event causes value to be changed, SetValueInEvent() should be called

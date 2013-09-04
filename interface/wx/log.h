@@ -2,7 +2,6 @@
 // Name:        log.h
 // Purpose:     interface of wxLog* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -948,12 +947,6 @@ public:
         @see OnFrameDelete()
     */
     virtual bool OnFrameClose(wxFrame* frame);
-
-    /**
-        Called immediately after the log frame creation allowing for
-        any extra initializations.
-    */
-    virtual void OnFrameCreate(wxFrame* frame);
 
     /**
         Called right before the log frame is going to be deleted: will

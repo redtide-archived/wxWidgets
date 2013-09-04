@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     28.06.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,15 +42,13 @@
 #include "wx/bookctrl.h"
 #include "wx/scrolwin.h"
 #include "wx/textwrapper.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #if wxUSE_DISPLAY
 #include "wx/display.h"
 #endif
 
 extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
-
-wxModalDialogHook *wxModalDialogHook::ms_instance = NULL;
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -128,7 +125,7 @@ END_EVENT_TABLE()
 wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = NULL;
 bool wxDialogBase::sm_layoutAdaptation = false;
 
-void wxDialogBase::Init()
+wxDialogBase::wxDialogBase()
 {
     m_returnCode = 0;
     m_affirmativeId = wxID_OK;
@@ -425,7 +422,7 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
     if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
         return false;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, id);
+    wxCommandEvent event(wxEVT_BUTTON, id);
     event.SetEventObject(btn);
     btn->GetEventHandler()->ProcessEvent(event);
 

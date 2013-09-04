@@ -4,7 +4,6 @@
 // Author:
 // Modified by:
 // Created:     2009-01-31
-// RCS-ID:      $Id: dataview.mm$
 // Copyright:
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -542,7 +541,7 @@ outlineView:(NSOutlineView*)outlineView
     wxCHECK_MSG( dvc->GetModel(), false,
                     "Pointer to model not set correctly." );
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_DROP, dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_DROP, dvc->GetId());
     event.SetEventObject(dvc);
     event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
@@ -753,7 +752,7 @@ outlineView:(NSOutlineView*)outlineView
 
     // send first the event to wxWidgets that the sorting has changed so that
     // the program can do special actions before the sorting actually starts:
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable definition
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable definition
 
     event.SetEventObject(dvc);
     if (noOfDescriptors > 0)
@@ -792,7 +791,7 @@ outlineView:(NSOutlineView*)outlineView
     wxCHECK_MSG(dvc->GetModel(), false, "Pointer to model not set correctly.");
 
     wxDataViewEvent
-        event(wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE,dvc->GetId());
+        event(wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE,dvc->GetId());
 
     event.SetEventObject(dvc);
     event.SetItem(wxDataViewItemFromItem(item));
@@ -897,7 +896,7 @@ outlineView:(NSOutlineView*)outlineView
         // send a begin drag event for all selected items and proceed with
         // dragging unless the event is vetoed:
         wxDataViewEvent
-            event(wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG,dvc->GetId());
+            event(wxEVT_DATAVIEW_ITEM_BEGIN_DRAG,dvc->GetId());
 
         event.SetEventObject(dvc);
         event.SetModel(dvc->GetModel());
@@ -965,6 +964,7 @@ outlineView:(NSOutlineView*)outlineView
                 delete[] dataFormats;
                 delete itemObject;
                 if (dataStringAvailable)
+                {
                     if (itemStringAvailable)
                     {
                         if (itemCounter > 0)
@@ -973,6 +973,7 @@ outlineView:(NSOutlineView*)outlineView
                     }
                     else
                         dataStringAvailable = false;
+                }
             }
             else
             {
@@ -1624,7 +1625,7 @@ outlineView:(NSOutlineView*)outlineView
     // sent whether the cell is editable or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1645,7 +1646,7 @@ outlineView:(NSOutlineView*)outlineView
     // menu should be shown or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,dvc->GetId());
 
     wxDataViewItemArray selectedItems;
 
@@ -1666,7 +1667,7 @@ outlineView:(NSOutlineView*)outlineView
 //
 // delegate methods
 //
--(void) outlineView:(NSOutlineView*)outlineView mouseDownInHeaderOfTableColumn:(NSTableColumn*)tableColumn
+-(void) outlineView:(NSOutlineView*)outlineView didClickTableColumn:(NSTableColumn*)tableColumn
 {
     wxDataViewColumn* const
         col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
@@ -1674,7 +1675,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent
-        event(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK,dvc->GetId());
+        event(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK,dvc->GetId());
 
 
     // first, send an event that the user clicked into a column's header:
@@ -1701,7 +1702,7 @@ outlineView:(NSOutlineView*)outlineView
         NSArray*          sortDescriptors;
         NSSortDescriptor* sortDescriptor;
 
-        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[NSString stringWithFormat:@"%d",[outlineView columnWithIdentifier:[tableColumn identifier]]]
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[NSString stringWithFormat:@"%ld",(long)[outlineView columnWithIdentifier:[tableColumn identifier]]]
             ascending:YES];
         sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
         [tableColumn setSortDescriptorPrototype:sortDescriptor];
@@ -1716,7 +1717,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1734,7 +1735,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1809,7 +1810,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_COLUMN_REORDERED,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1822,7 +1823,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_COLLAPSED,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1835,7 +1836,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_EXPANDED,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1850,7 +1851,7 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
+    wxDataViewEvent event(wxEVT_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
 
     event.SetEventObject(dvc);
     event.SetModel(dvc->GetModel());
@@ -1885,7 +1886,7 @@ outlineView:(NSOutlineView*)outlineView
 
     // now, send the event:
     wxDataViewEvent
-        event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dvc->GetId());
+        event(wxEVT_DATAVIEW_ITEM_EDITING_STARTED,dvc->GetId());
 
     event.SetEventObject(dvc);
     event.SetItem(
@@ -1905,9 +1906,9 @@ outlineView:(NSOutlineView*)outlineView
     // even if no event indicating a start of an editing session has been sent
     // (see Documentation for NSControl controlTextDidEndEditing:); this is
     // not expected by a user of the wxWidgets library and therefore an
-    // wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event is only sent if a
-    // corresponding wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has been sent
-    // before; to check if a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has
+    // wxEVT_DATAVIEW_ITEM_EDITING_DONE event is only sent if a
+    // corresponding wxEVT_DATAVIEW_ITEM_EDITING_STARTED has been sent
+    // before; to check if a wxEVT_DATAVIEW_ITEM_EDITING_STARTED has
     // been sent the last edited column/row are valid:
     if ( currentlyEditedColumn != -1 && currentlyEditedRow != -1 )
     {
@@ -1920,7 +1921,7 @@ outlineView:(NSOutlineView*)outlineView
 
         // send event to wxWidgets:
         wxDataViewEvent
-            event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dvc->GetId());
+            event(wxEVT_DATAVIEW_ITEM_EDITING_DONE,dvc->GetId());
 
         event.SetEventObject(dvc);
         event.SetItem(
@@ -1964,6 +1965,9 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
     [scrollview setAutohidesScrollers:YES];
     [scrollview setDocumentView:m_OutlineView];
 
+    // we cannot call InstallHandler(m_OutlineView) here, because we are handling
+    // our action:s ourselves, only associate the view with this impl
+    Associate(m_OutlineView,this);
     // initialize the native control itself too
     InitOutlineView(style);
 }

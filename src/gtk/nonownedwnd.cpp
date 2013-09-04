@@ -3,7 +3,6 @@
 // Purpose:     wxGTK implementation of wxNonOwnedWindow.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,15 +187,15 @@ private:
 
     virtual bool DoSetShape(GdkWindow *window)
     {
-        if (m_mask.GetBitmap() == NULL)
+        if (!m_mask)
             return false;
 
 #ifdef __WXGTK3__
-        cairo_region_t* region = gdk_cairo_region_create_from_surface(m_mask.GetBitmap());
+        cairo_region_t* region = gdk_cairo_region_create_from_surface(m_mask);
         gdk_window_shape_combine_region(window, region, 0, 0);
         cairo_region_destroy(region);
 #else
-        gdk_window_shape_combine_mask(window, m_mask.GetBitmap(), 0, 0);
+        gdk_window_shape_combine_mask(window, m_mask, 0, 0);
 #endif
 
         return true;

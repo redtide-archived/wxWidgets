@@ -3,7 +3,6 @@
 // Purpose:     wxTextMeasure implementation for wxGTK
 // Author:      Manuel Martin
 // Created:     2012-10-05
-// RCS-ID:      $Id:
 // Copyright:   (c) 1997-2012 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -126,7 +125,7 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
 
     // Set layout's text
     const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, GetFont());
-    if ( !dataUTF8 )
+    if ( !dataUTF8 && !string.empty() )
     {
         // hardly ideal, but what else can we do if conversion failed?
         wxLogLastError(wxT("GetTextExtent"));

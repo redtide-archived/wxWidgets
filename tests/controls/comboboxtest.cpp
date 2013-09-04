@@ -3,7 +3,6 @@
 // Purpose:     wxComboBox unit test
 // Author:      Vadim Zeitlin
 // Created:     2007-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +55,20 @@ private:
     }
 
     CPPUNIT_TEST_SUITE( ComboBoxTestCase );
+#ifdef __WXOSX__
+    CPPUNIT_TEST( SetValue );
+    CPPUNIT_TEST( TextChangeEvents );
+    CPPUNIT_TEST( Selection );
+    CPPUNIT_TEST( InsertionPoint );
+    CPPUNIT_TEST( Replace );
+//  TODO on OS X only works interactively
+//   WXUISIM_TEST( Editable );
+    CPPUNIT_TEST( Hint );
+    CPPUNIT_TEST( CopyPaste ); 
+    CPPUNIT_TEST( UndoRedo );
+#else
         wxTEXT_ENTRY_TESTS();
+#endif
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Size );
         CPPUNIT_TEST( PopDismiss );
@@ -129,8 +141,8 @@ void ComboBoxTestCase::Size()
 void ComboBoxTestCase::PopDismiss()
 {
 #if defined(__WXMSW__) || defined(__WXGTK210__)
-    EventCounter drop(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
-    EventCounter close(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();
@@ -169,7 +181,6 @@ void ComboBoxTestCase::Sort()
 
 void ComboBoxTestCase::ReadOnly()
 {
-#ifndef __WXOSX__
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
@@ -190,7 +201,6 @@ void ComboBoxTestCase::ReadOnly()
     m_combo->SetValue("ITEM 2");
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
-#endif
 }
 
 void ComboBoxTestCase::IsEmpty()

@@ -3,7 +3,6 @@
 // Purpose:     wxTextMeasureBase implementation
 // Author:      Manuel Martin
 // Created:     2012-10-05
-// RCS-ID:      $Id:
 // Copyright:   (c) 1997-2012 wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +85,9 @@ void wxTextMeasureBase::GetTextExtent(const wxString& string,
     if ( !height )
         height = &unusedHeight;
 
-    if ( string.empty() )
+    // Avoid even setting up the DC for measuring if we don't actually need to
+    // measure anything.
+    if ( string.empty() && !descent && !externalLeading )
     {
         *width =
         *height = 0;

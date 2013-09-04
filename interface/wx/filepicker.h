@@ -2,7 +2,6 @@
 // Name:        filepicker.h
 // Purpose:     interface of wxFilePickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -21,8 +20,8 @@
 #define wxDIRP_USE_TEXTCTRL           (wxPB_USE_TEXTCTRL)
 #define wxDIRP_DEFAULT_STYLE          (wxDIRP_DIR_MUST_EXIST)
 
-wxEventType wxEVT_COMMAND_FILEPICKER_CHANGED;
-wxEventType wxEVT_COMMAND_DIRPICKER_CHANGED;
+wxEventType wxEVT_FILEPICKER_CHANGED;
+wxEventType wxEVT_DIRPICKER_CHANGED;
 
 
 /**

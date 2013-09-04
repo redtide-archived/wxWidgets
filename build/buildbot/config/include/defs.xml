@@ -4,7 +4,6 @@
     Name:       include/defs.xml
     Purpose:    Common declarations for buildbot
     Author:     Mike Wetherell
-    RCS-ID:     $Id$
     Copyright:  (c) 2007 Mike Wetherell
     Licence:    wxWindows licence
 -->
@@ -225,13 +224,7 @@
         <xsl:text> </xsl:text>
     </xsl:if>
 
-    <xsl:if test="$utils = 'true'">
-        <xsl:choose>
-            <xsl:when test="$gui = 'true'">utils</xsl:when>
-            <xsl:otherwise>utils/tex2rtf/src ../../HelpGen/src</xsl:otherwise>
-        </xsl:choose>
-        <xsl:text> </xsl:text>
-    </xsl:if>
+    <xsl:if test="$utils = 'true' and $gui = 'true'">utils </xsl:if>
 
     <xsl:if test="$demos = 'true' and $gui = 'true'">demos </xsl:if>
 

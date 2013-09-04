@@ -474,6 +474,8 @@
 
 #define wxUSE_NOTIFICATION_MESSAGE 0
 
+#define wxUSE_PREFERENCES_EDITOR 0
+
 #define wxUSE_RICHTOOLTIP 0
 
 #define wxUSE_SASH          0
@@ -710,6 +712,12 @@
  * Define if the compiler supports variadic macros
  */
 #undef HAVE_VARIADIC_MACROS
+
+/*
+ * Define if you don't want variadic macros to be used even if they are
+ * supported by the compiler.
+ */
+#undef wxNO_VARIADIC_MACROS
 
 /*
  * Define if your compiler has std::wstring
@@ -1186,12 +1194,6 @@
 /* Define this if you have fputws() */
 #undef HAVE_FPUTWS
 
-/* Define this if you have strcasecmp() function in <string.h> */
-#undef HAVE_STRCASECMP_IN_STRING_H
-
-/* Define this if you have strcasecmp() function in <strings.h> */
-#undef HAVE_STRCASECMP_IN_STRINGS_H
-
 /* Define this if you have wprintf() and related functions */
 #undef HAVE_WPRINTF
 
@@ -1240,6 +1242,9 @@
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
 
+/* Define if setpriority() is available. */
+#undef HAVE_SETPRIORITY
+
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
 
@@ -1254,10 +1259,6 @@
    ------------------------------------------------------------------------- */
 
 #ifdef __WIN32__
-
-/* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibility
-   with wx/msw/setup.h */
-#define wxUSE_XPM_IN_MSW wxUSE_XPM
 
 /* When using an external jpeg library and the Windows headers already define
  * boolean, define to the type used by the jpeg library for boolean.  */

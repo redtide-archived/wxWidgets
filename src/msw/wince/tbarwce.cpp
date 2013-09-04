@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-07-12
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -504,7 +503,7 @@ bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
             }
         }
 
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        wxCommandEvent event(wxEVT_MENU);
         event.SetEventObject(this);
         event.SetId(id);
         event.SetInt(checked);

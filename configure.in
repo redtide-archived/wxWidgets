@@ -1,5 +1,4 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_REVISION($Id$)dnl
 
 AC_PREREQ(2.58)
 
@@ -9,8 +8,6 @@ dnl Top-level configure.in for wxWidgets by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
-dnl
-dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------------
@@ -336,7 +333,7 @@ case "${host}" in
     AC_DEFINE(__BSD__)
     AC_DEFINE(__DARWIN__)
     AC_DEFINE(TARGET_CARBON)
-    DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
+    DEFAULT_DEFAULT_wxUSE_OSX_COCOA=1
   ;;
 
   *-*-beos* )
@@ -585,6 +582,8 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available)], wxUSE_LIBJBIG)
+WX_ARG_WITHOUT(liblzma,    [  --without-liblzma       don't use liblzma in libtiff even if available)], wxUSE_LIBLZMA)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
@@ -773,6 +772,7 @@ WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conv
 WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_FEATURE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
+WX_ARG_FEATURE(fsvolume,      [  --enable-fsvolume       use wxFSVolume class], wxUSE_FSVOLUME)
 WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
 WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
@@ -968,6 +968,7 @@ WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wx
 WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage class], wxUSE_NOTIFICATION_MESSAGE)
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
 WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
+WX_ARG_FEATURE(prefseditor, [  --enable-prefseditor    use wxPreferencesEditor class], wxUSE_PREFERENCES_EDITOR)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_FEATURE(richmsgdlg,  [  --enable-richmsgdlg     use wxRichMessageDialog class], wxUSE_RICHMSGDLG)
@@ -1431,7 +1432,6 @@ if test "$wants_win32" = 1 ; then
     USE_UNIX=0
     USE_WIN32=1
     AC_DEFINE(__WIN32__)
-    AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
     AC_DEFINE(__GNUWIN32__)
     AC_DEFINE(STRICT)
@@ -1462,9 +1462,6 @@ case "${host}" in
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
           AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
-      else
-          dnl Include resources for the "native" port (wxPM).
-          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
       dnl Check for the gcc version (and thereby for the C runtime library).
       dnl wx_cv_gccversion = EMX2 -> Standard EMX environment
@@ -1518,50 +1515,6 @@ case "${host}" in
         enable_omf=yes
       fi
       dnl (end of OS/2-only piece)
-  ;;
-  *)
-      dnl ---------------------------------------------------------------------
-      dnl look for strcasecmp() in string.h and then strings.h if it's not
-      dnl there. Don't do this on OS/2, where "stricmp" is the function to be
-      dnl used.
-      dnl ---------------------------------------------------------------------
-      dnl (non-OS/2-only piece)
-
-      AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
-          AC_TRY_LINK([
-              #include <string.h>
-              ],
-              [
-                  strcasecmp("foo", "bar");
-              ],
-              ac_cv_string_strcasecmp=yes,
-              ac_cv_string_strcasecmp=no
-          )
-      ])
-
-      if test x"$ac_cv_string_strcasecmp" = "xyes"; then
-          AC_DEFINE(HAVE_STRCASECMP_IN_STRING_H)
-      else
-          AC_CACHE_CHECK([for strcasecmp() in strings.h], ac_cv_strings_strcasecmp, [
-              AC_TRY_LINK([
-                  #include <strings.h>
-                  ],
-                  [
-                      strcasecmp("foo", "bar");
-                  ],
-                  ac_cv_strings_strcasecmp=yes,
-                  ac_cv_strings_strcasecmp=no
-              )
-          ])
-
-          if test x"$ac_cv_strings_strcasecmp" = "xyes"; then
-              AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
-          else
-              AC_MSG_ERROR([No case-insensitive string comparison function found.])
-          fi
-      fi
-
-      dnl (end of non-OS/2-only piece)
   ;;
 esac
 
@@ -1764,6 +1717,8 @@ if test $wx_cv_have_variadic_macros = "yes"; then
     AC_DEFINE(HAVE_VARIADIC_MACROS)
 fi
 
+else
+    AC_DEFINE(wxNO_VARIADIC_MACROS)
 fi dnl wxUSE_VARARG_MACROS == yes
 
 
@@ -2699,6 +2654,24 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we need to hack around this
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
+
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+            dnl If libtiff configure detects lzma library, it enables support for
+            dnl LZMA compression and using it requires linking with liblzma.
+            AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
+        else
+            dnl Prevent libtiff configure from looking for liblzma if it's
+            dnl explicitly disabled.
+            ac_configure_args="$ac_configure_args --disable-lzma"
+        fi
+
+        dnl Similarly for jbig
+        if test "$wxUSE_LIBJBIG" = "yes"; then
+            AC_CHECK_LIB(jbig, jbg_dec_init, [LIBS="$LIBS -ljbig"])
+        else
+            ac_configure_args="$ac_configure_args --disable-jbig"
+        fi
+
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
@@ -2774,9 +2747,6 @@ dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
-AFMINSTALL=
-WIN32INSTALL=
-
 TOOLKIT=
 TOOLKIT_INCLUDE=
 WIDGET_SET=
@@ -2810,17 +2780,8 @@ if test "$USE_WIN32" = 1 ; then
             LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-    dnl This one is still used by some sample makefiles.
-    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-    RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
-
-    dnl This lot we export to wx-config.  It must add the relevant
-    dnl include directories at the point when they can be known.
-    dnl (but are these (still) required anyway?)
-    WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-
-    dnl install Win32-specific files in "make install"
-    WIN32INSTALL=win32install
+    dnl Flags to be passed to windres by the applications using wxWidgets.
+    WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -3033,7 +2994,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-        AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
@@ -3102,7 +3062,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         wxUSE_UNIVERSAL="yes"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
 
@@ -3125,7 +3084,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl this junk out
         GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//' | sed 's/ -RNONE//'`
         TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
     fi
@@ -4091,7 +4049,18 @@ if test "$WCSLEN_FOUND" = 1; then
     AC_DEFINE(HAVE_WCSLEN)
 fi
 
-AC_CHECK_FUNCS([wcsdup wcsftime strnlen wcsnlen wcscasecmp wcsncasecmp])
+dnl Notice that unlike the functions below, this one seems to be present in all
+dnl support OS X versions so it's OK to test for it here.
+AC_CHECK_FUNCS(wcsftime)
+
+dnl OS X provides the wide character functions (and also strnlen(), for some
+dnl reason) only starting from 10.7 so our tests would succeed if we're
+dnl configuring under 10.7 or later, yet the compiled programs would fail if
+dnl ran under 10.6 or earlier. To avoid this problem, define the corresponding
+dnl HAVE_XXX in wx/osx/config_xcode.h instead of testing for them here.
+if test "$wxUSE_MAC" != 1; then
+    AC_CHECK_FUNCS([strnlen wcsdup wcsnlen wcscasecmp wcsncasecmp])
+fi
 
 dnl On HP-UX aCC need this define to find mbstrtowcs() &c
 dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
@@ -4366,22 +4335,25 @@ dnl backtrace() and backtrace_symbols() for wxStackWalker
 if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
         [
-            AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE([#include <execinfo.h>],
+            AC_SEARCH_LIBS(backtrace, execinfo,
                 [
-                    void *trace[1];
-                    char **messages;
-
-                    backtrace(trace, 1);
-                    messages = backtrace_symbols(trace, 1);
+                    AC_LANG_PUSH(C++)
+                    AC_TRY_LINK([#include <execinfo.h>],
+                        [
+                            void *trace[1];
+                            char **messages;
+                            backtrace(trace, 1);
+                            messages = backtrace_symbols(trace, 1);
+                        ],
+                        wx_cv_func_backtrace=yes,
+                        wx_cv_func_backtrace=no
+                    )
+                    AC_LANG_POP()
                 ],
-                wx_cv_func_backtrace=yes,
                 wx_cv_func_backtrace=no
             )
-            AC_LANG_POP()
         ]
     )
-
 
     if test "$wx_cv_func_backtrace" = "no"; then
         AC_MSG_WARN([backtrace() is not available, wxStackWalker will not be available])
@@ -5835,6 +5807,10 @@ if test "$wxUSE_FS_ZIP" = "yes"; then
   fi
 fi
 
+if test "$wxUSE_FSVOLUME" = "yes"; then
+  AC_DEFINE(wxUSE_FSVOLUME)
+fi
+
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
   if test "$USE_UNIX" != 1; then
     AC_MSG_WARN([Catching fatal exceptions not currently supported on this system, wxApp::OnFatalException will not be called])
@@ -6143,6 +6119,12 @@ if test "$wxUSE_DATETIME" = "yes"; then
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
+
+dnl ------------------------------------------------------------------------
+dnl wxProcess
+dnl ------------------------------------------------------------------------
+
+AC_CHECK_FUNCS(setpriority)
 
 dnl ------------------------------------------------------------------------
 dnl wxSocket
@@ -7049,6 +7031,11 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
             USES_CONTROLS=1
         fi
     fi
+fi
+
+if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
+    AC_DEFINE(wxUSE_PREFERENCES_EDITOR)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS prefseditor"
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
@@ -8212,11 +8199,11 @@ dnl when we've configured a Universal binary build.
 dnl The next version of Bakefile will have the correct fix for this
 dnl at which time, this hack can be removed.
 
-if test "$wxUSE_MAC" = 1 ; then
+if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         if test "x$disable_macosx_deps" = "xyes"; then
             sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
-                mv temp bk-deps
+            mv temp bk-deps
             chmod +x bk-deps
         fi
     fi
@@ -8309,8 +8296,6 @@ AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 
 dnl toolkit options
 AC_SUBST(USE_GUI)
-AC_SUBST(AFMINSTALL)
-AC_SUBST(WIN32INSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
@@ -8363,8 +8348,6 @@ dnl additional resurces settings
 AC_SUBST(RESCOMP)
 AC_SUBST(WINDRES)
 AC_SUBST(REZ)
-AC_SUBST(RESFLAGS)
-AC_SUBST(RESPROGRAMOBJ)
 AC_SUBST(WX_RESOURCES_MACOSX_ASCII)
 AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 

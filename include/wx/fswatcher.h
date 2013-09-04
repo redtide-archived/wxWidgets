@@ -3,7 +3,6 @@
 // Purpose:     wxFileSystemWatcherBase
 // Author:      Bartosz Bekier
 // Created:     2009-05-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Bartosz Bekier <bartosz.bekier@gmail.com>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_BASE, wxEVT_FSWATCHER,
 class WXDLLIMPEXP_BASE wxFileSystemWatcherEvent: public wxEvent
 {
 public:
-    wxFileSystemWatcherEvent(int changeType, int watchid = wxID_ANY) :
+    wxFileSystemWatcherEvent(int changeType = 0, int watchid = wxID_ANY) :
         wxEvent(watchid, wxEVT_FSWATCHER),
         m_changeType(changeType)
     {
@@ -152,7 +151,7 @@ public:
 
     virtual wxEventCategory GetEventCategory() const
     {
-        // TODO this has to be merged with "similiar" categories and changed
+        // TODO this has to be merged with "similar" categories and changed
         return wxEVT_CATEGORY_UNKNOWN;
     }
 
@@ -179,6 +178,8 @@ protected:
     wxFileName m_path;
     wxFileName m_newPath;
     wxString m_errorMsg;
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileSystemWatcherEvent)
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)

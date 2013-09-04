@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     24.09.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001-2004 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -187,7 +186,8 @@ void wxTopLevelWindowMac::ShowWithoutActivating()
 
     m_nowpeer->ShowWithoutActivating();
 
-    // TODO: Should we call EVT_SIZE here?
+    // because apps expect a size event to occur at this moment
+    SendSizeEvent();
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)

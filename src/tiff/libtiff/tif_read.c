@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -47,7 +46,7 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
 {
 	static const char module[] = "TIFFFillStripPartial";
 	register TIFFDirectory *td = &tif->tif_dir;
-        uint64 unused_data;
+        tmsize_t unused_data;
         uint64 read_offset;
         tmsize_t cc, to_read;
         /* tmsize_t bytecountm; */
@@ -117,7 +116,7 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
         if( (uint64) to_read > td->td_stripbytecount[strip] 
             - tif->tif_rawdataoff - tif->tif_rawdataloaded )
         {
-                to_read = td->td_stripbytecount[strip]
+                to_read = (tmsize_t)td->td_stripbytecount[strip]
                         - tif->tif_rawdataoff - tif->tif_rawdataloaded;
         }
 

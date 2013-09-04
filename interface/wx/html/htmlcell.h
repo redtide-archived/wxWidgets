@@ -2,7 +2,6 @@
 // Name:        html/htmlcell.h
 // Purpose:     interface of wxHtml*Cell
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -319,8 +318,27 @@ public:
 
         @param window
             interface to the parent HTML window
+
+        @see GetMouseCursorAt()
     */
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface* window) const;
+
+    /**
+        Returns cursor to show when mouse pointer is over the specified point.
+
+        This function should be overridden instead of GetMouseCursorAt() if
+        the cursor should depend on the exact position of the mouse in the
+        window.
+
+        @param window
+            interface to the parent HTML window
+        @param rePos
+            Position to show cursor.
+
+        @since 3.0
+     */
+    virtual wxCursor GetMouseCursorAt(wxHtmlWindowInterface* window,
+                                      const wxPoint& rePos) const;
 
     /**
         Returns pointer to the next cell in list (see htmlcell.h if you're
@@ -712,4 +730,54 @@ public:
             that the window will always have same width as parent container).
     */
     wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+};
+
+
+
+/**
+    @class wxHtmlWordCell
+
+    This html cell represents a single word or text fragment in the document stream.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlWordCell : public wxHtmlCell
+{
+public:
+    wxHtmlWordCell(const wxString& word, const wxDC& dc);
+};
+
+
+/**
+    @class wxHtmlWordWithTabsCell
+
+    wxHtmlWordCell is a specialization for storing text fragments with
+    embedded tab characters.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlWordWithTabsCell : public wxHtmlWordCell
+{
+public:
+    wxHtmlWordWithTabsCell(const wxString& word,
+                           const wxString& wordOrig,
+                           size_t linepos,
+                           const wxDC& dc);
+};
+
+
+/**
+    @class wxHtmlFontCell
+
+    This cell represents a font change in the document stream.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlFontCell : public wxHtmlCell
+{
+public:
+    wxHtmlFontCell(wxFont *font);
 };

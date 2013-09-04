@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified By:
 // Created:     8/10/2006
-// Id:          $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@
 
 const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 
-wxDEFINE_EVENT( wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent );
+wxDEFINE_EVENT( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEvent );
 
 IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
 

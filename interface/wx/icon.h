@@ -2,7 +2,6 @@
 // Name:        icon.h
 // Purpose:     interface of wxIcon
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -178,6 +177,22 @@ public:
         Do not delete an icon that is selected into a memory device context.
     */
     virtual ~wxIcon();
+
+    /**
+        Attach a Windows icon handle.
+
+        This wxMSW-specific method allows to assign a native Windows @c HICON
+        (which must be castes to @c WXHICON opaque handle type) to wxIcon.
+        Notice that this means that the @c HICON will be destroyed by wxIcon
+        when it is destroyed.
+
+        @return @true if successful.
+
+        @onlyfor{wxmsw}
+
+        @since 2.9.5
+    */
+    bool CreateFromHICON(WXHICON icon);
 
     /**
         Returns disabled (dimmed) version of the icon.

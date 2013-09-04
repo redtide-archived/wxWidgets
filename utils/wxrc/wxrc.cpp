@@ -3,7 +3,6 @@
 // Purpose:     XML resource compiler
 // Author:      Vaclav Slavik, Eduardo Marques <edrdo@netcabo.pt>
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -356,7 +355,8 @@ void XmlResApp::CompileRes()
 {
     wxArrayString files = PrepareTempFiles();
 
-    wxRemoveFile(parOutput);
+    if ( wxFileExists(parOutput) )
+        wxRemoveFile(parOutput);
 
     if (!retCode)
     {

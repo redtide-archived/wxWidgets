@@ -4,7 +4,6 @@
 // Author:      Robert Roebling, Vadim Zeitlin
 // Modified by:
 // Created:     28.12.2000
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -93,13 +92,16 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/dynlib.h"
 #include "wx/dir.h"
+#include "wx/longlong.h"
 
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
 #endif
 
 #ifdef __WINDOWS__
-#include "wx/msw/private.h"
+    #include "wx/msw/private.h"
+    #include <shlobj.h>         // for CLSID_ShellLink
+    #include "wx/msw/missing.h"
 #endif
 
 #if defined(__WXMAC__)
@@ -229,49 +231,30 @@ private:
 
 #if wxUSE_DATETIME && defined(__WIN32__) && !defined(__WXMICROWIN__)
 
-// convert between wxDateTime and FILETIME which is a 64-bit value representing
-// the number of 100-nanosecond intervals since January 1, 1601.
+// Convert between wxDateTime and FILETIME which is a 64-bit value representing
+// the number of 100-nanosecond intervals since January 1, 1601 UTC.
+//
+// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
 static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
 {
-    FILETIME ftcopy = ft;
-    FILETIME ftLocal;
-    if ( !::FileTimeToLocalFileTime(&ftcopy, &ftLocal) )
-    {
-        wxLogLastError(wxT("FileTimeToLocalFileTime"));
-    }
+    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+    t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
+    t -= EPOCH_OFFSET_IN_MSEC;
 
-    SYSTEMTIME st;
-    if ( !::FileTimeToSystemTime(&ftLocal, &st) )
-    {
-        wxLogLastError(wxT("FileTimeToSystemTime"));
-    }
-
-    dt->Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
-            st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+    *dt = wxDateTime(t);
 }
 
 static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 {
-    SYSTEMTIME st;
-    st.wDay = dt.GetDay();
-    st.wMonth = (WORD)(dt.GetMonth() + 1);
-    st.wYear = (WORD)dt.GetYear();
-    st.wHour = dt.GetHour();
-    st.wMinute = dt.GetMinute();
-    st.wSecond = dt.GetSecond();
-    st.wMilliseconds = dt.GetMillisecond();
+    // Undo the conversions above.
+    wxLongLong t(dt.GetValue());
+    t += EPOCH_OFFSET_IN_MSEC;
+    t *= 10000;
 
-    FILETIME ftLocal;
-    if ( !::SystemTimeToFileTime(&st, &ftLocal) )
-    {
-        wxLogLastError(wxT("SystemTimeToFileTime"));
-    }
-
-    if ( !::LocalFileTimeToFileTime(&ftLocal, ft) )
-    {
-        wxLogLastError(wxT("LocalFileTimeToFileTime"));
-    }
+    ft->dwHighDateTime = t.GetHi();
+    ft->dwLowDateTime = t.GetLo();
 }
 
 #endif // wxUSE_DATETIME && __WIN32__
@@ -606,11 +589,10 @@ void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
 
 void wxFileName::Clear()
 {
-    m_dirs.Clear();
-
-    m_volume =
-    m_name =
-    m_ext = wxEmptyString;
+    m_dirs.clear();
+    m_volume.clear();
+    m_name.clear();
+    m_ext.clear();
 
     // we don't have any absolute path for now
     m_relative = true;
@@ -1702,13 +1684,6 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 // quotation marks."
 
 #if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
-// The following lines are necessary under WinCE
-// #include "wx/msw/private.h"
-// #include <ole2.h>
-#include <shlobj.h>
-#if defined(__WXWINCE__)
-#include <shlguid.h>
-#endif
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
@@ -1917,7 +1892,7 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
         case wxPATH_MAC:
             // On a Mac even names with * and ? are allowed (Tested with OS
             // 9.2.1 and OS X 10.2.5)
-            strForbiddenChars = wxEmptyString;
+            strForbiddenChars.clear();
             break;
 
         case wxPATH_DOS:
@@ -2039,10 +2014,12 @@ wxFileName::IsMSWUniqueVolumeNamePath(const wxString& path, wxPathFormat format)
     return true;
 }
 
-void wxFileName::AppendDir( const wxString& dir )
+bool wxFileName::AppendDir( const wxString& dir )
 {
-    if ( IsValidDirComponent(dir) )
-        m_dirs.Add( dir );
+    if (!IsValidDirComponent(dir))
+        return false;
+    m_dirs.Add(dir);
+    return true;
 }
 
 void wxFileName::PrependDir( const wxString& dir )
@@ -2050,10 +2027,12 @@ void wxFileName::PrependDir( const wxString& dir )
     InsertDir(0, dir);
 }
 
-void wxFileName::InsertDir(size_t before, const wxString& dir)
+bool wxFileName::InsertDir(size_t before, const wxString& dir)
 {
-    if ( IsValidDirComponent(dir) )
-        m_dirs.Insert(dir, before);
+    if (!IsValidDirComponent(dir))
+        return false;
+    m_dirs.Insert(dir, before);
+    return true;
 }
 
 void wxFileName::RemoveDir(size_t pos)
@@ -2295,7 +2274,7 @@ wxString wxFileName::GetLongPath() const
                   GetVolumeSeparator(wxPATH_DOS) +
                   GetPathSeparator(wxPATH_DOS);
     else
-        pathOut = wxEmptyString;
+        pathOut.clear();
 
     wxArrayString dirs = GetDirs();
     dirs.Add(GetFullName());
@@ -2591,6 +2570,37 @@ wxString wxFileName::StripExtension(const wxString& fullpath)
     wxFileName fn(fullpath);
     fn.SetExt("");
     return fn.GetFullPath();
+}
+
+// ----------------------------------------------------------------------------
+// file permissions functions
+// ----------------------------------------------------------------------------
+
+bool wxFileName::SetPermissions(int permissions)
+{
+    // Don't do anything for a symlink but first make sure it is one.
+    if ( m_dontFollowLinks &&
+            Exists(wxFILE_EXISTS_SYMLINK|wxFILE_EXISTS_NO_FOLLOW) )
+    {
+        // Looks like changing permissions for a symlinc is only supported
+        // on BSD where lchmod is present and correctly implemented.
+        // http://lists.gnu.org/archive/html/bug-coreutils/2009-09/msg00268.html
+        return false;
+    }
+
+#ifdef __WINDOWS__
+    int accMode = 0;
+
+    if ( permissions & (wxS_IRUSR|wxS_IRGRP|wxS_IROTH) )
+        accMode = _S_IREAD;
+
+    if ( permissions & (wxS_IWUSR|wxS_IWGRP|wxS_IWOTH) )
+        accMode |= _S_IWRITE;
+
+    permissions = accMode;
+#endif // __WINDOWS__
+
+    return wxChmod(GetFullPath(), permissions) == 0;
 }
 
 // ----------------------------------------------------------------------------

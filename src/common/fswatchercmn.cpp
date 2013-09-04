@@ -3,7 +3,6 @@
 // Purpose:     wxMswFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Bartosz Bekier <bartosz.bekier@gmail.com>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -62,6 +61,8 @@ static wxString GetFSWEventChangeTypeName(int type)
 // wxFileSystemWatcherEvent implementation
 // ============================================================================
 
+IMPLEMENT_DYNAMIC_CLASS(wxFileSystemWatcherEvent, wxEvent);
+
 wxString wxFileSystemWatcherEvent::ToString() const
 {
     return wxString::Format("FSW_EVT type=%d (%s) path='%s'", m_changeType,
@@ -100,7 +101,10 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
     }
     else
     {
-        wxLogError(_("Can't monitor non-existent path \"%s\" for changes."),
+        // Don't overreact to being passed a non-existent item. It may have
+        // only just been deleted, in which case doing nothing is correct
+        wxLogTrace(wxTRACE_FSWATCHER,
+                   "Can't monitor non-existent path \"%s\" for changes.",
                    path.GetFullPath());
         return false;
     }
@@ -130,7 +134,7 @@ wxFileSystemWatcherBase::AddAny(const wxFileName& path,
     if ( it == m_watches.end() )
     {
         wxFSWatchInfoMap::value_type val(canonical, watch);
-        m_watches.insert(val).second;
+        m_watches.insert(val);
     }
     else
     {

@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 <makefile>
 
 <!--
@@ -73,6 +72,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/timerunx.cpp
     src/unix/threadpsx.cpp
     src/unix/utilsunx.cpp
+    src/unix/wakeuppipe.cpp
     src/unix/fswatcher_kqueue.cpp
 </set>
 
@@ -405,6 +405,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/clntdata.h
     wx/cmdargs.h
     wx/cmdline.h
+    wx/compiler.h
     wx/confbase.h
     wx/config.h
     wx/convauto.h
@@ -709,6 +710,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/markupparser.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
+    src/common/modalhook.cpp
     src/common/mousemanager.cpp
     src/common/nbkbase.cpp
     src/common/overlaycmn.cpp
@@ -718,6 +720,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/persist.cpp
     src/common/pickerbase.cpp
     src/common/popupcmn.cpp
+    src/common/preferencescmn.cpp
     src/common/prntbase.cpp
     src/common/quantize.cpp
     src/common/radiobtncmn.cpp
@@ -770,6 +773,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/msgdlgg.cpp
     src/generic/numdlgg.cpp
     src/generic/progdlgg.cpp
+    src/generic/preferencesg.cpp
     src/generic/printps.cpp
     src/generic/renderg.cpp
     src/generic/richmsgdlgg.cpp
@@ -865,6 +869,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/listbox.h
     wx/mdi.h
     wx/menu.h
+    wx/modalhook.h
     wx/mousemanager.h
     wx/msgdlg.h
     wx/nativewin.h
@@ -1271,7 +1276,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/textctrl.h
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
-    wx/gtk/treeentry_gtk.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
@@ -1929,7 +1933,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pencil.cur
     wx/msw/pntleft.cur
     wx/msw/pntright.cur
-    wx/msw/rightarr.cur
     wx/msw/roller.cur
     <!-- icons -->
     wx/msw/cdrom.ico
@@ -2540,6 +2543,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm
     src/osx/cocoa/slider.mm
@@ -3246,9 +3250,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_UNIV_SRC" hints="files">
 <!--
-Don't include src/generic/animateg.cpp many times in ADVANCED_SRC(WXUNIV=='1').
-This file is already included in [OSX_CARBON, OSX_COCOA, OSX_IPHONE, COCOA, PM, MOTIF] TOOLKITs
-and TOOLKIT=='GTK' and TOOLKIT_VERSION==''.
+    Including src/generic/animateg.cpp hre unconditionally results in bakefile
+    errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
 -->
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         src/generic/animateg.cpp
@@ -3257,6 +3260,9 @@ and TOOLKIT=='GTK' and TOOLKIT_VERSION==''.
         src/generic/animateg.cpp
     </if>
     <if cond="TOOLKIT=='WINCE'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='X11'">
         src/generic/animateg.cpp
     </if>
 </set>

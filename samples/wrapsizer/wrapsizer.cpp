@@ -3,7 +3,6 @@
 // Purpose:     wxWidgets sample demonstrating wxWrapSizer use
 // Author:      Arne Steinarson
 // Created:     21.01.2008
-// RCS-ID:      $Id$
 // Copyright:   (c) Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -145,7 +144,7 @@ WrapSizerFrame::WrapSizerFrame()
     // OK Button
     sizerRoot->Add(new wxButton(m_panel, wxID_OK),
                     wxSizerFlags().Centre().DoubleBorder());
-    Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(wxID_OK, wxEVT_BUTTON,
                 wxCommandEventHandler(WrapSizerFrame::OnButton));
 
     // Set sizer for the panel

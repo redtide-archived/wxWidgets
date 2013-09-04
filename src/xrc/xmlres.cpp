@@ -3,7 +3,6 @@
 // Purpose:     XRC resources
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -2872,8 +2871,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule)
 void wxXmlInitResourceModule()
 {
     wxModule* module = new wxXmlResourceModule;
-    module->Init();
     wxModule::RegisterModule(module);
+    wxModule::InitializeModules();
 }
 
 #endif // wxUSE_XRC

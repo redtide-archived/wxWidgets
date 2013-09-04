@@ -2,7 +2,6 @@
 // Name:        tests/any/anytest.cpp
 // Purpose:     Test the wxAny classes
 // Author:      Jaakko Salli
-// RCS-ID:      $Id$
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -403,7 +402,7 @@ void wxAnyTestCase::GetAs()
     res = m_anyDoubleDouble1.GetAs(&s);
     CPPUNIT_ASSERT(res);
     double d2;
-    res = s.ToDouble(&d2);
+    res = s.ToCDouble(&d2);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
 }

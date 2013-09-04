@@ -4,7 +4,6 @@
 // Author:      Julian Smart, Vadim Zeitlin
 // Modified by:
 // Created:     13/07/98
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -73,6 +72,7 @@
 #endif
 
 #include "wx/platinfo.h"
+#include "wx/recguard.h"
 #include "wx/private/window.h"
 
 #ifdef __WINDOWS__
@@ -88,6 +88,14 @@ wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS
 
 extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[] = "panel";
+
+namespace wxMouseCapture
+{
+
+// Check if the given window is in the capture stack.
+bool IsInCaptureStack(wxWindowBase* win);
+
+} // wxMouseCapture
 
 // ----------------------------------------------------------------------------
 // static data
@@ -448,7 +456,9 @@ bool wxWindowBase::ToggleWindowStyle(int flag)
 // common clean up
 wxWindowBase::~wxWindowBase()
 {
-    wxASSERT_MSG( GetCapture() != this, wxT("attempt to destroy window with mouse capture") );
+    wxASSERT_MSG( !wxMouseCapture::IsInCaptureStack(this),
+                    "Destroying window before releasing mouse capture: this "
+                    "will result in a crash later." );
 
     // FIXME if these 2 cases result from programming errors in the user code
     //       we should probably assert here instead of silently fixing them
@@ -1103,6 +1113,12 @@ void wxWindowBase::SendSizeEventToParent(int flags)
         parent->SendSizeEvent(flags);
 }
 
+bool wxWindowBase::CanScroll(int orient) const
+{
+    return (m_windowStyle &
+            (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
+}
+
 bool wxWindowBase::HasScrollbar(int orient) const
 {
     // if scrolling in the given direction is disabled, we can't have the
@@ -1149,8 +1165,6 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
     DoEnable(enabled);
 #endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
-    OnEnabled(enabled);
-
     // Disabling a top level window is typically done when showing a modal
     // dialog and we don't need to disable its children in this case, they will
     // be logically disabled anyhow (i.e. their IsEnabled() will return false)
@@ -1166,9 +1180,7 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
     // they would still show as enabled even though they wouldn't actually
     // accept any input (at least under MSW where children don't accept input
     // if any of the windows in their parent chain is enabled).
-    //
-    // Notice that we must do this even for wxHAS_NATIVE_ENABLED_MANAGEMENT
-    // platforms as we still need to call the children OnEnabled() recursively.
+#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -1177,6 +1189,7 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
         if ( !child->IsTopLevel() && child->IsThisEnabled() )
             child->NotifyWindowOnEnableChange(enabled);
     }
+#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 }
 
 bool wxWindowBase::Enable(bool enable)
@@ -1827,6 +1840,12 @@ wxWindow *wxWindowBase::FindWindow(long id) const
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
+
+        // As usual, don't recurse into child dialogs, finding a button in a
+        // child dialog when looking in this window would be unexpected.
+        if ( child->IsTopLevel() )
+            continue;
+
         res = child->FindWindow( id );
     }
 
@@ -1843,6 +1862,11 @@ wxWindow *wxWindowBase::FindWindow(const wxString& name) const
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
+
+        // As in FindWindow() overload above, never recurse into child dialogs.
+        if ( child->IsTopLevel() )
+            continue;
+
         res = child->FindWindow(name);
     }
 
@@ -1991,95 +2015,168 @@ void wxWindowBase::MakeModal(bool modal)
 }
 #endif // WXWIN_COMPATIBILITY_2_8
 
+#if wxUSE_VALIDATORS
+
+namespace
+{
+
+// This class encapsulates possibly recursive iteration on window children done
+// by Validate() and TransferData{To,From}Window() and allows to avoid code
+// duplication in all three functions.
+class ValidationTraverserBase
+{
+public:
+    wxEXPLICIT ValidationTraverserBase(wxWindowBase* win)
+        : m_win(static_cast<wxWindow*>(win))
+    {
+    }
+
+    // Traverse all the direct children calling OnDo() on them and also all
+    // grandchildren if wxWS_EX_VALIDATE_RECURSIVELY is used, calling
+    // OnRecurse() for them.
+    bool DoForAllChildren()
+    {
+        const bool recurse = m_win->HasExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+
+        wxWindowList& children = m_win->GetChildren();
+        for ( wxWindowList::iterator i = children.begin();
+              i != children.end();
+              ++i )
+        {
+            wxWindow* const child = static_cast<wxWindow*>(*i);
+            wxValidator* const validator = child->GetValidator();
+            if ( validator && !OnDo(validator) )
+            {
+                return false;
+            }
+
+            // Notice that validation should never recurse into top level
+            // children, e.g. some other dialog which might happen to be
+            // currently shown.
+            if ( recurse && !child->IsTopLevel() && !OnRecurse(child) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Give it a virtual dtor just to suppress gcc warnings about a class with
+    // virtual methods but non-virtual dtor -- even if this is completely safe
+    // here as we never use the objects of this class polymorphically.
+    virtual ~ValidationTraverserBase() { }
+
+protected:
+    // Called for each child, validator is guaranteed to be non-NULL.
+    virtual bool OnDo(wxValidator* validator) = 0;
+
+    // Called for each child if we need to recurse into its children.
+    virtual bool OnRecurse(wxWindow* child) = 0;
+
+
+    // The window whose children we're traversing.
+    wxWindow* const m_win;
+
+    wxDECLARE_NO_COPY_CLASS(ValidationTraverserBase);
+};
+
+} // anonymous namespace
+
+#endif // wxUSE_VALIDATORS
+
 bool wxWindowBase::Validate()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class ValidateTraverser : public ValidationTraverserBase
     {
-        wxWindowBase *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->Validate((wxWindow *)this) )
+    public:
+        wxEXPLICIT ValidateTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            return false;
         }
 
-        if ( recurse && !child->Validate() )
+        virtual bool OnDo(wxValidator* validator)
         {
-            return false;
+            return validator->Validate(m_win);
         }
-    }
-#endif // wxUSE_VALIDATORS
 
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->Validate();
+        }
+    };
+
+    return ValidateTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 bool wxWindowBase::TransferDataToWindow()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class DataToWindowTraverser : public ValidationTraverserBase
     {
-        wxWindowBase *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->TransferToWindow() )
+    public:
+        wxEXPLICIT DataToWindowTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            wxLogWarning(_("Could not transfer data to window"));
+        }
+
+        virtual bool OnDo(wxValidator* validator)
+        {
+            if ( !validator->TransferToWindow() )
+            {
+                wxLogWarning(_("Could not transfer data to window"));
 #if wxUSE_LOG
-            wxLog::FlushActive();
+                wxLog::FlushActive();
 #endif // wxUSE_LOG
 
-            return false;
-        }
-
-        if ( recurse )
-        {
-            if ( !child->TransferDataToWindow() )
-            {
-                // warning already given
                 return false;
             }
-        }
-    }
-#endif // wxUSE_VALIDATORS
 
+            return true;
+        }
+
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->TransferDataToWindow();
+        }
+    };
+
+    return DataToWindowTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 bool wxWindowBase::TransferDataFromWindow()
 {
 #if wxUSE_VALIDATORS
-    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
-
-    wxWindowList::compatibility_iterator node;
-    for ( node = m_children.GetFirst(); node; node = node->GetNext() )
+    class DataFromWindowTraverser : public ValidationTraverserBase
     {
-        wxWindow *child = node->GetData();
-        wxValidator *validator = child->GetValidator();
-        if ( validator && !validator->TransferFromWindow() )
+    public:
+        DataFromWindowTraverser(wxWindowBase* win)
+            : ValidationTraverserBase(win)
         {
-            // nop warning here because the application is supposed to give
-            // one itself - we don't know here what might have gone wrongly
-
-            return false;
         }
 
-        if ( recurse )
+        virtual bool OnDo(wxValidator* validator)
         {
-            if ( !child->TransferDataFromWindow() )
-            {
-                // warning already given
-                return false;
-            }
+            return validator->TransferFromWindow();
         }
-    }
-#endif // wxUSE_VALIDATORS
 
+        virtual bool OnRecurse(wxWindow* child)
+        {
+            return child->TransferDataFromWindow();
+        }
+    };
+
+    return DataFromWindowTraverser(this).DoForAllChildren();
+#else // !wxUSE_VALIDATORS
     return true;
+#endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 }
 
 void wxWindowBase::InitDialog()
@@ -2540,6 +2637,8 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     wxLayoutConstraints *constr = GetConstraints();
     if ( constr && constr->AreSatisfied() )
     {
+        ChildrenRepositioningGuard repositionGuard(this);
+
         int x = constr->left.GetValue();
         int y = constr->top.GetValue();
         int w = constr->width.GetValue();
@@ -2888,7 +2987,7 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 {
     gs_popupMenuSelection = wxID_NONE;
 
-    Connect(wxEVT_COMMAND_MENU_SELECTED,
+    Connect(wxEVT_MENU,
             wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
             NULL,
             this);
@@ -2911,7 +3010,7 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
                wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
                NULL,
                this);
-    Disconnect(wxEVT_COMMAND_MENU_SELECTED,
+    Disconnect(wxEVT_MENU,
                wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
                NULL,
                this);
@@ -3131,72 +3230,106 @@ wxHitTest wxWindowBase::DoHitTest(wxCoord x, wxCoord y) const
 // mouse capture
 // ----------------------------------------------------------------------------
 
-struct WXDLLEXPORT wxWindowNext
+// Private data used for mouse capture tracking.
+namespace wxMouseCapture
 {
-    wxWindow *win;
-    wxWindowNext *next;
-} *wxWindowBase::ms_winCaptureNext = NULL;
-wxWindow *wxWindowBase::ms_winCaptureCurrent = NULL;
-bool wxWindowBase::ms_winCaptureChanging = false;
+
+// Stack of the windows which previously had the capture, the top most element
+// is the window that has the mouse capture now.
+//
+// NB: We use wxVector and not wxStack to be able to examine all of the stack
+//     elements for debug checks, but only the stack operations should be
+//     performed with this vector.
+wxVector<wxWindow*> stack;
+
+// Flag preventing reentrancy in {Capture,Release}Mouse().
+wxRecursionGuardFlag changing;
+
+bool IsInCaptureStack(wxWindowBase* win)
+{
+    for ( wxVector<wxWindow*>::const_iterator it = stack.begin();
+          it != stack.end();
+          ++it )
+    {
+        if ( *it == win )
+            return true;
+    }
+
+    return false;
+}
+
+} // wxMouseCapture
 
 void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(wxT("mousecapture"), wxT("CaptureMouse(%p)"), static_cast<void*>(this));
 
-    wxASSERT_MSG( !ms_winCaptureChanging, wxT("recursive CaptureMouse call?") );
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    wxASSERT_MSG( !guard.IsInside(), wxT("recursive CaptureMouse call?") );
 
-    ms_winCaptureChanging = true;
+    wxASSERT_MSG( !wxMouseCapture::IsInCaptureStack(this),
+                    "Recapturing the mouse in the same window?" );
 
     wxWindow *winOld = GetCapture();
     if ( winOld )
-    {
         ((wxWindowBase*) winOld)->DoReleaseMouse();
 
-        // save it on stack
-        wxWindowNext *item = new wxWindowNext;
-        item->win = winOld;
-        item->next = ms_winCaptureNext;
-        ms_winCaptureNext = item;
-    }
-    //else: no mouse capture to save
-
     DoCaptureMouse();
-    ms_winCaptureCurrent = (wxWindow*)this;
 
-    ms_winCaptureChanging = false;
+    wxMouseCapture::stack.push_back(static_cast<wxWindow*>(this));
 }
 
 void wxWindowBase::ReleaseMouse()
 {
     wxLogTrace(wxT("mousecapture"), wxT("ReleaseMouse(%p)"), static_cast<void*>(this));
 
-    wxASSERT_MSG( !ms_winCaptureChanging, wxT("recursive ReleaseMouse call?") );
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    wxASSERT_MSG( !guard.IsInside(), wxT("recursive ReleaseMouse call?") );
 
-    wxASSERT_MSG( GetCapture() == this,
-                  "attempt to release mouse, but this window hasn't captured it" );
-    wxASSERT_MSG( ms_winCaptureCurrent == this,
-                  "attempt to release mouse, but this window hasn't captured it" );
-
-    ms_winCaptureChanging = true;
+#if wxDEBUG_LEVEL
+    wxWindow* const winCapture = GetCapture();
+    if ( !winCapture )
+    {
+        wxFAIL_MSG
+        (
+          wxString::Format
+          (
+            "Releasing mouse in %p(%s) but it is not captured",
+            this, GetClassInfo()->GetClassName()
+          )
+        );
+    }
+    else if ( winCapture != this )
+    {
+        wxFAIL_MSG
+        (
+          wxString::Format
+          (
+            "Releasing mouse in %p(%s) but it is captured by %p(%s)",
+            this, GetClassInfo()->GetClassName(),
+            winCapture, winCapture->GetClassInfo()->GetClassName()
+          )
+        );
+    }
+#endif // wxDEBUG_LEVEL
 
     DoReleaseMouse();
-    ms_winCaptureCurrent = NULL;
 
-    if ( ms_winCaptureNext )
+    wxCHECK_RET( !wxMouseCapture::stack.empty(),
+                    "Releasing mouse capture but capture stack empty?" );
+    wxCHECK_RET( wxMouseCapture::stack.back() == this,
+                    "Window releasing mouse capture not top of capture stack?" );
+
+    wxMouseCapture::stack.pop_back();
+
+    // Restore the capture to the previous window, if any.
+    if ( !wxMouseCapture::stack.empty() )
     {
-        ((wxWindowBase*)ms_winCaptureNext->win)->DoCaptureMouse();
-        ms_winCaptureCurrent = ms_winCaptureNext->win;
-
-        wxWindowNext *item = ms_winCaptureNext;
-        ms_winCaptureNext = item->next;
-        delete item;
+        ((wxWindowBase*)wxMouseCapture::stack.back())->DoCaptureMouse();
     }
-    //else: stack is empty, no previous capture
-
-    ms_winCaptureChanging = false;
 
     wxLogTrace(wxT("mousecapture"),
-        (const wxChar *) wxT("After ReleaseMouse() mouse is captured by %p"),
+        wxT("After ReleaseMouse() mouse is captured by %p"),
         static_cast<void*>(GetCapture()));
 }
 
@@ -3219,26 +3352,17 @@ void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
     // a wx call to ReleaseMouse or CaptureMouse:
-    if ( ms_winCaptureChanging )
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    if ( guard.IsInside() )
         return;
 
     // if the capture was lost unexpectedly, notify every window that has
     // capture (on stack or current) about it and clear the stack:
-
-    if ( ms_winCaptureCurrent )
+    while ( !wxMouseCapture::stack.empty() )
     {
-        DoNotifyWindowAboutCaptureLost(ms_winCaptureCurrent);
-        ms_winCaptureCurrent = NULL;
-    }
+        DoNotifyWindowAboutCaptureLost(wxMouseCapture::stack.back());
 
-    while ( ms_winCaptureNext )
-    {
-        wxWindowNext *item = ms_winCaptureNext;
-        ms_winCaptureNext = item->next;
-
-        DoNotifyWindowAboutCaptureLost(item->win);
-
-        delete item;
+        wxMouseCapture::stack.pop_back();
     }
 }
 
@@ -3298,7 +3422,7 @@ bool wxWindowBase::TryAfter(wxEvent& event)
             wxWindow *parent = GetParent();
             if ( parent && !parent->IsBeingDeleted() )
             {
-                wxPropagateOnce propagateOnce(event);
+                wxPropagateOnce propagateOnce(event, this);
 
                 return parent->GetEventHandler()->ProcessEvent(event);
             }

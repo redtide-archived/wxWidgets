@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     1995
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -49,7 +48,7 @@ public:
     void OnPrint(wxCommandEvent& event);
     void OnPrintPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
-#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     void OnPrintPS(wxCommandEvent& event);
     void OnPrintPreviewPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);

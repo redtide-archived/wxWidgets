@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     30.09.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -518,9 +517,7 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
 
         if ( !facename.empty() )
         {
-            wxFont font(wxNORMAL_FONT->GetPointSize(),
-                        wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                        wxFONTWEIGHT_NORMAL, false, facename, encoding);
+            wxFont font(wxFontInfo().FaceName(facename).Encoding(encoding));
 
             DoChangeFont(font);
         }
@@ -978,10 +975,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     // and now create the correct font
     if ( !DoEnumerateFamilies(false, fontenc, true /* silent */) )
     {
-        wxFont font(wxNORMAL_FONT->GetPointSize(),
-                    wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-                    wxFONTWEIGHT_NORMAL, false /* !underlined */,
-                    wxEmptyString /* facename */, fontenc);
+        wxFont font(wxFontInfo(wxNORMAL_FONT->GetPointSize()).Encoding(fontenc));
         if ( font.IsOk() )
         {
             DoChangeFont(font);

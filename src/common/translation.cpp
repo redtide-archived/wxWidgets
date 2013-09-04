@@ -5,7 +5,6 @@
 //              Michael N. Filippov <michael@idisys.iae.nsk.su>
 //              (2003/09/30 - PluralForms support)
 // Created:     2010-04-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -101,6 +100,13 @@ void LogTraceArray(const char *prefix, const wxArrayString& arr)
     wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
 }
 
+void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
+{
+    wxLogTrace(TRACE_I18N, "%s:", prefix);
+    for ( wxArrayString::const_iterator i = arr.begin(); i != arr.end(); ++i )
+        wxLogTrace(TRACE_I18N, "    %s", *i);
+}
+
 // Use locale-based detection as a fallback
 wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available))
 {
@@ -155,13 +161,13 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
                 {
                     wxString lang(*j);
                     lang.Replace("-", "_");
-                    if ( available.Index(lang) != wxNOT_FOUND )
+                    if ( available.Index(lang, /*bCase=*/false) != wxNOT_FOUND )
                         return lang;
                     size_t pos = lang.find('_');
                     if ( pos != wxString::npos )
                     {
                         lang = lang.substr(0, pos);
-                        if ( available.Index(lang) != wxNOT_FOUND )
+                        if ( available.Index(lang, /*bCase=*/false) != wxNOT_FOUND )
                             return lang;
                     }
                 }
@@ -1512,7 +1518,6 @@ bool wxTranslations::AddCatalog(const wxString& domain,
 
 bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
 {
-    m_loader->GetAvailableTranslations(domain);
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
 
     wxMsgCatalog *cat = NULL;
@@ -1755,7 +1760,7 @@ wxArrayString gs_searchPrefixes;
 wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
 {
     // Search first in Unix-standard prefix/lang/LC_MESSAGES, then in
-    // prefix/lang and finally in just prefix.
+    // prefix/lang.
     //
     // Note that we use LC_MESSAGES on all platforms and not just Unix, because
     // it doesn't cost much to look into one more directory and doing it this
@@ -1765,13 +1770,19 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
     //    breaking apps after they are recompiled against the latest wx
     // b) it makes it possible to package app's support files in the same
     //    way on all target platforms
-    const wxString pathPrefix = wxFileName(prefix, lang).GetFullPath();
+    const wxString prefixAndLang = wxFileName(prefix, lang).GetFullPath();
 
     wxString searchPath;
-    searchPath.reserve(4*pathPrefix.length());
-    searchPath << pathPrefix << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
-            << prefix << wxFILE_SEP_PATH << wxPATH_SEP
-            << pathPrefix;
+    searchPath.reserve(4*prefixAndLang.length());
+
+    searchPath
+#ifdef __WXOSX__
+               << prefixAndLang << ".lproj/LC_MESSAGES" << wxPATH_SEP
+               << prefixAndLang << ".lproj" << wxPATH_SEP
+#endif
+               << prefixAndLang << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
+               << prefixAndLang << wxPATH_SEP
+               ;
 
     return searchPath;
 }
@@ -1784,7 +1795,7 @@ bool HasMsgCatalogInDir(const wxString& dir, const wxString& domain)
 
 // get prefixes to locale directories; if lang is empty, don't point to
 // OSX's .lproj bundles
-wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
+wxArrayString GetSearchPrefixes()
 {
     wxArrayString paths;
 
@@ -1794,15 +1805,7 @@ wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
 #if wxUSE_STDPATHS
     // then look in the standard location
     wxString stdp;
-    if ( lang.empty() )
-    {
-        stdp = wxStandardPaths::Get().GetResourcesDir();
-    }
-    else
-    {
-        stdp = wxStandardPaths::Get().
-            GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
-    }
+    stdp = wxStandardPaths::Get().GetResourcesDir();
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
 #endif // wxUSE_STDPATHS
@@ -1838,7 +1841,7 @@ wxString GetFullSearchPath(const wxString& lang)
     wxString searchPath;
     searchPath.reserve(500);
 
-    const wxArrayString prefixes = GetSearchPrefixes(lang);
+    const wxArrayString prefixes = GetSearchPrefixes();
 
     for ( wxArrayString::const_iterator i = prefixes.begin();
           i != prefixes.end();
@@ -1872,8 +1875,11 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
 {
     wxString searchPath = GetFullSearchPath(lang);
 
-    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
-                domain, searchPath);
+    LogTraceLargeArray
+    (
+        wxString::Format("looking for \"%s.mo\" in search path", domain),
+        wxSplit(searchPath, wxPATH_SEP[0])
+    );
 
     wxFileName fn(domain);
     fn.SetExt(wxS("mo"));
@@ -1895,9 +1901,11 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
     wxArrayString langs;
     const wxArrayString prefixes = GetSearchPrefixes();
 
-    wxLogTrace(TRACE_I18N,
-               "looking for available translations of \"%s\" in search path \"%s\"",
-               domain, wxJoin(prefixes, wxPATH_SEP[0]));
+    LogTraceLargeArray
+    (
+        wxString::Format("looking for available translations of \"%s\" in search path", domain),
+        prefixes
+    );
 
     for ( wxArrayString::const_iterator i = prefixes.begin();
           i != prefixes.end();
@@ -1924,7 +1932,8 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
 #endif // __WXOSX__
 
                 wxLogTrace(TRACE_I18N,
-                           "found %s translation of \"%s\"", lang, domain);
+                           "found %s translation of \"%s\" in %s",
+                           lang, domain, langdir);
                 langs.push_back(lang);
             }
         }

@@ -2,7 +2,6 @@
 // Name:        src/html/m_layout.cpp
 // Purpose:     wxHtml module for basic paragraphs/layout handling
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -355,7 +354,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
         {
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(clr, wxHTML_CLR_TRANSPARENT_BACKGROUND));
             winIface->SetHTMLBackgroundColour(clr);
         }
 

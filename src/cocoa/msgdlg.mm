@@ -3,7 +3,6 @@
 // Purpose:     wxMessageDialog for wxCocoa
 // Author:      Gareth Simpson
 // Created:     2007-10-09
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +30,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #import <AppKit/NSAlert.h>
 // ============================================================================
@@ -73,7 +72,7 @@ void wxCocoaMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& va
 
 int wxCocoaMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxAutoNSAutoreleasePool thePool;
 

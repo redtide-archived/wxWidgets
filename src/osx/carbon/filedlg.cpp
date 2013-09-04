@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,7 +25,7 @@
 #include "wx/filename.h"
 
 #include "wx/osx/private.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef __DARWIN__
     #include <Navigation.h>
@@ -456,12 +455,17 @@ static pascal void NavEventProc(
 }
 
 
-wxFileDialog::wxFileDialog(
+void wxFileDialog::Init()
+{
+}
+
+void wxFileDialog::Create(
     wxWindow *parent, const wxString& message,
     const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
     long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
-    : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
+    wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name);
+
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
 }
 
@@ -477,7 +481,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_paths.Empty();
     m_fileNames.Empty();

@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     12/12/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -49,7 +48,7 @@
 #include "wx/filectrl.h"
 #include "wx/generic/filedlgg.h"
 #include "wx/debug.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -309,7 +308,7 @@ wxBitmapButton* wxGenericFileDialog::AddBitmapButton( wxWindowID winId,
 
 int wxGenericFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     if (CreateExtraControl())
     {

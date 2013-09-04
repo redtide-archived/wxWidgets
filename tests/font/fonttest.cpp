@@ -3,7 +3,6 @@
 // Purpose:     wxFont unit test
 // Author:      Francesco Montorsi
 // Created:     16.3.09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,9 +102,6 @@ void FontTestCase::Construct()
     // compile because it's easy to introduce ambiguities due to the number of
     // overloaded wxFont ctors.
 
-    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT).IsOk() );
-    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
-                               wxFONTFLAG_DEFAULT).IsOk() );
     CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
                                wxFONTSTYLE_NORMAL,
                                wxFONTWEIGHT_NORMAL).IsOk() );
@@ -208,9 +204,12 @@ void FontTestCase::GetSet()
 
         // test Get/SetStrikethrough()
 
+        // Strike through support not implemented in wxOSX currently.
+#ifndef __WXOSX__
         test.SetStrikethrough(true);
         CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( true, test.GetStrikethrough() );
+#endif // !__WXOSX__
 
 
         // test Get/SetWeight()

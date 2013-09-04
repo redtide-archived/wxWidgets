@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,8 +41,12 @@
 #include <stdio.h>
 
 // ---------------------------------------------------------------------------
-// macors
+// macros
 // ---------------------------------------------------------------------------
+
+wxBEGIN_EVENT_TABLE(wxStaticBitmap, wxStaticBitmapBase)
+    EVT_SIZE(wxStaticBitmap::WXHandleSize)
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -204,6 +207,15 @@ wxSize wxStaticBitmap::DoGetBestClientSize() const
     }
 
     return size;
+}
+
+void wxStaticBitmap::WXHandleSize(wxSizeEvent& event)
+{
+    // Invalidate everything when our size changes as the image position (it's
+    // drawn centred in the window client area) changes.
+    Refresh();
+
+    event.Skip();
 }
 
 #ifndef __WXWINCE__

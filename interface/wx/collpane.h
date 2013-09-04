@@ -2,7 +2,6 @@
 // Name:        collpane.h
 // Purpose:     interface of wxCollapsiblePane
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +43,7 @@ public:
     void SetCollapsed(bool collapsed);
 };
 
-wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
+wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
 
 /**
     @class wxCollapsiblePane

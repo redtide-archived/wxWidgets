@@ -3,7 +3,6 @@
 // Purpose:     define wxSpinCtrl event types
 // Author:      Peter Most
 // Created:     01.11.08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,8 +27,8 @@
 
 #if wxUSE_SPINCTRL
 
-wxDEFINE_EVENT(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent);
+wxDEFINE_EVENT(wxEVT_SPINCTRL, wxSpinEvent);
+wxDEFINE_EVENT(wxEVT_SPINCTRLDOUBLE, wxSpinDoubleEvent);
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -75,9 +74,9 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl, "wx/spinctrl.h")
 wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
 wxEVENT_RANGE_PROPERTY( Spin, wxEVT_SCROLL_TOP, wxEVT_SCROLL_CHANGED, wxSpinEvent )
 
-wxEVENT_PROPERTY( Updated, wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEvent )
-wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
-wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxEVENT_PROPERTY( Updated, wxEVT_SPINCTRL, wxCommandEvent )
+wxEVENT_PROPERTY( TextUpdated, wxEVT_TEXT, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_TEXT_ENTER, wxCommandEvent )
 
 wxPROPERTY( ValueString, wxString, SetValue, GetValue, \
            wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, wxT("Helpstring"), wxT("group")) ;

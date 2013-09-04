@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/14/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -836,7 +835,7 @@ void wxPMDCImpl::DoDrawPoint(
 } // end of wxPMDCImpl::DoDrawPoint
 
 void wxPMDCImpl::DoDrawPolygon( int n,
-                          wxPoint vPoints[],
+                          const wxPoint vPoints[],
                           wxCoord vXoffset,
                           wxCoord vYoffset,
                           wxPolygonFillMode nFillStyle )
@@ -903,7 +902,7 @@ void wxPMDCImpl::DoDrawPolygon( int n,
 
 void wxPMDCImpl::DoDrawLines(
   int                               n
-, wxPoint                           vPoints[]
+, const wxPoint                           vPoints[]
 , wxCoord                           vXoffset
 , wxCoord                           vYoffset
 )

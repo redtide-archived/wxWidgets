@@ -3,7 +3,6 @@
 // Purpose:     wxTreeListCtrl class documentation
 // Author:      Vadim Zeitlin
 // Created:     2011-08-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -219,7 +218,7 @@ extern const wxTreeListItem wxTLI_LAST;
 
     @beginEventTable{wxTreeListEvent}
     @event{EVT_TREELIST_SELECTION_CHANGED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_SELECTION_CHANGED event and notifies
+        Process @c wxEVT_TREELIST_SELECTION_CHANGED event and notifies
         about the selection change in the control. In the single selection case
         the item indicated by the event has been selected and previously
         selected item, if any, was deselected. In multiple selection case, the
@@ -228,26 +227,26 @@ extern const wxTreeListItem wxTLI_LAST;
         could have changed as well, use wxTreeListCtrl::GetSelections() to
         retrieve the new selection if necessary.
     @event{EVT_TREELIST_ITEM_EXPANDING(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_EXPANDING event notifying about
+        Process @c wxEVT_TREELIST_ITEM_EXPANDING event notifying about
         the given branch being expanded. This event is sent before the
         expansion occurs and can be vetoed to prevent it from happening.
     @event{EVT_TREELIST_ITEM_EXPANDED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_EXPANDED event notifying about
+        Process @c wxEVT_TREELIST_ITEM_EXPANDED event notifying about
         the expansion of the given branch. This event is sent after the
         expansion occurs and can't be vetoed.
     @event{EVT_TREELIST_ITEM_CHECKED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_CHECKED event notifying about
+        Process @c wxEVT_TREELIST_ITEM_CHECKED event notifying about
         the user checking or unchecking the item. You can use
         wxTreeListCtrl::GetCheckedState() to retrieve the new item state and
         wxTreeListEvent::GetOldCheckedState() to get the previous one.
     @event{EVT_TREELIST_ITEM_ACTIVATED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_ACTIVATED event notifying about
+        Process @c wxEVT_TREELIST_ITEM_ACTIVATED event notifying about
         the user double clicking the item or activating it from keyboard.
     @event{EVT_TREELIST_ITEM_CONTEXT_MENU(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU event indicating
+        Process @c wxEVT_TREELIST_ITEM_CONTEXT_MENU event indicating
         that the popup menu for the given item should be displayed.
     @event{EVT_TREELIST_COLUMN_SORTED(id, func)}
-        Process @c wxEVT_COMMAND_TREELIST_COLUMN_SORTED event indicating that
+        Process @c wxEVT_TREELIST_COLUMN_SORTED event indicating that
         the control contents has just been resorted using the specified column.
         The event doesn't carry the sort direction, use GetSortColumn() method
         if you need to know it.
@@ -460,6 +459,8 @@ public:
             wxTLI_FIRST or wxTLI_LAST indicating that the item should be either
             inserted before the first child of its parent (if any) or after the
             last one.
+        @param text
+            The item text.
         @param imageClosed
             The normal item image, may be NO_IMAGE to not show any image.
         @param imageOpened
@@ -909,7 +910,7 @@ public:
     /**
         Return the previous state of the item checkbox.
 
-        This method can be used with @c wxEVT_COMMAND_TREELIST_ITEM_CHECKED
+        This method can be used with @c wxEVT_TREELIST_ITEM_CHECKED
         events only.
 
         Notice that the new state of the item can be retrieved using
@@ -920,7 +921,7 @@ public:
     /**
         Return the column affected by the event.
 
-        This is currently only used with @c wxEVT_COMMAND_TREELIST_COLUMN_SORTED
+        This is currently only used with @c wxEVT_TREELIST_COLUMN_SORTED
         event.
      */
     unsigned GetColumn() const;
@@ -937,10 +938,10 @@ public:
     wxEVENT_HANDLER_CAST(wxTreeListEventFunction, func)
 
 
-wxEventType wxEVT_COMMAND_TREELIST_SELECTION_CHANGED;
-wxEventType wxEVT_COMMAND_TREELIST_ITEM_EXPANDING;
-wxEventType wxEVT_COMMAND_TREELIST_ITEM_EXPANDED;
-wxEventType wxEVT_COMMAND_TREELIST_ITEM_CHECKED;
-wxEventType wxEVT_COMMAND_TREELIST_ITEM_ACTIVATED;
-wxEventType wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU;
-wxEventType wxEVT_COMMAND_TREELIST_COLUMN_SORTED;
+wxEventType wxEVT_TREELIST_SELECTION_CHANGED;
+wxEventType wxEVT_TREELIST_ITEM_EXPANDING;
+wxEventType wxEVT_TREELIST_ITEM_EXPANDED;
+wxEventType wxEVT_TREELIST_ITEM_CHECKED;
+wxEventType wxEVT_TREELIST_ITEM_ACTIVATED;
+wxEventType wxEVT_TREELIST_ITEM_CONTEXT_MENU;
+wxEventType wxEVT_TREELIST_COLUMN_SORTED;

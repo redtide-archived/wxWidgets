@@ -2,7 +2,6 @@
 // Name:        src/gtk/clipbrd.cpp
 // Purpose:     wxClipboard implementation for wxGTK
 // Author:      Robert Roebling, Vadim Zeitlin
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 //              (c) 2007 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -434,6 +433,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
 {
+    m_idSelectionGetHandler = 0;
+
     m_open = false;
 
     m_dataPrimary =
@@ -642,9 +643,13 @@ bool wxClipboard::AddData( wxDataObject *data )
         AddSupportedTarget(format);
     }
 
-    g_signal_connect (m_clipboardWidget, "selection_get",
+    if ( !m_idSelectionGetHandler )
+    {
+        m_idSelectionGetHandler = g_signal_connect (
+                      m_clipboardWidget, "selection_get",
                       G_CALLBACK (selection_handler),
                       GUINT_TO_POINTER (gtk_get_current_event_time()) );
+    }
 
     // tell the world we offer clipboard data
     return SetSelectionOwner();

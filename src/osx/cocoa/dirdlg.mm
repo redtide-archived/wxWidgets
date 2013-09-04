@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-08-30
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,13 +31,18 @@
 
 #include "wx/filename.h"
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include "wx/osx/private.h"
 
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
-wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
+void wxDirDialog::Init()
+{
+    m_sheetDelegate = nil;
+}
+
+void wxDirDialog::Create(wxWindow *parent, const wxString& message,
         const wxString& defaultPath, long style, const wxPoint& WXUNUSED(pos),
         const wxSize& WXUNUSED(size), const wxString& WXUNUSED(name))
 {
@@ -95,7 +99,7 @@ void wxDirDialog::ShowWindowModal()
 
 int wxDirDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxCFEventLoopPauseIdleEvents pause;
 

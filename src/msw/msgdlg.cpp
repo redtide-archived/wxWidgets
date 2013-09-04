@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,10 +41,10 @@
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
+#include "wx/fontutil.h"
 
 #if wxUSE_MSGBOX_HOOK
-    #include "wx/fontutil.h"
     #include "wx/textbuf.h"
     #include "wx/display.h"
 #endif
@@ -592,7 +591,7 @@ int wxMessageDialog::ShowMessageBox()
 
 int wxMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
@@ -627,6 +626,18 @@ int wxMessageDialog::ShowModal()
 #endif // wxHAS_MSW_TASKDIALOG
 
     return ShowMessageBox();
+}
+
+long wxMessageDialog::GetEffectiveIcon() const
+{
+    // only use the auth needed icon if available, otherwise fallback to the default logic
+    if ( (m_dialogStyle & wxICON_AUTH_NEEDED) &&
+        wxMSWMessageDialog::HasNativeTaskDialog() )
+    {
+        return wxICON_AUTH_NEEDED;
+    }
+
+    return wxMessageDialogBase::GetEffectiveIcon();
 }
 
 void wxMessageDialog::DoCentre(int dir)
@@ -737,6 +748,10 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
         case wxICON_INFORMATION:
             tdc.pszMainIcon = TD_INFORMATION_ICON;
+            break;
+
+        case wxICON_AUTH_NEEDED:
+            tdc.pszMainIcon = TD_SHIELD_ICON;
             break;
     }
 

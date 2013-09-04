@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -236,7 +235,7 @@ void * wxChoice::DoGetItemClientData(unsigned int n) const
 
 bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+    SendSelectionChangedEvent(wxEVT_CHOICE);
 
     return true ;
 }

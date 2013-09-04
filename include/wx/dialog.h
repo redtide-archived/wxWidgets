@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29.06.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -12,8 +11,8 @@
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
-#include "wx/defs.h"
 #include "wx/toplevel.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxStdDialogButtonSizer;
@@ -65,10 +64,10 @@ enum wxDialogModality
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 
-class WXDLLIMPEXP_CORE wxDialogBase : public wxTopLevelWindow
+class WXDLLIMPEXP_CORE wxDialogBase : public wxNavigationEnabled<wxTopLevelWindow>
 {
 public:
-    wxDialogBase() { Init(); }
+    wxDialogBase();
     virtual ~wxDialogBase() { }
 
     // define public wxDialog methods to be implemented by the derived classes
@@ -242,9 +241,6 @@ protected:
     static bool                         sm_layoutAdaptation;
 
 private:
-    // common part of all ctors
-    void Init();
-
     // helper of GetParentForModalDialog(): returns the passed in window if it
     // can be used as our parent or NULL if it can't
     wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;

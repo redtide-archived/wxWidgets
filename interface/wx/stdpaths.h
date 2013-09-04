@@ -2,7 +2,6 @@
 // Name:        stdpaths.h
 // Purpose:     interface of wxStandardPaths
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -363,5 +362,15 @@ public:
         @since 2.9.0
     */
     void UseAppInfo(int info);
+
+protected:
+    /**
+        Protected default constructor.
+
+        This constructor is protected in order to prevent creation of objects
+        of this class as Get() should be used instead to access the unique
+        global wxStandardPaths object of the correct type.
+     */
+    wxStandardPaths();
 };
 

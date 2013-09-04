@@ -4,7 +4,6 @@
 // Author:      Benjamin I. Williams
 // Modified by: Jens Lody (moved from auibook.cpp in extra file)
 // Created:     2012-03-21
-// RCS-ID:      $Id:$
 // Copyright:   (C) Copyright 2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,7 +49,7 @@ public:
 
     bool ProcessEvent(wxEvent& evt)
     {
-        if (evt.GetEventType() == wxEVT_COMMAND_MENU_SELECTED)
+        if (evt.GetEventType() == wxEVT_MENU)
         {
             m_lastId = evt.GetId();
             return true;

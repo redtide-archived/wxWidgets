@@ -3,7 +3,6 @@
 // Purpose:     interface of wxHeaderCtrl
 // Author:      Vadim Zeitlin
 // Created:     2008-12-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -708,16 +707,16 @@ public:
 
 
 
-wxEventType wxEVT_COMMAND_HEADER_CLICK;
-wxEventType wxEVT_COMMAND_HEADER_RIGHT_CLICK;
-wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK;
-wxEventType wxEVT_COMMAND_HEADER_DCLICK;
-wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
-wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
-wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
-wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
-wxEventType wxEVT_COMMAND_HEADER_RESIZING;
-wxEventType wxEVT_COMMAND_HEADER_END_RESIZE;
-wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER;
-wxEventType wxEVT_COMMAND_HEADER_END_REORDER;
-wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
+wxEventType wxEVT_HEADER_CLICK;
+wxEventType wxEVT_HEADER_RIGHT_CLICK;
+wxEventType wxEVT_HEADER_MIDDLE_CLICK;
+wxEventType wxEVT_HEADER_DCLICK;
+wxEventType wxEVT_HEADER_RIGHT_DCLICK;
+wxEventType wxEVT_HEADER_MIDDLE_DCLICK;
+wxEventType wxEVT_HEADER_SEPARATOR_DCLICK;
+wxEventType wxEVT_HEADER_BEGIN_RESIZE;
+wxEventType wxEVT_HEADER_RESIZING;
+wxEventType wxEVT_HEADER_END_RESIZE;
+wxEventType wxEVT_HEADER_BEGIN_REORDER;
+wxEventType wxEVT_HEADER_END_REORDER;
+wxEventType wxEVT_HEADER_DRAGGING_CANCELLED;

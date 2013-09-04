@@ -9,7 +9,6 @@
 //              Added wxWIZARD_HELP event
 //              Robert Vazan (sizers)
 // Created:     15.08.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,7 +146,15 @@ public:
     void SetPrev(wxWizardPage *prev) { m_prev = prev; }
     void SetNext(wxWizardPage *next) { m_next = next; }
 
-    // a convenience function to make the pages follow each other
+    // Convenience functions to make the pages follow each other without having
+    // to call their SetPrev() or SetNext() explicitly.
+    wxWizardPageSimple& Chain(wxWizardPageSimple* next)
+    {
+        SetNext(next);
+        next->SetPrev(this);
+        return *next;
+    }
+
     static void Chain(wxWizardPageSimple *first, wxWizardPageSimple *second)
     {
         wxCHECK_RET( first && second,

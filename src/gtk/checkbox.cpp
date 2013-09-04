@@ -2,7 +2,6 @@
 // Name:        src/gtk/checkbox.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
         }
     }
 
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
+    wxCommandEvent event(wxEVT_CHECKBOX, cb->GetId());
     event.SetInt(cb->Get3StateValue());
     event.SetEventObject(cb);
     cb->HandleWindowEvent(event);

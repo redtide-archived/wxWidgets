@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2004-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1287,7 +1286,7 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
         // switched to one that has wxButton as well.
         askColour = true;
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    else if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         // Must override index detection since at this point GetIndex()
         // will return old value.
@@ -1828,6 +1827,8 @@ wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString&
 
     m_pImage = NULL;
     m_pBitmap = NULL;
+
+    LoadImageFromFile();
 }
 
 wxImageFileProperty::~wxImageFileProperty()
@@ -1846,6 +1847,11 @@ void wxImageFileProperty::OnSetValue()
     wxDELETE(m_pImage);
     wxDELETE(m_pBitmap);
 
+    LoadImageFromFile();
+}
+
+void wxImageFileProperty::LoadImageFromFile()
+{
     wxFileName filename = GetFileName();
 
     // Create the image thumbnail

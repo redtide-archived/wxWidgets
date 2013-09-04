@@ -4,7 +4,6 @@
 // Author:      DavidStefan Csomor
 // Modified by:
 // Created:     2008-06-20
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -145,6 +144,8 @@ bool shouldHandleSelector(SEL selector)
 // wx native implementation 
 //
 
+static NSResponder* s_nextFirstResponder = NULL;
+
 @interface wxNSWindow : NSWindow
 {
 }
@@ -152,6 +153,7 @@ bool shouldHandleSelector(SEL selector)
 - (void) sendEvent:(NSEvent *)event;
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSWindow
@@ -206,6 +208,14 @@ bool shouldHandleSelector(SEL selector)
     return YES;
 }
 
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    s_nextFirstResponder = aResponder;
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = nil;
+    return retval;
+}
+
 @end
 
 @interface wxNSPanel : NSPanel
@@ -215,6 +225,7 @@ bool shouldHandleSelector(SEL selector)
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
 - (void)sendEvent:(NSEvent *)event;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSPanel
@@ -263,6 +274,14 @@ bool shouldHandleSelector(SEL selector)
         if (wxTheApp)
             wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
     }
+}
+
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    s_nextFirstResponder = aResponder;
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = nil;
+    return retval;
 }
 
 @end
@@ -450,7 +469,7 @@ extern int wxOSXGetIdFromSelector(SEL action );
         if ( wxpeer )
         {
             wxpeer->HandleActivated(0, false);
-            // as for wx the deactivation also means loosing focus we
+            // as for wx the deactivation also means losing focus we
             // must trigger this manually
             [window makeFirstResponder:nil];
             
@@ -484,6 +503,19 @@ extern int wxOSXGetIdFromSelector(SEL action );
         }
         return editor;
     } 
+    else if ([anObject isKindOfClass:[wxNSComboBox class]])
+    {
+        wxNSComboBox * cb = (wxNSComboBox*) anObject;
+        wxNSTextFieldEditor* editor = [cb fieldEditor];
+        if ( editor == nil )
+        {
+            editor = [[wxNSTextFieldEditor alloc] init];
+            [editor setFieldEditor:YES];
+            [cb setFieldEditor:editor];
+            [editor release];
+        }
+        return editor;
+    }    
  
     return nil;
 }
@@ -555,11 +587,11 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( style & wxFRAME_TOOL_WINDOW || ( style & wxPOPUP_WINDOW ) ||
             GetWXPeer()->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
-    {
         m_macWindow = [wxNSPanel alloc];
-    }
     else
         m_macWindow = [wxNSWindow alloc];
+
+    [m_macWindow setAcceptsMouseMovedEvents:YES];
 
     CGWindowLevel level = kCGNormalWindowLevel;
 
@@ -626,7 +658,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     // If the parent is modal, windows with wxFRAME_FLOAT_ON_PARENT style need
     // to be in kCGUtilityWindowLevel and not kCGFloatingWindowLevel to stay
     // above the parent.
-    wxDialog * const parentDialog = wxDynamicCast(parent, wxDialog);
+    wxDialog * const parentDialog = parent == NULL ? NULL : wxDynamicCast(parent->MacGetTopLevelWindow(), wxDialog);
     if (parentDialog && parentDialog->IsModal())
     {
         if (level == kCGFloatingWindowLevel)
@@ -771,7 +803,8 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
 
 void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
 {
-    if (m_macWindow)
+    // don't mess with native wrapped windows, they might throw an exception when their level is changed
+    if (!m_wxPeer->IsNativeWindowWrapper() && m_macWindow)
     {
         CGWindowLevel level = kCGNormalWindowLevel;
         
@@ -1026,6 +1059,12 @@ void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
     if ( [m_macWindow level] != m_macWindowLevel )
         [m_macWindow setLevel:m_macWindowLevel];
 }
+
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetNextFirstResponder()
+{
+    return s_nextFirstResponder;
+}
+
 
 //
 //

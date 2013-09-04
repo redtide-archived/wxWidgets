@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -543,6 +542,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     // check if we have something more than a simple text item
 #if wxUSE_OWNER_DRAWN
+    bool makeItemOwnerDrawn = false;
     if ( pItem->IsOwnerDrawn() )
     {
 #ifndef __DMC__
@@ -696,6 +696,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 // set menu as ownerdrawn
                 m_ownerDrawn = true;
 
+                // also ensure that the new item itself is made owner drawn
+                makeItemOwnerDrawn = true;
+
                 ResetMaxAccelWidth();
             }
             // only update our margin for equals alignment to other item
@@ -726,6 +729,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             wxLogLastError(wxT("InsertMenu[Item]()"));
 
             return false;
+        }
+
+        if ( makeItemOwnerDrawn )
+        {
+            SetOwnerDrawnMenuItem(GetHmenu(), pos,
+                                  reinterpret_cast<ULONG_PTR>(pItem), TRUE);
         }
     }
 
@@ -1533,6 +1542,10 @@ void wxMenuBar::RebuildAccelTable()
         SetAcceleratorTable(wxAcceleratorTable(nAccelCount, accelEntries));
 
         delete [] accelEntries;
+    }
+    else // No (more) accelerators.
+    {
+        SetAcceleratorTable(wxAcceleratorTable());
     }
 }
 

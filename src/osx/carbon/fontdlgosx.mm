@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2004-10-03
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +27,7 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 // ============================================================================
 // implementation
@@ -435,7 +434,7 @@ bool wxFontDialog::Create(wxWindow *parent)
 
 int wxFontDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens

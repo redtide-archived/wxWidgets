@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/dcprint.h"
 #include "wx/paper.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <stdlib.h>
 
@@ -396,7 +395,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
 
     // From MSDN: How To Modify Printer Settings with the DocumentProperties() Function
     // The purpose of this is to fill the DEVMODE with privdata from printer driver.
-    // If we have a printer name and OpenPrinter sucessfully returns
+    // If we have a printer name and OpenPrinter successfully returns
     // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
     if ( !m_devMode && !printerName.IsEmpty() )
     {
@@ -739,7 +738,7 @@ wxWindowsPrintDialog::~wxWindowsPrintDialog()
 
 int wxWindowsPrintDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     ConvertToNative( m_printDialogData );
 
@@ -960,7 +959,7 @@ wxWindowsPageSetupDialog::~wxWindowsPageSetupDialog()
 
 int wxWindowsPageSetupDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     ConvertToNative( m_pageSetupData );
 

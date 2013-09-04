@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/15/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -971,7 +970,7 @@ bool wxSlider::OS2OnScroll( int    WXUNUSED(nOrientation),
     vEvent.SetEventObject(this);
     HandleWindowEvent(vEvent);
 
-    wxCommandEvent vCevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+    wxCommandEvent vCevent( wxEVT_SLIDER, GetId() );
 
     vCevent.SetInt(nNewPos);
     vCevent.SetEventObject(this);

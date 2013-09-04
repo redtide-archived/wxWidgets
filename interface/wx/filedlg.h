@@ -2,7 +2,6 @@
 // Name:        filedlg.h
 // Purpose:     interface of wxFileDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -182,6 +181,26 @@ public:
         Destructor.
     */
     virtual ~wxFileDialog();
+
+    /**
+        Returns the path of the file currently selected in dialog.
+
+        Notice that this file is not necessarily going to be accepted by the
+        user, so calling this function mostly makes sense from an update UI
+        event handler of a custom file dialog extra control to update its state
+        depending on the currently selected file.
+
+        Currently this function is fully implemented under GTK and MSW and
+        always returns an empty string elsewhere.
+
+        @since 2.9.5
+
+        @return The path of the currently selected file or an empty string if
+            nothing is selected.
+
+        @see SetExtraControlCreator()
+    */
+    virtual wxString GetCurrentlySelectedFilename() const;
 
     /**
         Returns the default directory.

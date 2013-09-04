@@ -2,7 +2,6 @@
 // Name:        filename.h
 // Purpose:     interface of wxFileName
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -337,12 +336,17 @@ public:
                wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Appends a directory component to the path. This component should contain a
-        single directory name level, i.e. not contain any path or volume separators nor
-        should it be empty, otherwise the function does nothing (and generates an
-        assert failure in debug build).
+        Appends a directory component to the path.
+
+        This component should contain a single directory name level, i.e. not
+        contain any path or volume separators nor should it be empty, otherwise
+        the function does nothing and returns false (and generates an assert
+        failure in debug build).
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void AppendDir(const wxString& dir);
+    bool AppendDir(const wxString& dir);
 
     /**
         Creates the file name from another filename object.
@@ -841,10 +845,16 @@ public:
     bool HasVolume() const;
 
     /**
-        Inserts a directory component before the zero-based position in the directory
-        list. Please see AppendDir() for important notes.
+        Inserts a directory component before the zero-based position in the
+        directory list.
+
+        As with AppendDir(), @a dir must be a single directory name and the
+        function returns @false and does nothing else if it isn't.
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void InsertDir(size_t before, const wxString& dir);
+    bool InsertDir(size_t before, const wxString& dir);
 
     /**
         Returns @true if this filename is absolute.
@@ -1247,8 +1257,29 @@ public:
     void SetPath(const wxString& path, wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Sets permissions for this file or directory.
+
+        @param permissions
+            The new permissions: this should be a combination of
+            ::wxPosixPermissions enum elements.
+
+        @since 3.0
+
+        @note If this is a symbolic link and it should not be followed
+              this call will fail.
+
+        @return @true on success, @false if an error occurred (for example,
+                the file doesn't exist).
+    */
+    bool SetPermissions(int permissions)
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
+
+        Notice that the file creation time can't be changed under Unix, so @a
+        dtCreate is ignored there (but @true is still returned). Under Windows
+        all three times can be set.
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,

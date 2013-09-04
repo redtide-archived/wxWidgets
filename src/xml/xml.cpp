@@ -3,7 +3,6 @@
 // Purpose:     wxXmlDocument - XML parser & data holder class
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -92,6 +91,22 @@ wxXmlNode::wxXmlNode(const wxXmlNode& node)
 
 wxXmlNode::~wxXmlNode()
 {
+    DoFree();
+}
+
+wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
+{
+    if ( &node != this )
+    {
+        DoFree();
+        DoCopy(node);
+    }
+
+    return *this;
+}
+
+void wxXmlNode::DoFree()
+{
     wxXmlNode *c, *c2;
     for (c = m_children; c; c = c2)
     {
@@ -105,14 +120,6 @@ wxXmlNode::~wxXmlNode()
         p2 = p->GetNext();
         delete p;
     }
-}
-
-wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
-{
-    wxDELETE(m_attrs);
-    wxDELETE(m_children);
-    DoCopy(node);
-    return *this;
 }
 
 void wxXmlNode::DoCopy(const wxXmlNode& node)

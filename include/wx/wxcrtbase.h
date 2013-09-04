@@ -5,7 +5,6 @@
  * Author:      Joel Farley, Ove Kaaven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
- * RCS-ID:      $Id$
  * Copyright:   (c) 1998-2006 wxWidgets dev team
  * Licence:     wxWindows licence
  */
@@ -164,14 +163,15 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #define wxCRT_StrxfrmW   wcsxfrm
 #endif /* __WXWINCE__ */
 
-/* Almost all compiler have strdup(), but VC++ for CE doesn't provide it.
-   Another special case is gcc in strict ANSI mode: normally it doesn't provide
-   strdup() but MinGW does provide it under MSVC-compatible name so test for it
-   before checking __WX_STRICT_ANSI_GCC__. */
-#if (defined(__VISUALC__) && __VISUALC__ >= 1400) || \
-    defined(__MINGW32__)
+/* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
+   And it's not available in MinGW strict ANSI mode nor under Windows CE. */
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400)
     #define wxCRT_StrdupA _strdup
-#elif !(defined(__WXWINCE__) || defined(__WX_STRICT_ANSI_GCC__))
+#elif defined(__MINGW32__)
+    #ifndef __WX_STRICT_ANSI_GCC__
+        #define wxCRT_StrdupA _strdup
+    #endif
+#elif !defined(__WXWINCE__)
     #define wxCRT_StrdupA strdup
 #endif
 
@@ -248,7 +248,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         defined(__EMX__) || defined(__DJGPP__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
-#elif defined(__SYMANTEC__) || defined(__VISUALC__)
+#elif defined(__SYMANTEC__) || (defined(__VISUALC__) && !defined(__WXWINCE__))
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp
 #elif defined(__UNIX__) || (defined(__GNUWIN32__) && !defined(__WX_STRICT_ANSI_GCC__))

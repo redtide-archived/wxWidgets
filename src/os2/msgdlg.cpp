@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/10/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,7 +21,7 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 #include "wx/os2/private.h"
 
 #include <stdlib.h>
@@ -35,7 +34,7 @@ IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 int wxMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     HWND                            hWnd = 0;
     ULONG                           ulStyle = MB_OK;

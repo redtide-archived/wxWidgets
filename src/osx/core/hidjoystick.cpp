@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2/13/2005
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -566,7 +565,7 @@ void wxHIDJoystick::BuildCookies(CFArrayRef Array)
 
     //
     // I wasted two hours of my life on this line :(
-    // accidently removed it during some source cleaning...
+    // accidentally removed it during some source cleaning...
     //
     MakeCookies(Array);
 

@@ -3,7 +3,6 @@
 // Purpose:     SVG sample
 // Author:      Chris Elliott
 // Modified by:
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -209,7 +208,7 @@ void wxSVGFileDCImpl::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2
     CalcBoundingBox(x2, y2);
 }
 
-void wxSVGFileDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset , wxCoord yoffset )
+void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset , wxCoord yoffset )
 {
     for ( int i = 1; i < n; i++ )
     {
@@ -322,7 +321,7 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     CalcBoundingBox(x + width, y + height);
 }
 
-void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                                     wxCoord xoffset, wxCoord yoffset,
                                     wxPolygonFillMode fillStyle)
 {

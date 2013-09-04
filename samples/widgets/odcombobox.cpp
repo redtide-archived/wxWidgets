@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxOwnerDrawnComboBox
 // Author:      Jaakko Salli (based on combobox page by Vadim Zeitlin)
 // Created:     Jul-28-2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -764,7 +763,7 @@ void ODComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
     wxASSERT_MSG( s == m_combobox->GetValue(),
                   wxT("event and combobox values should be the same") );
 
-    if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
         wxLogMessage(wxT("OwnerDrawnCombobox enter pressed (now '%s')"), s.c_str());
     }

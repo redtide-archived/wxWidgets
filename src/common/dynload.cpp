@@ -5,7 +5,6 @@
 //               (derived in part from dynlib.cpp (c) 1998 Guilhem Lavaux)
 // Modified by:
 // Created:      03/12/01
-// RCS-ID:       $Id$
 // Copyright:    (c) 2001 Ron Lee <ron@debian.org>
 // Licence:      wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -284,7 +283,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
     wxString realname(libname);
 
     if( !(flags & wxDL_VERBATIM) )
-        realname += wxDynamicLibrary::GetDllExt();
+        realname += wxDynamicLibrary::GetDllExt(wxDL_MODULE);
 
     wxPluginLibrary *entry;
 
@@ -343,7 +342,7 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
 
     if ( !entry )
     {
-        realname += wxDynamicLibrary::GetDllExt();
+        realname += wxDynamicLibrary::GetDllExt(wxDL_MODULE);
 
         entry = FindByName(realname);
     }

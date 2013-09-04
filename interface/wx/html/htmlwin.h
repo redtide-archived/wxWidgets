@@ -2,7 +2,6 @@
 // Name:        html/htmlwin.h
 // Purpose:     interface of wxHtmlWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -511,9 +510,9 @@ protected:
 
 
 
-wxEventType wxEVT_COMMAND_HTML_CELL_CLICKED;
-wxEventType wxEVT_COMMAND_HTML_CELL_HOVER;
-wxEventType wxEVT_COMMAND_HTML_LINK_CLICKED;
+wxEventType wxEVT_HTML_CELL_CLICKED;
+wxEventType wxEVT_HTML_CELL_HOVER;
+wxEventType wxEVT_HTML_LINK_CLICKED;
 
 
 /**

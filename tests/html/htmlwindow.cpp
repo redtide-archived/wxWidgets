@@ -3,7 +3,6 @@
 // Purpose:     wxHtmlWindow tests
 // Author:      Vaclav Slavik
 // Created:     2008-10-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vaclav Slavik <vslavik@fastmail.fm>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -120,7 +119,7 @@ void HtmlWindowTestCase::Title()
 #if wxUSE_UIACTIONSIMULATOR
 void HtmlWindowTestCase::CellClick()
 {
-    EventCounter clicked(m_win, wxEVT_COMMAND_HTML_CELL_CLICKED);
+    EventCounter clicked(m_win, wxEVT_HTML_CELL_CLICKED);
 
     wxUIActionSimulator sim;
 
@@ -139,7 +138,7 @@ void HtmlWindowTestCase::CellClick()
 
 void HtmlWindowTestCase::LinkClick()
 {
-    EventCounter clicked(m_win, wxEVT_COMMAND_HTML_LINK_CLICKED);
+    EventCounter clicked(m_win, wxEVT_HTML_LINK_CLICKED);
 
     wxUIActionSimulator sim;
 

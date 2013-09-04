@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/14/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,7 +25,7 @@
 #include "wx/os2/private.h"
 #include "wx/evtloop.h"
 #include "wx/scopedptr.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300
@@ -220,7 +219,7 @@ bool wxDialog::Show( bool bShow )
 //
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxASSERT_MSG( !IsModal(), wxT("wxDialog::ShowModal() reentered?") );
 

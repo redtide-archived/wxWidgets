@@ -2,7 +2,6 @@
 // Name:        const_cpp.h
 // Purpose:     Preprocessor symbols
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -157,7 +156,7 @@ compiler used.
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 11, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
+                    5 to 12, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
                     for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
@@ -248,6 +247,12 @@ with the corresponding library. The following symbols are honoured:
 Notice that the base library is always included and the core is always included
 for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 
+If the makefiles have been used to build the libraries from source and the @c CFG
+variable has been set to specify a different output path for that particular
+configuration of build then the @c wxCFG preprocessor symbol should be set in
+the project that uses wxWidgets to the same value as the @c CFG variable in
+order for the correct @c wx/setup.h file to automatically be included for that
+configuration.
 
 @section page_cppconst_miscellaneous Miscellaneous
 

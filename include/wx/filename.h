@@ -4,24 +4,12 @@
 // Author:      Robert Roebling, Vadim Zeitlin
 // Modified by:
 // Created:     28.12.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _WX_FILENAME_H_
 #define   _WX_FILENAME_H_
-
-/*
-    TODO:
-
-    1. support for drives under Windows
-    2. more file operations:
-        a) chmod()
-        b) [acm]time() - get and set
-        c) rename()?
-    3. SameFileAs() function to compare inodes under Unix
- */
 
 #include "wx/arrstr.h"
 #include "wx/filefn.h"
@@ -266,6 +254,10 @@ public:
     bool IsFileExecutable() const { return wxIsExecutable(GetFullPath()); }
     static bool IsFileExecutable(const wxString &path) { return wxFileExists(path) && wxIsExecutable(path); }
 
+        // set the file permissions to a combination of wxPosixPermissions enum
+        // values
+    bool SetPermissions(int permissions);
+
 
     // time functions
 #if wxUSE_DATETIME
@@ -490,16 +482,16 @@ public:
 
     // Dir accessors
     size_t GetDirCount() const { return m_dirs.size(); }
-    void AppendDir(const wxString& dir);
+    bool AppendDir(const wxString& dir);
     void PrependDir(const wxString& dir);
-    void InsertDir(size_t before, const wxString& dir);
+    bool InsertDir(size_t before, const wxString& dir);
     void RemoveDir(size_t pos);
     void RemoveLastDir() { RemoveDir(GetDirCount() - 1); }
 
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; m_hasExt = !m_ext.empty(); }
-    void ClearExt()                             { m_ext = wxEmptyString; m_hasExt = false; }
-    void SetEmptyExt()                          { m_ext = wxT(""); m_hasExt = true; }
+    void ClearExt()                             { m_ext.clear(); m_hasExt = false; }
+    void SetEmptyExt()                          { m_ext.clear(); m_hasExt = true; }
     wxString GetExt() const                     { return m_ext; }
     bool HasExt() const                         { return m_hasExt; }
 

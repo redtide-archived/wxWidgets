@@ -3,7 +3,6 @@
 // Purpose:     Test the new event types and wxEvtHandler-methods
 // Author:      Peter Most
 // Created:     2009-01-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Peter Most
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +79,9 @@ void GlobalOnEvent(wxEvent&)
     g_called.function = true;
 }
 
+#ifdef TEST_INVALID_BIND_GLOBAL
 void GlobalOnAnotherEvent(AnotherEvent&);
+#endif
 
 void GlobalOnIdle(wxIdleEvent&)
 {

@@ -2,7 +2,6 @@
 // Name:        clrpicker.h
 // Purpose:     interface of wxColourPickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +9,7 @@
 #define wxCLRP_DEFAULT_STYLE      0
 #define wxCLRP_SHOW_LABEL         0x0008
 
-wxEventType wxEVT_COMMAND_COLOURPICKER_CHANGED;
+wxEventType wxEVT_COLOURPICKER_CHANGED;
 
 
 /**

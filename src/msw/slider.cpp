@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart 1998
 //                  Vadim Zeitlin 2004
 // Licence:     wxWindows licence
@@ -310,7 +309,7 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     event.SetEventObject( this );
     HandleWindowEvent(event);
 
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+    wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
     cevent.SetInt( newPos );
     cevent.SetEventObject( this );
 

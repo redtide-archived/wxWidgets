@@ -3,7 +3,6 @@
 // Purpose:     wxRadioButton unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -69,9 +68,9 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
-    // GTK does not support selecting a single radio button
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    EventCounter selected(m_radio, wxEVT_COMMAND_RADIOBUTTON_SELECTED);
+    // GTK and OS X do not support selecting a single radio button
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) && !defined(__WXOSX__)
+    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -87,7 +86,7 @@ void RadioButtonTestCase::Click()
 void RadioButtonTestCase::Value()
 {
 #ifndef __WXGTK__
-    EventCounter selected(m_radio, wxEVT_COMMAND_RADIOBUTTON_SELECTED);
+    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     m_radio->SetValue(true);
 

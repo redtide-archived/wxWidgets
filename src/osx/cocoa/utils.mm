@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,8 @@ void wxBell()
 
 @implementation wxNSAppController
 
-- (void)applicationWillFinishLaunching:(NSNotification *)application {	
+- (void)applicationWillFinishLaunching:(NSNotification *)application
+{
     wxUnusedVar(application);
     
     // we must install our handlers later than setting the app delegate, because otherwise our handlers
@@ -61,6 +61,12 @@ void wxBell()
     [appleEventManager setEventHandler:self andSelector:@selector(handleOpenAppEvent:withReplyEvent:)
                          forEventClass:kCoreEventClass andEventID:kAEOpenApplication];
     
+    wxTheApp->OSXOnWillFinishLaunching();
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{
+    wxTheApp->OSXOnDidFinishLaunching();
 }
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
@@ -119,9 +125,7 @@ void wxBell()
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     wxUnusedVar(sender);
-    wxCloseEvent event;
-    wxTheApp->OnQueryEndSession(event);
-    if ( event.GetVeto() )
+    if ( !wxTheApp->OSXOnShouldTerminate() )
         return NSTerminateCancel;
     
     return NSTerminateNow;
@@ -129,9 +133,7 @@ void wxBell()
 
 - (void)applicationWillTerminate:(NSNotification *)application {
     wxUnusedVar(application);
-    wxCloseEvent event;
-    event.SetCanVeto(false);
-    wxTheApp->OnEndSession(event);
+    wxTheApp->OSXOnWillTerminate();
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
@@ -240,7 +242,10 @@ void wxBell()
 // here we subclass NSApplication, for the purpose of being able to override sendEvent.
 @interface wxNSApplication : NSApplication
 {
+    BOOL firstPass;
 }
+
+- (id)init;
 
 - (void)sendEvent:(NSEvent *)anEvent;
 
@@ -248,13 +253,28 @@ void wxBell()
 
 @implementation wxNSApplication
 
+- (id)init
+{
+    self = [super init];
+    firstPass = YES;
+    return self;
+}
+
 /* This is needed because otherwise we don't receive any key-up events for command-key
  combinations (an AppKit bug, apparently)			*/
 - (void)sendEvent:(NSEvent *)anEvent
 {
     if ([anEvent type] == NSKeyUp && ([anEvent modifierFlags] & NSCommandKeyMask))
         [[self keyWindow] sendEvent:anEvent];
-    else [super sendEvent:anEvent];
+    else
+        [super sendEvent:anEvent];
+    
+    if ( firstPass )
+    {
+        [NSApp stop:nil];
+        firstPass = NO;
+        return;
+    }
 }
 
 @end
@@ -278,6 +298,7 @@ bool wxApp::DoInitGui()
 
         appcontroller = OSXCreateAppController();
         [NSApp setDelegate:appcontroller];
+        [NSColor setIgnoresAlpha:NO];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
         // to the duplication of menus under 10.5 and a warning under 10.6
@@ -288,6 +309,14 @@ bool wxApp::DoInitGui()
     gNSLayoutManager = [[NSLayoutManager alloc] init];
     
     return true;
+}
+
+bool wxApp::CallOnInit()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    // this will only run one cycle to make sure the OS is ready
+    [NSApp run];
+    return OnInit();
 }
 
 void wxApp::DoCleanUp()

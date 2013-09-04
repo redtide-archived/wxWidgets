@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +13,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/printdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -60,7 +59,7 @@ void wxOSXCocoaPrintData::UpdateToPMState()
 
 int wxMacPrintDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_printDialogData.GetPrintData().ConvertToNative();
 
@@ -85,7 +84,7 @@ int wxMacPrintDialog::ShowModal()
 
 int wxMacPageSetupDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_pageSetupData.GetPrintData().ConvertToNative();
     ((wxOSXCocoaPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );

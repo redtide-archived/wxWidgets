@@ -4,7 +4,6 @@
 // Author:      Benjamin I. Williams
 // Modified by:
 // Created:     2005-05-17
-// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
@@ -287,7 +286,7 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 
     if ( event.GetEventType() == wxEVT_MOVING )
         OnMoving(event.GetRect(), dir);
-    else 
+    else
         OnMoving(wxRect(event.GetPosition(),GetSize()), dir);
 }
 
@@ -344,7 +343,7 @@ void wxAuiFloatingFrame::OnActivate(wxActivateEvent& event)
 }
 
 // utility function which determines the state of the mouse button
-// (independant of having a wxMouseEvent handy) - utimately a better
+// (independent of having a wxMouseEvent handy) - utimately a better
 // mechanism for this should be found (possibly by adding the
 // functionality to wxWidgets itself)
 bool wxAuiFloatingFrame::isMouseDown()

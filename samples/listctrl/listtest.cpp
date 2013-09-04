@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -666,14 +665,14 @@ void MyFrame::InitWithVirtualItems()
 
     if ( m_smallVirtual )
     {
-        m_listCtrl->InsertColumn(0, wxT("Animal"));
-        m_listCtrl->InsertColumn(1, wxT("Sound"));
+        m_listCtrl->AppendColumn(wxT("Animal"));
+        m_listCtrl->AppendColumn(wxT("Sound"));
         m_listCtrl->SetItemCount(WXSIZEOF(SMALL_VIRTUAL_VIEW_ITEMS));
     }
     else
     {
-        m_listCtrl->InsertColumn(0, wxT("First Column"));
-        m_listCtrl->InsertColumn(1, wxT("Second Column"));
+        m_listCtrl->AppendColumn(wxT("First Column"));
+        m_listCtrl->AppendColumn(wxT("Second Column"));
         m_listCtrl->SetColumnWidth(0, 150);
         m_listCtrl->SetColumnWidth(1, 150);
         m_listCtrl->SetItemCount(1000000);

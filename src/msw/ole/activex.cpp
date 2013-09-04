@@ -4,7 +4,6 @@
 // Author:      Ryan Norton <wxprojects@comcast.net>, Lindsay Mathieson <???>
 // Modified by:
 // Created:     11/07/04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Lindsay Mathieson, (c) 2005 Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1269,7 +1268,7 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 // wxActiveXContainer::MSWTranslateMessage
 //
 // Called for every message that needs to be translated.
-// Some controls might need more keyboard keys to process (CTRL-C, CTRL-A ect),
+// Some controls might need more keyboard keys to process (CTRL-C, CTRL-A etc),
 // In that case TranslateAccelerator should always be called first.
 //---------------------------------------------------------------------------
 bool wxActiveXContainer::MSWTranslateMessage(WXMSG* pMsg)

@@ -3,7 +3,6 @@
 // Purpose:     Compatibility code for older GTK+ versions
 // Author:      Vaclav Slavik
 // Created:     2011-03-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vaclav Slavik <vslavik@fastmail.fm>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,16 +54,13 @@ static inline gpointer wx_g_object_ref_sink(gpointer object)
 #define g_object_ref_sink wx_g_object_ref_sink
 
 // ----------------------------------------------------------------------------
-// the following were introduced in GTK+ 2.12 and GtkAboutDialog itself is not
-// in 2.4 so skip this if we don't have it.
-#if GTK_CHECK_VERSION(2,6,0)
+// the following were introduced in GTK+ 2.12
 
 static inline void wx_gtk_about_dialog_set_program_name(GtkAboutDialog* about, const gchar* name)
 {
     gtk_about_dialog_set_name(about, name);
 }
 #define gtk_about_dialog_set_program_name wx_gtk_about_dialog_set_program_name
-#endif // 2.6.0
 
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.14
@@ -128,18 +124,6 @@ static inline guint16 wx_gtk_entry_get_text_length(GtkEntry* entry)
     return entry->text_length;
 }
 #define gtk_entry_get_text_length wx_gtk_entry_get_text_length
-
-static inline GtkWidget* wx_gtk_font_selection_dialog_get_cancel_button(GtkFontSelectionDialog* fsd)
-{
-    return fsd->cancel_button;
-}
-#define gtk_font_selection_dialog_get_cancel_button wx_gtk_font_selection_dialog_get_cancel_button
-
-static inline GtkWidget* wx_gtk_font_selection_dialog_get_ok_button(GtkFontSelectionDialog* fsd)
-{
-    return fsd->ok_button;
-}
-#define gtk_font_selection_dialog_get_ok_button wx_gtk_font_selection_dialog_get_ok_button
 
 static inline const guchar* wx_gtk_selection_data_get_data(GtkSelectionData* selection_data)
 {

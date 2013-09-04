@@ -2,7 +2,6 @@
 // Name:        src/gtk/control.cpp
 // Purpose:     wxControl implementation for wxGTK
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -105,7 +104,6 @@ void wxControl::PostCreation(const wxSize& size)
     gtk_widget_ensure_style(m_widget);
 #endif
 
-    GTKApplyWidgetStyle();
     SetInitialSize(size);
 }
 

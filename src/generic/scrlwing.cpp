@@ -5,7 +5,6 @@
 // Modified by: Vadim Zeitlin on 31.08.00: wxScrollHelper allows to implement.
 //              Ron Lee on 10.4.02:  virtual size / auto scrollbars et al.
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -162,7 +161,16 @@ void wxAutoScrollTimer::Notify()
 
             event2.SetEventObject(m_win);
 
-            // FIXME: we don't fill in the other members - ok?
+            wxMouseState mouseState = wxGetMouseState();
+
+            event2.m_leftDown = mouseState.LeftIsDown();
+            event2.m_middleDown = mouseState.MiddleIsDown();
+            event2.m_rightDown = mouseState.RightIsDown();
+
+            event2.m_shiftDown = mouseState.ShiftDown();
+            event2.m_controlDown = mouseState.ControlDown();
+            event2.m_altDown = mouseState.AltDown();
+            event2.m_metaDown = mouseState.MetaDown();
 
             m_win->GetEventHandler()->ProcessEvent(event2);
         }
@@ -1009,6 +1017,9 @@ void wxScrollHelperBase::HandleOnMouseWheel(wxMouseEvent& event)
         newEvent.SetOrientation( event.GetWheelAxis() == 0 ? wxVERTICAL : wxHORIZONTAL);
         newEvent.SetEventObject(m_win);
 
+        if ( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
+            lines = -lines;
+
         if (event.IsPageScroll())
         {
             if (lines > 0)
@@ -1188,6 +1199,14 @@ wxScrollHelper::wxScrollHelper(wxWindow *winToScroll)
 {
     m_xVisibility =
     m_yVisibility = wxSHOW_SB_DEFAULT;
+}
+
+bool wxScrollHelper::IsScrollbarShown(int orient) const
+{
+    wxScrollbarVisibility visibility = orient == wxHORIZONTAL ? m_xVisibility
+                                                              : m_yVisibility;
+
+    return visibility != wxSHOW_SB_NEVER;
 }
 
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,

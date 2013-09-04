@@ -2,7 +2,6 @@
 // Name:        src/html/htmlcell.cpp
 // Purpose:     wxHtmlCell - basic element of HTML output
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -196,7 +195,17 @@ wxCursor wxHtmlCell::GetCursor() const
 }
 #endif // WXWIN_COMPATIBILITY_2_6
 
-wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+wxCursor
+wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface* WXUNUSED(window)) const
+{
+    // This is never called directly, only from GetMouseCursorAt() and we
+    // return an invalid cursor by default to let it delegate to the window.
+    return wxNullCursor;
+}
+
+wxCursor
+wxHtmlCell::GetMouseCursorAt(wxHtmlWindowInterface *window,
+                             const wxPoint& relPos) const
 {
 #if WXWIN_COMPATIBILITY_2_6
     // NB: Older versions of wx used GetCursor() virtual method in place of
@@ -209,7 +218,11 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
         return cur;
 #endif // WXWIN_COMPATIBILITY_2_6
 
-    if ( GetLink() )
+    const wxCursor curCell = GetMouseCursor(window);
+    if ( curCell.IsOk() )
+      return curCell;
+
+    if ( GetLink(relPos.x, relPos.y) )
     {
         return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Link);
     }
@@ -716,7 +729,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_UseBkColour = false;
+    m_BkColour = wxNullColour;
     m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
@@ -1096,7 +1109,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
     int xlocal = x + m_PosX;
     int ylocal = y + m_PosY;
 
-    if (m_UseBkColour)
+    if (m_BkColour.IsOk())
     {
         wxBrush myb = wxBrush(m_BkColour, wxBRUSHSTYLE_SOLID);
 
@@ -1217,10 +1230,7 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y,
 
 wxColour wxHtmlContainerCell::GetBackgroundColour()
 {
-    if (m_UseBkColour)
-        return m_BkColour;
-    else
-        return wxNullColour;
+    return m_BkColour;
 }
 
 

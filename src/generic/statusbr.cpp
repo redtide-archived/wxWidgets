@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Francesco Montorsi
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -291,10 +290,10 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
         return;     // happens when the status bar is shrunk in a very small area!
 
     int style = m_panes[i].GetStyle();
-    if (style != wxSB_FLAT)
+    if (style == wxSB_RAISED || style == wxSB_SUNKEN)
     {
         // Draw border
-        // For wxSB_NORMAL: paint a grey background, plus 3-d border (one black rectangle)
+        // For wxSB_SUNKEN: paint a grey background, plus 3-d border (one black rectangle)
         // Inside this, left and top sides (dark grey). Bottom and right (white).
         // Reverse it for wxSB_RAISED
 

@@ -3,7 +3,6 @@
 // Purpose:     wxFrame  unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +55,7 @@ void FrameTestCase::setUp()
 
 void FrameTestCase::tearDown()
 {
-    wxDELETE(m_frame);
+    m_frame->Destroy();
 }
 
 void FrameTestCase::Iconize()

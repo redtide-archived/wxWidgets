@@ -2,7 +2,6 @@
 // Name:        hyperlink.h
 // Purpose:     interface of wxHyperlinkEvent
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +44,7 @@ public:
 };
 
 
-wxEventType wxEVT_COMMAND_HYPERLINK;
+wxEventType wxEVT_HYPERLINK;
 
 /**
     @class wxHyperlinkCtrl

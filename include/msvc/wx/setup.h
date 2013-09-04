@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-12-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -62,6 +61,8 @@
         #define wxCOMPILER_PREFIX vc100
     #elif _MSC_VER == 1700
         #define wxCOMPILER_PREFIX vc110
+    #elif _MSC_VER == 1800
+        #define wxCOMPILER_PREFIX vc120
     #else
         #error "Unknown MSVC compiler version, please report to wx-dev."
     #endif
@@ -78,10 +79,19 @@
     #define wxARCH_SUFFIX
 #endif
 
+// Ensure the library configuration is defined
+#ifndef wxCFG
+    #define wxCFG
+#endif
+
+// Construct the path for the subdirectory under /lib/ that the included setup.h
+// will be used from
 #ifdef WXUSINGDLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll, wxCFG)
 #else // !DLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib, wxCFG)
 #endif // DLL/!DLL
 
 // The user can predefine a different prefix if not using the default MSW port

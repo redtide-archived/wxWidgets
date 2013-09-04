@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     29.04.04
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,7 +116,6 @@
 #define HAVE_LANGINFO_H 1
 #define HAVE_WCSRTOMBS 1
 #define HAVE_FPUTWS 1
-#define HAVE_STRCASECMP_IN_STRING_H 1
 #define HAVE_WPRINTF 1
 #define HAVE_VSWPRINTF 1
 #define HAVE_VSWSCANF 1

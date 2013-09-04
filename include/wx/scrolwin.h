@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     30.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -100,6 +99,9 @@ public:
     {
         DoShowScrollbars(horz, vert);
     }
+
+    // Test whether the specified scrollbar is shown.
+    virtual bool IsScrollbarShown(int orient) const = 0;
 
     // Enable/disable Windows scrolling in either direction. If true, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
@@ -316,6 +318,8 @@ protected:
 public:                                                                       \
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }                     \
     virtual bool Layout() { return ScrollLayout(); }                          \
+    virtual bool CanScroll(int orient) const                                  \
+        { return IsScrollbarShown(orient); }                                  \
     virtual void DoSetVirtualSize(int x, int y)                               \
         { ScrollDoSetVirtualSize(x, y); }                                     \
     virtual wxSize GetBestVirtualSize() const                                 \
@@ -399,12 +403,18 @@ public:
 #endif
     }
 
+#ifdef __WXMSW__
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
-#ifdef __WXMSW__
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     {
         return FilterMSWWindowProc(nMsg, T::MSWWindowProc(nMsg, wParam, lParam));
+    }
+
+    // Take into account the scroll origin.
+    virtual void MSWAdjustBrushOrg(int* xOrg, int* yOrg) const
+    {
+        CalcUnscrolledPosition(*xOrg, *yOrg, xOrg, yOrg);
     }
 #endif // __WXMSW__
 

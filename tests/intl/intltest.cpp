@@ -3,7 +3,6 @@
 // Purpose:     wxLocale unit test
 // Author:      Vaclav Slavik
 // Created:     2007-03-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -39,6 +38,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( IntlTestCase );
+        CPPUNIT_TEST( RestoreLocale );
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
         CPPUNIT_TEST( DateTimeFmtFrench );
@@ -46,11 +46,17 @@ private:
         CPPUNIT_TEST( IsAvailable );
     CPPUNIT_TEST_SUITE_END();
 
+    void RestoreLocale();
     void Domain();
     void Headers();
     void DateTimeFmtFrench();
     void DateTimeFmtC();
     void IsAvailable();
+
+    static wxString GetDecimalPoint()
+    {
+        return wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);
+    }
 
     wxLocale *m_locale;
 
@@ -90,6 +96,25 @@ void IntlTestCase::tearDown()
         delete m_locale;
         m_locale = NULL;
     }
+}
+
+void IntlTestCase::RestoreLocale()
+{
+    if ( !m_locale )
+        return;
+
+    // We must be using the French locale now, it was changed in setUp().
+    CPPUNIT_ASSERT_EQUAL( ",", GetDecimalPoint() );
+
+    // Switch to the English locale.
+    {
+        wxLocale locEn(wxLANGUAGE_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL( ".", GetDecimalPoint() );
+    }
+
+    // Verify that after destroying the English locale object, French locale is
+    // restored.
+    CPPUNIT_ASSERT_EQUAL( ",", GetDecimalPoint() );
 }
 
 void IntlTestCase::Domain()

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1173,15 +1172,6 @@ wxMask *wxBitmap::GetMask() const
     return GetBitmapData() ? GetBitmapData()->GetMask() : NULL;
 }
 
-wxBitmap wxBitmap::GetMaskBitmap() const
-{
-    wxBitmap bmp;
-    wxMask *mask = GetMask();
-    if ( mask )
-        bmp.SetHBITMAP(mask->GetMaskBitmap());
-    return bmp;
-}
-
 wxDC *wxBitmap::GetSelectedInto() const
 {
 #if wxDEBUG_LEVEL
@@ -1547,6 +1537,13 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     wxUnusedVar(colour);
     return false;
 #endif // __WXMICROWIN__/!__WXMICROWIN__
+}
+
+wxBitmap wxMask::GetBitmap() const
+{
+    wxBitmap bmp;
+    bmp.SetHBITMAP(m_maskBitmap);
+    return bmp;
 }
 
 // ----------------------------------------------------------------------------

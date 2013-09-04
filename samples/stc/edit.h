@@ -3,7 +3,6 @@
 // Purpose:     STC test module
 // Maintainer:  Wyo
 // Created:     2003-09-01
-// RCS-ID:      $Id$
 // Copyright:   (c) wxGuide
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
@@ -91,6 +90,11 @@ public:
     void OnSetReadOnly (wxCommandEvent &event);
     void OnWrapmodeOn (wxCommandEvent &event);
     void OnUseCharset (wxCommandEvent &event);
+    // annotations
+    void OnAnnotationAdd(wxCommandEvent& event);
+    void OnAnnotationRemove(wxCommandEvent& event);
+    void OnAnnotationClear(wxCommandEvent& event);
+    void OnAnnotationStyle(wxCommandEvent& event);
     //! extra
     void OnChangeCase (wxCommandEvent &event);
     void OnConvertEOL (wxCommandEvent &event);

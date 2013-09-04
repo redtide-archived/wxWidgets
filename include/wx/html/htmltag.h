@@ -2,7 +2,6 @@
 // Name:        wx/html/htmltag.h
 // Purpose:     wxHtmlTag class (represents single tag)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -165,9 +164,9 @@ private:
 
 
 #if WXWIN_COMPATIBILITY_2_8
-inline int wxHtmlTag::GetBeginPos() const { return m_Begin - m_sourceStart; }
-inline int wxHtmlTag::GetEndPos1() const { return m_End1 - m_sourceStart; }
-inline int wxHtmlTag::GetEndPos2() const { return m_End2 - m_sourceStart; }
+inline int wxHtmlTag::GetBeginPos() const { return int(m_Begin - m_sourceStart); }
+inline int wxHtmlTag::GetEndPos1() const { return int(m_End1 - m_sourceStart); }
+inline int wxHtmlTag::GetEndPos2() const { return int(m_End2 - m_sourceStart); }
 #endif // WXWIN_COMPATIBILITY_2_8
 
 

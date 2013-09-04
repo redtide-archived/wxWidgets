@@ -4,7 +4,6 @@
 // Purpose:     Sample showing most of the simple wxWidgets widgets
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -88,6 +87,8 @@ enum
     Widgets_BorderDouble,
     Widgets_BorderDefault,
 
+    Widgets_LayoutDirection,
+
     Widgets_GlobalBusyCursor,
     Widgets_BusyCursor,
 
@@ -167,6 +168,8 @@ protected:
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
     void OnSetBorder(wxCommandEvent& event);
+
+    void OnToggleLayoutDirection(wxCommandEvent& event);
 
     void OnToggleGlobalBusyCursor(wxCommandEvent& event);
     void OnToggleBusyCursor(wxCommandEvent& event);
@@ -299,6 +302,8 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU_RANGE(Widgets_BorderNone, Widgets_BorderDefault,
                    WidgetsFrame::OnSetBorder)
 
+    EVT_MENU(Widgets_LayoutDirection,   WidgetsFrame::OnToggleLayoutDirection)
+
     EVT_MENU(Widgets_GlobalBusyCursor,  WidgetsFrame::OnToggleGlobalBusyCursor)
     EVT_MENU(Widgets_BusyCursor,        WidgetsFrame::OnToggleBusyCursor)
 
@@ -399,6 +404,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     menuBorders->AppendRadioItem(Widgets_BorderRaised, wxT("&Raised\tCtrl-Shift-4"));
     menuBorders->AppendRadioItem(Widgets_BorderSunken, wxT("S&unken\tCtrl-Shift-5"));
     menuWidget->AppendSubMenu(menuBorders, wxT("Set &border"));
+
+    menuWidget->AppendSeparator();
+    menuWidget->AppendCheckItem(Widgets_LayoutDirection,
+                                "Toggle &layout direction\tCtrl-L");
 
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
@@ -920,6 +929,21 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage *page = CurrentPage();
 
     page->RecreateWidget();
+}
+
+void WidgetsFrame::OnToggleLayoutDirection(wxCommandEvent& event)
+{
+    wxLayoutDirection dir = event.IsChecked() ? wxLayout_RightToLeft
+                                              : wxLayout_LeftToRight;
+
+    const Widgets widgets = CurrentPage()->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
+    {
+        (*it)->SetLayoutDirection(dir);
+        (*it)->Refresh();
+    }
 }
 
 void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)

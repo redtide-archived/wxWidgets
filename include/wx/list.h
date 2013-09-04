@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: VZ at 16/11/98: WX_DECLARE_LIST() and typesafe lists added
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -218,7 +217,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \
-                return *this ? std::distance( m_list->begin(), m_iter )       \
+                return *this ? (int)std::distance( m_list->begin(), m_iter )  \
                              : wxNOT_FOUND;                                   \
             }                                                                 \
         };                                                                    \

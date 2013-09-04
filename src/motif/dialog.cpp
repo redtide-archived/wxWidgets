@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -289,7 +288,7 @@ bool wxDialog::Show( bool show )
 // Shows a dialog modally, returning a return code
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     Show(true);
 

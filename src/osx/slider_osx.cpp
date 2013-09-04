@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -299,7 +298,7 @@ void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
     event.SetEventObject( this );
     HandleWindowEvent( event );
 
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
+    wxCommandEvent cevent( wxEVT_SLIDER, m_windowId );
     cevent.SetInt( value );
     cevent.SetEventObject( this );
     HandleWindowEvent( cevent );
@@ -489,7 +488,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
     if (GetWindowStyle() & wxSL_LABELS)
     {
-        // make sure we don't allow the entire control to be resized accidently
+        // make sure we don't allow the entire control to be resized accidentally
         if (width == GetSize().x)
             m_minWidth = -1;
     }

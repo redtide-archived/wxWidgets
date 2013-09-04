@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2006-10-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -79,6 +78,8 @@
 #endif
 
 bool wxRichTextFormattingDialog::sm_showToolTips = false;
+
+IMPLEMENT_CLASS(wxRichTextDialogPage, wxPanel)
 
 IMPLEMENT_CLASS(wxRichTextFormattingDialog, wxPropertySheetDialog)
 
@@ -731,7 +732,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
 #endif // wxUSE_COLOURDLG
         Refresh();
 
-        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+        wxCommandEvent event(wxEVT_BUTTON, GetId());
         GetEventHandler()->ProcessEvent(event);
     }
 }

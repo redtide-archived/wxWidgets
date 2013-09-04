@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-03-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ public:
     virtual void UnsubclassWin();
 
     virtual wxPoint GetClientAreaOrigin() const;
-
+    
     // implement base class pure virtuals
 
     virtual bool SetTransparent(wxByte alpha);

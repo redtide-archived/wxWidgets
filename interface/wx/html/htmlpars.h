@@ -2,7 +2,6 @@
 // Name:        html/htmlpars.h
 // Purpose:     interface of wxHtmlTagHandler
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -66,9 +65,17 @@ public:
 
     /**
         Assigns @a parser to this handler. Each @b instance of handler
-        is guaranteed to be called only from the parser.
+        is guaranteed to be called only from the one parser.
     */
     virtual void SetParser(wxHtmlParser* parser);
+
+    /**
+       Returns the parser associated with this tag handler.
+
+       @since 2.9.5
+    */
+    wxHtmlParser* GetParser() const;
+
 
 protected:
 

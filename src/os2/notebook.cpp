@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/12/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,7 +207,7 @@ int wxNotebook::SetSelection( size_t nPage )
 
     if (nPage != (size_t)m_selection)
     {
-        wxBookCtrlEvent             vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+        wxBookCtrlEvent             vEvent( wxEVT_NOTEBOOK_PAGE_CHANGING
                                            ,m_windowId
                                           );
 
@@ -221,7 +220,7 @@ int wxNotebook::SetSelection( size_t nPage )
             //
             // Program allows the page change
             //
-            vEvent.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+            vEvent.SetEventType(wxEVT_NOTEBOOK_PAGE_CHANGED);
             HandleWindowEvent(vEvent);
 
             ::WinSendMsg( GetHWND()

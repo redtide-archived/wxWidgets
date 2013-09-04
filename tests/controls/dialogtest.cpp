@@ -3,7 +3,6 @@
 // Purpose:     wxWindow unit test
 // Author:      Vaclav Slavik
 // Created:     2012-08-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,7 +14,7 @@
 
 #include "wx/testing.h"
 
-#ifdef wxHAS_VARIADIC_MACROS
+#ifdef HAVE_VARIADIC_MACROS
 
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
@@ -122,4 +121,4 @@ void ModalDialogsTestCase::CustomDialog()
     CPPUNIT_ASSERT_EQUAL( 42, dlg.m_value );
 }
 
-#endif // wxHAS_VARIADIC_MACROS
+#endif // HAVE_VARIADIC_MACROS

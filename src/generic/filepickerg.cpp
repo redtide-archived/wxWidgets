@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified by:
 // Created:     15/04/2006
-// RCS-ID:      $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,7 +80,7 @@ bool wxGenericFileDirButton::Create(wxWindow *parent,
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(GetId(), wxEVT_BUTTON,
             wxCommandEventHandler(wxGenericFileDirButton::OnButtonClick),
             NULL, this);
 

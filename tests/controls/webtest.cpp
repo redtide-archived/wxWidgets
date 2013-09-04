@@ -3,7 +3,6 @@
 // Purpose:     wxWebView unit test
 // Author:      Steven Lamerton
 // Created:     2011-07-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +78,8 @@ void WebTestCase::setUp()
 {
     m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
 
-    m_loaded = new EventCounter(m_browser, wxEVT_COMMAND_WEB_VIEW_LOADED);
+    m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
+    m_browser->LoadURL("about:blank");
     ENSURE_LOADED;
 }
 
@@ -219,9 +219,18 @@ void WebTestCase::Selection()
 
     CPPUNIT_ASSERT(m_browser->HasSelection());
     CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
-    //We lower case the result as ie returns tags in uppercase
-    CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text",
-                         m_browser->GetSelectedSource().Lower());
+
+    // The web engine doesn't necessarily represent the HTML in the same way as
+    // we used above, e.g. IE uses upper case for all the tags while WebKit
+    // under OS X inserts plenty of its own <span> tags, so don't test for
+    // equality and just check that the source contains things we'd expect it
+    // to.
+    const wxString selSource = m_browser->GetSelectedSource();
+    WX_ASSERT_MESSAGE
+    (
+        ("Unexpected selection source: \"%s\"", selSource),
+        selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
+    );
 
     m_browser->ClearSelection();
     CPPUNIT_ASSERT(!m_browser->HasSelection());
@@ -229,25 +238,25 @@ void WebTestCase::Selection()
 
 void WebTestCase::Zoom()
 {
-    if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT))
+    if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
     {
-        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_LAYOUT);
-        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
+        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
+        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
 
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
-        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TINY, m_browser->GetZoom());
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
+        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
     }
 
     //Reset the zoom level
-    m_browser->SetZoom(wxWEB_VIEW_ZOOM_MEDIUM);
+    m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
 
-    if(m_browser->CanSetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT))
+    if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT))
     {
-        m_browser->SetZoomType(wxWEB_VIEW_ZOOM_TYPE_TEXT);
-        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TYPE_TEXT, m_browser->GetZoomType());
+        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
+        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_TEXT, m_browser->GetZoomType());
 
-        m_browser->SetZoom(wxWEB_VIEW_ZOOM_TINY);
-        CPPUNIT_ASSERT_EQUAL(wxWEB_VIEW_ZOOM_TINY, m_browser->GetZoom());
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
+        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
     }
 }
 

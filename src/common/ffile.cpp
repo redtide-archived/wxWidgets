@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     14.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -107,7 +106,7 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
     // note that real length may be less than file length for text files with DOS EOLs
     // ('\r's get dropped by CRT when reading which means that we have
     // realLen = fileLen - numOfLinesInTheFile)
-    length = fread(buf.data(), sizeof(char), length, m_fp);
+    length = fread(buf.data(), 1, length, m_fp);
 
     if ( Error() )
     {

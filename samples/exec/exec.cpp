@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.01.00
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -962,11 +961,8 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         wxLogStatus("Command \"%s\" terminated after %ldms; exit code %d.",
                     cmd, sw.Time(), code);
 
-        if ( code != -1 )
-        {
-            ShowOutput(cmd, output, wxT("Output"));
-            ShowOutput(cmd, errors, wxT("Errors"));
-        }
+        ShowOutput(cmd, output, wxT("Output"));
+        ShowOutput(cmd, errors, wxT("Errors"));
     }
     else // async exec
     {

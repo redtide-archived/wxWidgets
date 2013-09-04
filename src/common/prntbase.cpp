@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1112,7 +1111,7 @@ public:
 
         Connect(wxEVT_KILL_FOCUS,
                 wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
-        Connect(wxEVT_COMMAND_TEXT_ENTER,
+        Connect(wxEVT_TEXT_ENTER,
                 wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
     }
 

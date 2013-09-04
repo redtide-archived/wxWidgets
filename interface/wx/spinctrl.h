@@ -2,7 +2,6 @@
 // Name:        spinctrl.h
 // Purpose:     interface of wxSpinCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +16,7 @@
     @style{wxSP_WRAP}
         The value wraps at the minimum and maximum.
     @style{wxTE_PROCESS_ENTER}
-        Indicates that the control should generate @c wxEVT_COMMAND_TEXT_ENTER
+        Indicates that the control should generate @c wxEVT_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
@@ -33,7 +32,7 @@
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
-        Process a wxEVT_COMMAND_SPINCTRL_UPDATED event, which is generated
+        Process a wxEVT_SPINCTRL event, which is generated
         whenever the numeric value of the spin control is updated.
     @endEventTable
 
@@ -164,7 +163,7 @@ public:
 
         Notice that calling this method may change the value of the control if
         it's not inside the new valid range, e.g. it will become @a minVal if
-        it is less than it now. However no @c wxEVT_COMMAND_SPINCTRL_UPDATED
+        it is less than it now. However no @c wxEVT_SPINCTRL
         event is generated, even if it the value does change.
     */
     void SetRange(int minVal, int maxVal);
@@ -180,12 +179,20 @@ public:
     virtual void SetSelection(long from, long to);
 
     /**
-        Sets the value of the spin control. Use the variant using int instead.
+        Sets the value of the spin control.
+
+        It is recommended to use the overload taking an integer value instead.
+
+        Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
+        setter methods in wxWidgets, calling this method does not generate any
+        events as events are only generated for the user actions.
     */
     virtual void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.
+
+        Calling this method doesn't generate any @c wxEVT_SPINCTRL events.
     */
     void SetValue(int value);
 };
@@ -319,12 +326,20 @@ public:
     void SetRange(double minVal, double maxVal);
 
     /**
-        Sets the value of the spin control. Use the variant using double instead.
+        Sets the value of the spin control.
+
+        It is recommended to use the overload taking a double value instead.
+
+        Notice that, unlike wxTextCtrl::SetValue(), but like most of the other
+        setter methods in wxWidgets, calling this method does not generate any
+        events as events are only generated for the user actions.
     */
     virtual void SetValue(const wxString& text);
 
     /**
         Sets the value of the spin control.
+
+        Calling this method doesn't generate any @c wxEVT_SPINCTRLDOUBLE events.
     */
     void SetValue(double value);
 };
@@ -373,5 +388,5 @@ public:
     void SetValue(double value);
 };
 
-wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
-wxEventType wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED;
+wxEventType wxEVT_SPINCTRL;
+wxEventType wxEVT_SPINCTRLDOUBLE;

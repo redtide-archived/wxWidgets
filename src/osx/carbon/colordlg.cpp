@@ -5,7 +5,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +13,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 
 #if !USE_NATIVE_FONT_DIALOG_FOR_MACOSX
@@ -48,7 +47,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     RGBColor currentColor ;
 

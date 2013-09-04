@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -275,6 +274,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
         style = SBT_NOBORDERS;
         break;
 
+    case wxSB_SUNKEN:
     case wxSB_NORMAL:
     default:
         style = 0;
@@ -553,6 +553,7 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
         case wxSB_FLAT:
             style = SBT_NOBORDERS;
             break;
+        case wxSB_SUNKEN:
         case wxSB_NORMAL:
         default:
             style = 0;

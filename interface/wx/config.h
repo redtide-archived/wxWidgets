@@ -2,7 +2,6 @@
 // Name:        config.h
 // Purpose:     interface of wxConfigBase
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -791,7 +790,7 @@ public:
         # config file for my program
         UserData = $HOME/data
 
-        # the following syntax is valud only under Windows
+        # the following syntax is valid only under Windows
         UserData = %windir%\\data.dat
         @endcode
 

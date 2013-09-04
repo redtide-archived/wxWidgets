@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxComboBox
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -153,7 +152,7 @@ protected:
     // the checkboxes for styles
     wxCheckBox *m_chkSort,
                *m_chkReadonly,
-               *m_chkFilename;
+               *m_chkProcessEnter;
 
     // the combobox itself and the sizer it is in
     wxComboBox *m_combobox;
@@ -243,7 +242,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkSort =
     m_chkReadonly =
-    m_chkFilename = (wxCheckBox *)NULL;
+    m_chkProcessEnter = (wxCheckBox *)NULL;
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
@@ -278,8 +277,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Sort items"));
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Read only"));
-    m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&File name"));
-    m_chkFilename->Disable(); // not implemented yet
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("Process &Enter"));
 
     sizerLeftTop->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeftTop->Add(m_radioKind, 0, wxGROW | wxALL, 5);
@@ -298,7 +296,7 @@ void ComboboxWidgetsPage::CreateContent()
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(sizerLeftTop);
     sizerLeft->AddSpacer(10);
-    sizerLeft->Add(sizerLeftBottom);
+    sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
@@ -404,7 +402,7 @@ void ComboboxWidgetsPage::Reset()
 {
     m_chkSort->SetValue(false);
     m_chkReadonly->SetValue(false);
-    m_chkFilename->SetValue(false);
+    m_chkProcessEnter->SetValue(false);
 }
 
 void ComboboxWidgetsPage::CreateCombo()
@@ -415,6 +413,9 @@ void ComboboxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
+    if ( m_chkProcessEnter->GetValue() )
+        flags |= wxTE_PROCESS_ENTER;
+
 
     switch ( m_radioKind->GetSelection() )
     {
@@ -451,11 +452,6 @@ void ComboboxWidgetsPage::CreateCombo()
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 flags);
-
-#if 0
-    if ( m_chkFilename->GetValue() )
-        ;
-#endif // TODO
 
     unsigned int count = items.GetCount();
     for ( unsigned int n = 0; n < count; n++ )
@@ -594,7 +590,7 @@ void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkSort->GetValue() ||
                     m_chkReadonly->GetValue() ||
-                        m_chkFilename->GetValue() );
+                        m_chkProcessEnter->GetValue() );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIInsert(wxUpdateUIEvent& event)
@@ -654,7 +650,7 @@ void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
     wxASSERT_MSG( s == m_combobox->GetValue(),
                   wxT("event and combobox values should be the same") );
 
-    if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
         wxLogMessage(wxT("Combobox enter pressed (now '%s')"), s.c_str());
     }

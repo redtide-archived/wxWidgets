@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -217,7 +216,7 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         // and not BS_AUTORADIOBUTTON
         SetValue(true);
 
-        wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+        wxCommandEvent event(wxEVT_RADIOBUTTON, GetId());
         event.SetEventObject( this );
         event.SetInt(true); // always checked
 

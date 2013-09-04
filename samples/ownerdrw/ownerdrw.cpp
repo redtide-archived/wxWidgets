@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     13.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,7 +80,7 @@ BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
     EVT_LISTBOX(Control_Listbox, OwnerDrawnFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
-    EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
+    EVT_COMMAND(Control_Listbox, wxEVT_LISTBOX_DCLICK,
                 OwnerDrawnFrame::OnListboxDblClick)
 END_EVENT_TABLE()
 

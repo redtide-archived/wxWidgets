@@ -2,7 +2,6 @@
 // Name:        cmdline.h
 // Purpose:     interface of wxCmdLineParser
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -226,7 +225,7 @@ struct wxCmdLineEntryDesc
 
     First global option is the support for long (also known as GNU-style)
     options. The long options are the ones which start with two dashes and look
-    like "--verbose", i.e. they generally are complete words and not some
+    like "\--verbose", i.e. they generally are complete words and not some
     abbreviations of them. As long options are used by more and more
     applications, they are enabled by default, but may be disabled with
     DisableLongOptions().
@@ -496,7 +495,7 @@ public:
     size_t GetParamCount() const;
 
     /**
-        Parse the command line, return 0 if ok, -1 if @c "-h" or @c "--help"
+        Parse the command line, return 0 if ok, -1 if @c "-h" or @c "\--help"
         option was encountered and the help message was given or a positive
         value if a syntax error occurred.
 

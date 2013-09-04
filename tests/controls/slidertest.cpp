@@ -3,7 +3,6 @@
 // Purpose:     wxSlider unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -33,9 +32,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );
+#ifndef __WXOSX__
         WXUISIM_TEST( PageUpDown );
         WXUISIM_TEST( LineUpDown );
         WXUISIM_TEST( LinePageSize );
+#endif
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
         WXUISIM_TEST( Thumb );
@@ -195,16 +196,7 @@ void SliderTestCase::Thumb()
 
     m_slider->SetValue(0);
 
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(10, 10)));
-    wxYield();
-
-    sim.MouseDown();
-    wxYield();
-
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
-    wxYield();
-
-    sim.MouseUp();
+    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, 10)),m_slider->ClientToScreen(wxPoint(50, 10)));
     wxYield();
 
     CPPUNIT_ASSERT(track.GetCount() != 0);

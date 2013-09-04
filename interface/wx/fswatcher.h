@@ -3,7 +3,6 @@
 // Purpose:     wxFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Bartosz Bekier <bartosz.bekier@gmail.com>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -157,7 +156,7 @@ public:
 class wxFileSystemWatcherEvent : public wxEvent
 {
 public:
-    wxFileSystemWatcherEvent(int changeType, int watchid = wxID_ANY);
+    wxFileSystemWatcherEvent(int changeType = 0, int watchid = wxID_ANY);
     wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
                              int watchid = wxID_ANY);
     wxFileSystemWatcherEvent(int changeType,

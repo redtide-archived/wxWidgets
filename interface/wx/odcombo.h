@@ -2,7 +2,6 @@
 // Name:        odcombo.h
 // Purpose:     interface of wxOwnerDrawnComboBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +67,7 @@ enum
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
-           Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
+           Process a wxEVT_COMBOBOX event, when an item on
            the list is selected. Note that calling GetValue() returns the new
            value of selection.
     @endEventTable

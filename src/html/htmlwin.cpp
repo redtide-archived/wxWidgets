@@ -2,7 +2,6 @@
 // Name:        src/html/htmlwin.cpp
 // Purpose:     wxHtmlWindow class for parsing & displaying HTML (implementation)
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,9 +42,9 @@
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_CELL_CLICKED, wxHtmlCellEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_CELL_HOVER, wxHtmlCellEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEvent );
+wxDEFINE_EVENT( wxEVT_HTML_CELL_CLICKED, wxHtmlCellEvent );
+wxDEFINE_EVENT( wxEVT_HTML_CELL_HOVER, wxHtmlCellEvent );
+wxDEFINE_EVENT( wxEVT_HTML_LINK_CLICKED, wxHtmlLinkEvent );
 
 
 #if wxUSE_CLIPBOARD
@@ -206,7 +205,7 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
 
         wxCursor cur;
         if (cell)
-            cur = cell->GetMouseCursor(m_interface);
+            cur = cell->GetMouseCursorAt(m_interface, pos);
         else
             cur = m_interface->GetHTMLCursor(
                         wxHtmlWindowInterface::HTMLCursor_Default);
@@ -229,6 +228,11 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
     {
         if ( cell )
         {
+            // A single cell can have different cursors for different positions,
+            // so update cursor for this case as well.
+            wxCursor cur = cell->GetMouseCursorAt(m_interface, pos);
+            m_interface->GetHTMLWindow()->SetCursor(cur);
+
             OnCellMouseHover(cell, pos.x, pos.y);
         }
     }
@@ -240,7 +244,7 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
                                             wxCoord x, wxCoord y,
                                             const wxMouseEvent& event)
 {
-    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_CLICKED,
+    wxHtmlCellEvent ev(wxEVT_HTML_CELL_CLICKED,
                        m_interface->GetHTMLWindow()->GetId(),
                        cell, wxPoint(x,y), event);
 
@@ -261,7 +265,7 @@ void wxHtmlWindowMouseHelper::OnCellMouseHover(wxHtmlCell * cell,
                                                wxCoord x,
                                                wxCoord y)
 {
-    wxHtmlCellEvent ev(wxEVT_COMMAND_HTML_CELL_HOVER,
+    wxHtmlCellEvent ev(wxEVT_HTML_CELL_HOVER,
                        m_interface->GetHTMLWindow()->GetId(),
                        cell, wxPoint(x,y), wxMouseEvent());
     m_interface->GetHTMLWindow()->GetEventHandler()->ProcessEvent(ev);
@@ -1090,7 +1094,7 @@ void wxHtmlWindow::DoEraseBackground(wxDC& dc)
     if ( m_bmpBg.IsOk() )
     {
         // draw the background bitmap tiling it over the entire window area
-        const wxSize sz = GetClientSize();
+        const wxSize sz = GetVirtualSize();
         const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
         for ( wxCoord x = 0; x < sz.x; x += sizeBmp.x )
         {
@@ -1538,7 +1542,7 @@ void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
     if ( IsSelectionEnabled() &&
             (event.GetKeyCode() == 'C' && event.CmdDown()) )
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());
+        wxClipboardTextEvent evt(wxEVT_TEXT_COPY, GetId());
 
         evt.SetEventObject(this);
 

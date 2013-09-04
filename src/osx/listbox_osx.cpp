@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -393,8 +392,8 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
 void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
 {
-    wxCommandEvent event( doubleClick ? wxEVT_COMMAND_LISTBOX_DOUBLECLICKED :
-        wxEVT_COMMAND_LISTBOX_SELECTED, GetId() );
+    wxCommandEvent event( doubleClick ? wxEVT_LISTBOX_DCLICK :
+        wxEVT_LISTBOX, GetId() );
     event.SetEventObject( this );
     if ( HasClientObjectData() )
         event.SetClientObject( GetClientObject(n) );

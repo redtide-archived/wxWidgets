@@ -3,7 +3,6 @@
 // Purpose:     wxButton unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -82,7 +81,7 @@ void ButtonTestCase::Click()
 {
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
-    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 
@@ -99,7 +98,7 @@ void ButtonTestCase::Click()
 
 void ButtonTestCase::Disabled()
 {
-    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 

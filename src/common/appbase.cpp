@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,6 +255,10 @@ int wxAppConsoleBase::OnRun()
     return MainLoop();
 }
 
+void wxAppConsoleBase::OnLaunched()
+{    
+}
+
 int wxAppConsoleBase::OnExit()
 {
 #if wxUSE_CONFIG
@@ -304,6 +307,15 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
     return app ? app->GetTraits() : NULL;
 }
 
+/* static */
+wxAppTraits& wxAppConsoleBase::GetValidTraits()
+{
+    static wxConsoleAppTraits s_traitsConsole;
+    wxAppTraits* const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+
+    return traits ? *traits : s_traitsConsole;
+}
+
 // ----------------------------------------------------------------------------
 // wxEventLoop redirection
 // ----------------------------------------------------------------------------
@@ -312,6 +324,9 @@ int wxAppConsoleBase::MainLoop()
 {
     wxEventLoopBaseTiedPtr mainLoop(&m_mainLoop, CreateMainLoop());
 
+    if (wxTheApp)
+        wxTheApp->OnLaunched();
+    
     return m_mainLoop ? m_mainLoop->Run() : -1;
 }
 

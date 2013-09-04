@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/05/99
-// RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@
 #include <string.h>
 
 #include "wx/tokenzr.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #define wxMAXPATH                    1024
 #define wxMAXFILE                    1024
@@ -105,7 +104,7 @@ void wxFileDialog::GetPaths (
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxString                        sTheFilter;
     wxString                        sFilterBuffer;

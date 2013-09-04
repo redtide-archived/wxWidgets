@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 #include "wx/control.h"
 #include "wx/thread.h"
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 #include "wx/osx/private.h"
 
 
@@ -63,7 +62,7 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxCFEventLoopPauseIdleEvents pause;
     

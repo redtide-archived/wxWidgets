@@ -5,7 +5,6 @@
 // Modified by: Vadim Zeitlin (modifications partly inspired by omnithreads
 //              package from Olivetti & Oracle Research Laboratory)
 // Created:     04/13/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -86,12 +85,12 @@ enum wxThreadWait
 #endif
 };
 
-// defines the interval of priority
+// Obsolete synonyms for wxPRIORITY_XXX for backwards compatibility-only
 enum
 {
-    WXTHREAD_MIN_PRIORITY      = 0u,
-    WXTHREAD_DEFAULT_PRIORITY  = 50u,
-    WXTHREAD_MAX_PRIORITY      = 100u
+    WXTHREAD_MIN_PRIORITY      = wxPRIORITY_MIN,
+    WXTHREAD_DEFAULT_PRIORITY  = wxPRIORITY_DEFAULT,
+    WXTHREAD_MAX_PRIORITY      = wxPRIORITY_MAX
 };
 
 // There are 2 types of mutexes: normal mutexes and recursive ones. The attempt
@@ -558,7 +557,8 @@ public:
     wxThreadError Resume();
 
     // priority
-        // Sets the priority to "prio": see WXTHREAD_XXX_PRIORITY constants
+        // Sets the priority to "prio" which must be in 0..100 range (see
+        // also wxPRIORITY_XXX constants).
         //
         // NB: the priority can only be set before the thread is created
     void SetPriority(unsigned int prio);

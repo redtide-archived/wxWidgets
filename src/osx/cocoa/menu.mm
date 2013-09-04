@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -67,8 +66,8 @@
 - (void)menuNeedsUpdate:(NSMenu*)smenu;
 #else
 - (void)menuWillOpen:(NSMenu *)menu;
-- (void)menuDidClose:(NSMenu *)menu;
 #endif
+- (void)menuDidClose:(NSMenu *)menu;
 - (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item;
 
 @end
@@ -105,6 +104,7 @@
             wxpeer->HandleMenuOpened();
     }
 }
+#endif
 
 - (void)menuDidClose:(NSMenu *)smenu
 {
@@ -117,7 +117,6 @@
             wxpeer->HandleMenuClosed();
     }
 }
-#endif
 
 - (void)menu:(NSMenu *)smenu willHighlightItem:(NSMenuItem *)item
 {

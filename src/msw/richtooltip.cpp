@@ -3,7 +3,6 @@
 // Purpose:     Native MSW implementation of wxRichToolTip.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,7 +150,7 @@ public:
         wxRichToolTipGenericImpl::SetTitleFont(font);
     }
 
-    virtual void ShowFor(wxWindow* win, wxRect* rect)
+    virtual void ShowFor(wxWindow* win, const wxRect* rect)
     {
         // TODO: We could use native tooltip control to show native balloon
         //       tooltips for any window but right now we use the simple

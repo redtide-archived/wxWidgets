@@ -5,7 +5,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.09.99 (extracted from src/common/log.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -529,8 +528,6 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     // status bar for menu prompts
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
-
-    m_log->OnFrameCreate(this);
 }
 
 void wxLogFrame::DoClose()
@@ -642,10 +639,6 @@ void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 wxFrame *wxLogWindow::GetFrame() const
 {
     return m_pLogFrame;
-}
-
-void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
-{
 }
 
 bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))

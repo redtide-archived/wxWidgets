@@ -2,7 +2,6 @@
 // Name:        choice.h
 // Purpose:     interface of wxChoice
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +19,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHOICE(id, func)}
-           Process a @c wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
+           Process a @c wxEVT_CHOICE event, when an item on the
            list is selected.
     @endEventTable
 

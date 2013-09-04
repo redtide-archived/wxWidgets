@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1112,7 +1111,16 @@ void wxNativeFontInfo::Init(int size,
                   wxFontEncoding encoding)
 {
     Init();
-    m_pointSize = size;
+
+    // We should use the default font size if the special value wxDEFAULT is
+    // specified and we also handle -1 as a synonym for wxDEFAULT for
+    // compatibility with wxGTK (see #12541).
+    //
+    // Notice that we rely on the fact that wxNORMAL_FONT itself is not
+    // initialized using this ctor, but from native font info.
+    m_pointSize = size == -1 || size == wxDEFAULT
+                    ? wxNORMAL_FONT->GetPointSize()
+                    : size;
     m_family = family;
     m_style = style;
     m_weight = weight;

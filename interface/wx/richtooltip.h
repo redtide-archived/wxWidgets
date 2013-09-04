@@ -3,7 +3,6 @@
 // Purpose:     wxRichToolTip class documentation
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,13 +181,15 @@ public:
         window which must be non-@NULL or, if @a rect is non-@NULL, the middle
         of the specified wxRect.
 
+        The coordinates of the @a rect parameter are relative to the given window.
+
         Currently the native MSW implementation is used only if @a win is a
         wxTextCtrl and @a rect is @NULL. This limitation may be removed in the
         future.
 
         Parameter @a rect is new since wxWidgets 2.9.5.
      */
-    void ShowFor(wxWindow* win, wxRect* rect = NULL);
+    void ShowFor(wxWindow* win, const wxRect* rect = NULL);
 
     /**
         Destructor.

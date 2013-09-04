@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -369,7 +368,7 @@ _TIFFmemcmp(const void* p1, const void* p2, tmsize_t c)
 
 #ifndef _WIN32_WCE
 
-#if (_MSC_VER < 1500)
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
 #  define vsnprintf _vsnprintf
 #endif
 

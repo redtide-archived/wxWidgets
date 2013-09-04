@@ -5,7 +5,6 @@
 // Author:      Jethro Grassie / Kevin Ollivier / Marianne Gagnon
 // Modified by:
 // Created:     2004-4-16
-// RCS-ID:      $Id$
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier / Marianne Gagnon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,7 @@ public:
     virtual bool CanGoForward() const;
     virtual void GoBack();
     virtual void GoForward();
-    virtual void Reload(wxWebViewReloadFlags flags = wxWEB_VIEW_RELOAD_DEFAULT);
+    virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT);
     virtual void Stop();
     virtual wxString GetPageSource() const;
     virtual wxString GetPageText() const;
@@ -87,7 +86,7 @@ public:
     virtual void Redo();
 
     //Find function
-    virtual long Find(const wxString& text, int flags = wxWEB_VIEW_FIND_DEFAULT) 
+    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) 
     { 
         wxUnusedVar(text);
         wxUnusedVar(flags);
@@ -166,6 +165,20 @@ private:
     void* m_webKitCtrlEventHandler;
     //It should be WebView*, but WebView is an Objective-C class
     //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
+};
+
+class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory
+{
+public:
+    virtual wxWebView* Create() { return new wxWebViewWebKit; }
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr)
+    { return new wxWebViewWebKit(parent, id, url, pos, size, style, name); }
 };
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT

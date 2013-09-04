@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,7 +302,7 @@ protected:
         wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
         wxCHECK_RET( list != NULL , wxT("Listbox expected"));
         
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+        wxCommandEvent event( wxEVT_LISTBOX, list->GetId() );
         
         if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
             return;

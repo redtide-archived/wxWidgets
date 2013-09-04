@@ -2,7 +2,6 @@
 // Name:        src/gtk/frame.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -304,7 +303,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
         hildon_window_set_menu(HILDON_WINDOW(m_widget),
                                GTK_MENU(m_frameMenuBar->m_widget));
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-        m_frameMenuBar->SetParent(this);
 
         // menubar goes into top of vbox (m_mainWidget)
         gtk_box_pack_start(

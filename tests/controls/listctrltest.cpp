@@ -3,7 +3,6 @@
 // Purpose:     wxListCtrl unit test
 // Author:      Vadim Zeitlin
 // Created:     2008-11-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 //              (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,9 +96,9 @@ void ListCtrlTestCase::EditLabel()
 #if wxUSE_UIACTIONSIMULATOR
 void ListCtrlTestCase::ColumnDrag()
 {
-    EventCounter begindrag(m_list, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG);
-    EventCounter dragging(m_list, wxEVT_COMMAND_LIST_COL_DRAGGING);
-    EventCounter enddrag(m_list, wxEVT_COMMAND_LIST_COL_END_DRAG);
+    EventCounter begindrag(m_list, wxEVT_LIST_COL_BEGIN_DRAG);
+    EventCounter dragging(m_list, wxEVT_LIST_COL_DRAGGING);
+    EventCounter enddrag(m_list, wxEVT_LIST_COL_END_DRAG);
 
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertColumn(1, "Column 1");
@@ -132,8 +131,8 @@ void ListCtrlTestCase::ColumnDrag()
 
 void ListCtrlTestCase::ColumnClick()
 {
-    EventCounter colclick(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
-    EventCounter colrclick(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
+    EventCounter colclick(m_list, wxEVT_LIST_COL_CLICK);
+    EventCounter colrclick(m_list, wxEVT_LIST_COL_RIGHT_CLICK);
 
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);

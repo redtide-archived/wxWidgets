@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -390,10 +389,43 @@ void wxApp::MacReopenApp()
 
         if ( firstIconized )
             firstIconized->Iconize( false ) ;
+        
+        // showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
+        // as hidden tlws, we don't want to reshow those, so let's just reopen the minimized a.k.a. iconized tlws
+        // unless we find a regression ...
+#if 0
         else if ( firstHidden )
             firstHidden->Show( true );
+#endif
     }
 }
+
+#if wxOSX_USE_COCOA_OR_IPHONE
+void wxApp::OSXOnWillFinishLaunching()
+{
+#if wxOSX_USE_IPHONE
+    m_onInitResult = OnInit();
+#endif
+}
+
+void wxApp::OSXOnDidFinishLaunching()
+{
+}
+
+void wxApp::OSXOnWillTerminate()
+{
+    wxCloseEvent event;
+    event.SetCanVeto(false);
+    wxTheApp->OnEndSession(event);
+}
+
+bool wxApp::OSXOnShouldTerminate()
+{
+    wxCloseEvent event;
+    wxTheApp->OnQueryEndSession(event);
+    return !event.GetVeto();
+}
+#endif
 
 //----------------------------------------------------------------------
 // Macintosh CommandID support - converting between native and wx IDs
@@ -789,21 +821,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
 
-    // Mac OS X passes a process serial number command line argument when
-    // the application is launched from the Finder. This argument must be
-    // removed from the command line arguments before being handled by the
-    // application (otherwise applications would need to handle it)
-    if ( argc > 1 )
-    {
-        static const wxChar *ARG_PSN = wxT("-psn_");
-        if ( wxStrncmp(argv[1], ARG_PSN, wxStrlen(ARG_PSN)) == 0 )
-        {
-            // remove this argument
-            --argc;
-            memmove(argv + 1, argv + 2, argc * sizeof(wxChar*));
-        }
-    }
-
     /*
      Cocoa supports -Key value options which set the user defaults key "Key"
      to the value "value"  Some of them are very handy for debugging like
@@ -857,7 +874,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
@@ -1132,7 +1149,7 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case WXK_RETURN:      keycode = kVK_Return; break;
         case WXK_ESCAPE:      keycode = kVK_Escape; break;
         case WXK_SPACE:       keycode = kVK_Space; break;
-        case WXK_DELETE:      keycode = kVK_Delete; break;
+        case WXK_DELETE:      keycode = kVK_ForwardDelete; break;
             
         case WXK_SHIFT:       keycode = kVK_Shift; break;
         case WXK_ALT:         keycode = kVK_Option; break;
@@ -1485,7 +1502,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
 
@@ -1496,7 +1513,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
             {
                 // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
-                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                wxCommandEvent new_event(wxEVT_BUTTON,wxID_CANCEL);
                 new_event.SetEventObject( focus );
                 handled = focus->HandleWindowEvent( new_event );
             }

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -61,6 +60,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
     #include "wx/msw/mslu.h"
 
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
@@ -742,11 +742,13 @@ wxPathOnly (wxChar *path)
     {
         static wxChar buf[_MAXPATHLEN];
 
-        // Local copy
-        wxStrcpy (buf, path);
-
         int l = wxStrlen(path);
         int i = l - 1;
+        if ( i >= _MAXPATHLEN )
+            return NULL;
+
+        // Local copy
+        wxStrcpy (buf, path);
 
         // Search backward for a backward or forward slash
         while (i > -1)
@@ -788,11 +790,14 @@ wxString wxPathOnly (const wxString& path)
     {
         wxChar buf[_MAXPATHLEN];
 
-        // Local copy
-        wxStrcpy(buf, path);
-
         int l = path.length();
         int i = l - 1;
+
+        if ( i >= _MAXPATHLEN )
+            return wxString();
+
+        // Local copy
+        wxStrcpy(buf, path);
 
         // Search backward for a backward or forward slash
         while (i > -1)
@@ -1384,7 +1389,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         buf = new wxChar[sz + 1];
     }
 
-    bool ok wxDUMMY_INITIALIZE(false);
+    bool ok = false;
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation

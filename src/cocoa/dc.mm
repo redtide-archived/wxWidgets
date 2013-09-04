@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/04/01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -362,11 +361,11 @@ void wxCocoaDCImpl::DoDrawPoint( int x, int y )
 {
 };
 
-void wxCocoaDCImpl::DoDrawPolygon( int, wxPoint *, int, int, wxPolygonFillMode)
+void wxCocoaDCImpl::DoDrawPolygon( int, const wxPoint *, int, int, wxPolygonFillMode)
 {
 };
 
-void wxCocoaDCImpl::DoDrawLines( int, wxPoint *, int, int )
+void wxCocoaDCImpl::DoDrawLines( int, const wxPoint *, int, int )
 {
 }
 

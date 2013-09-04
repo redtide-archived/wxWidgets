@@ -3,7 +3,6 @@
 // Purpose:     wxRichMessageDialog
 // Author:      Rickard Westerlund
 // Created:     2010-07-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,7 @@
 #if wxUSE_RICHMSGDLG
 
 #include "wx/richmsgdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
@@ -34,7 +33,7 @@
 
 int wxRichMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
 #ifdef wxHAS_MSW_TASKDIALOG
     using namespace wxMSWMessageDialog;

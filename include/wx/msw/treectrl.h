@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to be less MSW-specific on 10/10/98
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -216,6 +215,10 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
@@ -335,6 +338,9 @@ private:
 
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
+
+    // The size to restore the control to when it is thawed, see DoThaw().
+    wxSize m_thawnSize;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;

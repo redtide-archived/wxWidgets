@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2002/04/05
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -149,7 +148,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
-    m_list->InsertColumn(0, wxT("wxArtID"));
+    m_list->AppendColumn(wxT("wxArtID"));
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);

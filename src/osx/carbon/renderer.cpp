@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,7 +184,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             drawInfo.version = 0;
             drawInfo.kind = kThemeListHeaderButton;
             drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-            drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+            drawInfo.value = (flags & wxCONTROL_PRESSED) ? kThemeButtonOn : kThemeButtonOff;
             drawInfo.adornment = kThemeAdornmentNone;
 
             // The down arrow is drawn automatically, change it to an up arrow if needed.
@@ -195,7 +194,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
 
             // If we don't want any arrows we need to draw over the one already there
-            if ( (flags & wxCONTROL_SELECTED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
+            if ( (flags & wxCONTROL_PRESSED) && (sortArrow == wxHDR_SORT_ICON_NONE) )
             {
                 // clip to the header rectangle
                 CGContextSaveGState( cgContext );
@@ -211,12 +210,12 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     // Reserve room for the arrows before writing the label, and turn off the
     // flags we've already handled
     wxRect newRect(rect);
-    if ( (flags & wxCONTROL_SELECTED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
+    if ( (flags & wxCONTROL_PRESSED) && (sortArrow != wxHDR_SORT_ICON_NONE) )
     {
         newRect.width -= 12;
         sortArrow = wxHDR_SORT_ICON_NONE;
     }
-    flags &= ~wxCONTROL_SELECTED;
+    flags &= ~wxCONTROL_PRESSED;
 
     return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
 }
@@ -424,7 +423,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
         drawInfo.version = 0;
         drawInfo.kind = kind;
         drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
-        drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+        drawInfo.value = (flags & wxCONTROL_PRESSED) ? kThemeButtonOn : kThemeButtonOff;
         if (flags & wxCONTROL_UNDETERMINED)
             drawInfo.value = kThemeButtonMixed;
         drawInfo.adornment = adornment;
@@ -442,7 +441,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                             int flags)
 {
     if (flags & wxCONTROL_CHECKED)
-        flags |= wxCONTROL_SELECTED;
+        flags |= wxCONTROL_PRESSED;
 
     int kind;
 
@@ -594,7 +593,7 @@ void wxRendererMac::DrawRadioBitmap(wxWindow* win, wxDC& dc,
         kind = kThemeRadioButton;
 
     if (flags & wxCONTROL_CHECKED)
-        flags |= wxCONTROL_SELECTED;
+        flags |= wxCONTROL_PRESSED;
 
     DrawMacThemeButton(win, dc, rect, flags,
                           kind, kThemeAdornmentNone);

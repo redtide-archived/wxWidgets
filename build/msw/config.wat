@@ -35,12 +35,8 @@ CPP = $(CC) -p
 #   1 - DLL
 SHARED = 0
 
-# Used toolkit [MSW,GTK]
-#   GTK - GTK+
-TOOLKIT = MSW
-
 # GTK+ toolkit version [,2]
-TOOLKIT_VERSION =
+TOOLKIT_VERSION = 
 
 # Build wxUniversal instead of native port? [0,1]
 #   1 - Universal

@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Modified by:
 // Created:     06/16/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -559,11 +558,11 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
         // have the lowest priority, the second - the highest, all the rest
         // the normal one
         if ( n == 0 )
-            thr->SetPriority(WXTHREAD_MIN_PRIORITY);
+            thr->SetPriority(wxPRIORITY_MIN);
         else if ( n == 1 )
-            thr->SetPriority(WXTHREAD_MAX_PRIORITY);
+            thr->SetPriority(wxPRIORITY_MAX);
         else
-            thr->SetPriority(WXTHREAD_DEFAULT_PRIORITY);
+            thr->SetPriority(wxPRIORITY_DEFAULT);
 
         threads.Add(thr);
     }
@@ -597,6 +596,8 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
+    wxThread* toDelete = NULL;
+    {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
     // stop the last thread
@@ -606,7 +607,15 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     }
     else
     {
-        wxGetApp().m_threads.Last()->Delete();
+        toDelete = wxGetApp().m_threads.Last();
+    }
+    }
+
+    if ( toDelete )
+    {
+        // This can still crash if the thread gets to delete itself
+        // in the mean time.
+        toDelete->Delete();
 
 #if wxUSE_STATUSBAR
         SetStatusText(wxT("Last thread stopped."), 1);

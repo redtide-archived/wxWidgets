@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,7 +20,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include "wx/osx/private.h"
 
@@ -55,7 +54,11 @@ static pascal void NavEventProc(
     }
 }
 
-wxDirDialog::wxDirDialog(wxWindow *parent,
+void wxDirDialog::Init()
+{
+}
+
+void wxDirDialog::Create(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
                          long style,
@@ -73,7 +76,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
 int wxDirDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     NavDialogRef dialog = NULL;
     NavDialogCreationOptions options;

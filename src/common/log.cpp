@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -856,8 +855,10 @@ wxLogStderr::wxLogStderr(FILE *fp)
 
 void wxLogStderr::DoLogText(const wxString& msg)
 {
-    wxFputs(msg + '\n', m_fp);
-    fflush(m_fp);
+    // First send it to stderr, even if we don't have it (e.g. in a Windows GUI
+    // application under) it's not a problem to try to use it and it's easier
+    // than determining whether we do have it or not.
+    wxMessageOutputStderr(m_fp).Output(msg);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
     // stderr at all, so show the messages also somewhere else, typically in
@@ -902,7 +903,14 @@ wxLogChain::wxLogChain(wxLog *logger)
     m_bPassMessages = true;
 
     m_logNew = logger;
-    m_logOld = wxLog::SetActiveTarget(this);
+
+    // Notice that we use GetActiveTarget() here instead of directly calling
+    // SetActiveTarget() to trigger wxLog auto-creation: if we're created as
+    // the first logger, we should still chain with the standard, implicit and
+    // possibly still not created standard logger instead of disabling normal
+    // logging entirely.
+    m_logOld = wxLog::GetActiveTarget();
+    wxLog::SetActiveTarget(this);
 }
 
 wxLogChain::~wxLogChain()

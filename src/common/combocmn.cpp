@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,26 +22,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/combo.h"
+
+#ifdef __WXMSW__
+#include "wx/msw/private.h"
+#endif
+
 #if wxUSE_COMBOBOX
 #include "wx/combobox.h"
 extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
-#endif
-
-#if wxUSE_COMBOCTRL
-
-#ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/log.h"
-    #include "wx/dcclient.h"
-    #include "wx/settings.h"
-    #include "wx/timer.h"
-    #include "wx/textctrl.h"
-#endif
-
-#include "wx/tooltip.h"
-
-#include "wx/combo.h"
-
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -87,8 +75,8 @@ wxEND_FLAGS( wxComboBoxStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
-wxEVENT_PROPERTY( Select, wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
-wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxEVENT_PROPERTY( Select, wxEVT_COMBOBOX, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_TEXT_ENTER, wxCommandEvent )
 
 // TODO DELEGATES
 wxPROPERTY( Font, wxFont, SetFont, GetFont, wxEMPTY_PARAMETER_VALUE, \
@@ -109,6 +97,21 @@ wxEMPTY_HANDLERS_TABLE(wxComboBox)
 
 wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
                 wxString, Value, wxPoint, Position, wxSize, Size )
+
+#endif // wxUSE_COMBOBOX
+
+#if wxUSE_COMBOCTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/log.h"
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
+    #include "wx/timer.h"
+    #include "wx/textctrl.h"
+#endif
+
+#include "wx/tooltip.h"
 
 // constants
 // ----------------------------------------------------------------------------
@@ -389,7 +392,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
     wxWindow* popup = m_combo->GetPopupControl()->GetControl();
     wxWindow* winpopup = m_combo->GetPopupWindow();
 
-    if (
+    if ( !winFocused || (
          winFocused != m_focusStart &&
          winFocused != popup &&
          winFocused->GetParent() != popup &&
@@ -398,6 +401,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
          winFocused != m_combo &&
          winFocused != m_combo->GetButton() // GTK (atleast) requires this
         )
+       )
     {
         m_combo->HidePopup(true);
     }
@@ -1095,10 +1099,10 @@ wxComboCtrlBase::CreateTextCtrl(int style)
 
         // Connecting the events is currently the most reliable way
         wxWindowID id = m_text->GetId();
-        m_text->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
+        m_text->Connect(id, wxEVT_TEXT,
                         wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
                         NULL, this);
-        m_text->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+        m_text->Connect(id, wxEVT_TEXT_ENTER,
                         wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
                         NULL, this);
 
@@ -1370,15 +1374,31 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     int fhei;
 
-#if wxUSE_COMBOBOX && (defined(__WXMSW__) || defined(__WXGTK__)) \
-        && !defined(__WXUNIVERSAL__)
-    wxComboBox* cb = new wxComboBox;
-    cb->Hide();
-    cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    fhei = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
+#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+    // Control creation is not entirely cheap, so cache the heights to
+    // avoid repeatedly creating dummy controls:
+    static wxString s_last_font;
+    static int s_last_fhei = -1;
+    wxString fontdesc;
     if ( m_font.IsOk() )
-        cb->SetFont(m_font);
-    fhei = cb->GetBestSize().y;
-    cb->Destroy();
+        fontdesc = m_font.GetNativeFontInfoDesc();
+    if ( s_last_fhei != -1 && fontdesc == s_last_font )
+    {
+        fhei = s_last_fhei;
+    }
+    else
+    {
+        wxComboBox* cb = new wxComboBox;
+        cb->Hide();
+        cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
+        if ( m_font.IsOk() )
+            cb->SetFont(m_font);
+        s_last_font = fontdesc;
+        s_last_fhei = fhei = cb->GetBestSize().y;
+        cb->Destroy();
+    }
 #else
     if ( m_font.IsOk() )
         fhei = (m_font.GetPointSize()*2) + 5;
@@ -1787,7 +1807,7 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
         return;
     }
 
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    if ( event.GetEventType() == wxEVT_TEXT )
     {
         if ( m_ignoreEvtText > 0 )
         {
@@ -2050,21 +2070,23 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
-// On Mac, this leads to infinite recursion and eventually a crash
-#ifdef __WXMAC__
-    wxUnusedVar(event);
-#else
+    // On Mac, setting focus here leads to infinite recursion and eventually
+    // a crash due to the SetFocus call producing another event.
+    // Handle Mac in OnIdleEvent using m_resetFocus.
+    
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-        wxWindow* tc = GetTextCtrl();
-        if ( tc && tc != DoFindFocus() )
+        if ( GetTextCtrl() && !GetTextCtrl()->HasFocus() )
         {
-            tc->SetFocus();
+#ifdef __WXMAC__
+            m_resetFocus = true;
+#else
+            GetTextCtrl()->SetFocus();
+#endif
         }
     }
-
+    
     Refresh();
-#endif
 }
 
 void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
@@ -2072,9 +2094,8 @@ void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
     if ( m_resetFocus )
     {
         m_resetFocus = false;
-        wxWindow* tc = GetTextCtrl();
-        if ( tc )
-            tc->SetFocus();
+        if ( GetTextCtrl() )
+            GetTextCtrl()->SetFocus();
     }
 }
 
@@ -2232,7 +2253,7 @@ void wxComboCtrlBase::OnButtonClick()
 
 void wxComboCtrlBase::Popup()
 {
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+    wxCommandEvent event(wxEVT_COMBOBOX_DROPDOWN, GetId());
     event.SetEventObject(this);
     HandleWindowEvent(event);
 
@@ -2518,7 +2539,7 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
 
     if ( generateEvent )
     {
-        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
+        wxCommandEvent event(wxEVT_COMBOBOX_CLOSEUP, GetId());
         event.SetEventObject(this);
         HandleWindowEvent(event);
     }

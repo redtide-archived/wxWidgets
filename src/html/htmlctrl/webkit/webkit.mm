@@ -4,7 +4,6 @@
 // Author:      Jethro Grassie / Kevin Ollivier
 // Modified by:
 // Created:     2004-4-16
-// RCS-ID:      $Id$
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -127,7 +126,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
     }
 #endif
 
-    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
     GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
 

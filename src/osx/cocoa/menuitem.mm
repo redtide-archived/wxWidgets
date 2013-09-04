@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,6 +309,10 @@ bool wxMenuItemCocoaImpl::DoDefault()
     {
         [theNSApplication unhideAllApplications:nil];
         handled=true;
+    }
+    else if (menuid == wxApp::s_macExitMenuItemId)
+    {
+        wxTheApp->ExitMainLoop();
     }
     return handled;
 }

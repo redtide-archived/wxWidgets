@@ -3,7 +3,6 @@
 // Purpose:     wxRichToolTip implementation common to all platforms.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ void wxRichToolTip::SetTitleFont(const wxFont& font)
     m_impl->SetTitleFont(font);
 }
 
-void wxRichToolTip::ShowFor(wxWindow* win, wxRect* rect)
+void wxRichToolTip::ShowFor(wxWindow* win, const wxRect* rect)
 {
     wxCHECK_RET( win, wxS("Must have a valid window") );
 

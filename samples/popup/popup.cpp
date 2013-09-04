@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     2005-02-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -66,7 +65,7 @@ enum
 class SimpleTransientPopup: public wxPopupTransientWindow
 {
 public:
-    SimpleTransientPopup( wxWindow *parent );
+    SimpleTransientPopup( wxWindow *parent, bool scrolled );
     virtual ~SimpleTransientPopup();
 
     // wxPopupTransientWindow virtual methods are all overridden to log them
@@ -74,8 +73,6 @@ public:
     virtual void OnDismiss();
     virtual bool ProcessLeftDown(wxMouseEvent& event);
     virtual bool Show( bool show = true );
-
-    wxScrolledWindow* GetChild() { return m_panel; }
 
 private:
     wxScrolledWindow *m_panel;
@@ -110,7 +107,7 @@ BEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
     EVT_SPINCTRL( Minimal_PopupSpinctrl, SimpleTransientPopup::OnSpinCtrl )
 END_EVENT_TABLE()
 
-SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
+SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                      :wxPopupTransientWindow( parent )
 {
     m_panel = new wxScrolledWindow( this, wxID_ANY );
@@ -142,9 +139,30 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
     topSizer->Add( m_spinCtrl, 0, wxALL, 5 );
     topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
 
+    if ( scrolled )
+    {
+        // Add a big window to ensure that scrollbars are shown when we set the
+        // panel size to a lesser size below.
+        topSizer->Add(new wxPanel(m_panel, wxID_ANY, wxDefaultPosition,
+                                  wxSize(600, 900)));
+    }
+
     m_panel->SetSizer( topSizer );
-    topSizer->Fit(m_panel);
-    topSizer->Fit(this);
+    if ( scrolled )
+    {
+        // Set the fixed size to ensure that the scrollbars are shown.
+        m_panel->SetSize(300, 300);
+
+        // And also actually enable them.
+        m_panel->SetScrollRate(10, 10);
+    }
+    else
+    {
+        // Use the fitting size for the panel if we don't need scrollbars.
+        topSizer->Fit(m_panel);
+    }
+
+    SetClientSize(m_panel->GetSize());
 }
 
 SimpleTransientPopup::~SimpleTransientPopup()
@@ -389,7 +407,7 @@ void MyFrame::OnStartSimplePopup(wxCommandEvent& event)
 {
     wxLogMessage( wxT("================================================") );
     delete m_simplePopup;
-    m_simplePopup = new SimpleTransientPopup( this );
+    m_simplePopup = new SimpleTransientPopup( this, false );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
@@ -402,8 +420,7 @@ void MyFrame::OnStartScrolledPopup(wxCommandEvent& event)
 {
     wxLogMessage( wxT("================================================") );
     delete m_scrolledPopup;
-    m_scrolledPopup = new SimpleTransientPopup( this );
-    m_scrolledPopup->GetChild()->SetScrollbars(1, 1, 1000, 1000);
+    m_scrolledPopup = new SimpleTransientPopup( this, true );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
@@ -466,7 +483,7 @@ void MyDialog::OnStartSimplePopup(wxCommandEvent& event)
 {
     wxLogMessage( wxT("================================================") );
     delete m_simplePopup;
-    m_simplePopup = new SimpleTransientPopup( this );
+    m_simplePopup = new SimpleTransientPopup( this, false );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();
@@ -479,8 +496,7 @@ void MyDialog::OnStartScrolledPopup(wxCommandEvent& event)
 {
     wxLogMessage( wxT("================================================") );
     delete m_scrolledPopup;
-    m_scrolledPopup = new SimpleTransientPopup( this );
-    m_scrolledPopup->GetChild()->SetScrollbars(1, 1, 1000, 1000);
+    m_scrolledPopup = new SimpleTransientPopup( this, true );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
     wxPoint pos = btn->ClientToScreen( wxPoint(0,0) );
     wxSize sz = btn->GetSize();

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -259,6 +258,28 @@ public:
                 }
             }
         }
+    }
+
+    int TabHitTest(const wxPoint & pt, long* flags)
+    {
+        int retval = wxNOT_FOUND;
+        
+        NSPoint nspt = wxToNSPoint( m_osxView, pt );
+        
+        wxNSTabView* slf = (wxNSTabView*) m_osxView;
+        
+        NSTabViewItem* hitItem = [slf tabViewItemAtPoint:nspt];
+        
+        if (!hitItem) {
+            if ( flags )
+                *flags = wxBK_HITTEST_NOWHERE;
+        } else {
+            retval = [slf indexOfTabViewItem:hitItem];
+            if ( flags )
+                *flags = wxBK_HITTEST_ONLABEL;
+        }
+        
+        return retval; 
     }
 };
 

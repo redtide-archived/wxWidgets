@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -242,6 +241,7 @@ public:
     void OnSortRev(wxCommandEvent& WXUNUSED(event)) { DoSort(true); }
 
     void OnAddItem(wxCommandEvent& event);
+    void OnAddManyItems(wxCommandEvent& event);
     void OnInsertItem(wxCommandEvent& event);
 
     void OnIncIndent(wxCommandEvent& event);
@@ -350,6 +350,7 @@ enum
     TreeTest_EnsureVisible,
     TreeTest_SetFocus,
     TreeTest_AddItem,
+    TreeTest_AddManyItems,
     TreeTest_InsertItem,
     TreeTest_IncIndent,
     TreeTest_DecIndent,

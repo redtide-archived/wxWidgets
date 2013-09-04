@@ -4,7 +4,6 @@
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-05-25
-// RCS-ID:      $Id$
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -1457,7 +1456,7 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
         page->AdjustRectToIncludeScrollButtons(&background);
         background.height -= 2;
     }
-    // Page background isn't dependant upon the width of the page
+    // Page background isn't dependent upon the width of the page
     // (at least not the part of it intended to be painted by this
     // function). Set to wider than the page itself for when externally
     // expanded panels need a background - the expanded panel can be wider

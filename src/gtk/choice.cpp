@@ -2,7 +2,6 @@
 // Name:        src/gtk/choice.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ extern "C" {
 static void
 gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-    choice->SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+    choice->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
 
 }

@@ -2,7 +2,6 @@
 // Name:        tokenzr.h
 // Purpose:     interface of wxStringTokenizer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -175,7 +174,7 @@ public:
 
     @return The array with the parsed tokens.
 
-    @header{wx/string.h}
+    @header{wx/tokenzr.h}
 */
 wxArrayString 
 wxStringTokenize(const wxString& str,

@@ -3,7 +3,6 @@
 // Purpose:     STC test declarations
 // Maintainer:  Wyo
 // Created:     2003-09-01
-// RCS-ID:      $Id$
 // Copyright:   (c) wxGuide
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,8 @@
 enum {
     // menu IDs
     myID_PROPERTIES = wxID_HIGHEST,
-    myID_INDENTINC,
+    myID_EDIT_FIRST,
+    myID_INDENTINC = myID_EDIT_FIRST,
     myID_INDENTRED,
     myID_FINDNEXT,
     myID_REPLACE,
@@ -57,6 +57,12 @@ enum {
     myID_OVERTYPE,
     myID_READONLY,
     myID_WRAPMODEON,
+    myID_ANNOTATION_ADD,
+    myID_ANNOTATION_REMOVE,
+    myID_ANNOTATION_CLEAR,
+    myID_ANNOTATION_STYLE_HIDDEN,
+    myID_ANNOTATION_STYLE_STANDARD,
+    myID_ANNOTATION_STYLE_BOXED,
     myID_CHANGECASE,
     myID_CHANGELOWER,
     myID_CHANGEUPPER,
@@ -73,6 +79,7 @@ enum {
     myID_PAGEPREV,
     myID_PAGENEXT,
     myID_SELECTLINE,
+    myID_EDIT_LAST = myID_SELECTLINE,
     myID_WINDOW_MINIMAL,
 
     // other IDs

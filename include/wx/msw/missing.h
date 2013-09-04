@@ -3,7 +3,6 @@
 // Purpose:     Declarations for parts of the Win32 SDK that are missing in
 //              the versions that come with some compilers
 // Created:     2002/04/23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Mattia Barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -85,6 +84,9 @@
     #endif
     #ifndef SPI_GETWHEELSCROLLLINES
         #define SPI_GETWHEELSCROLLLINES 104
+    #endif
+    #ifndef SPI_GETWHEELSCROLLCHARS
+        #define SPI_GETWHEELSCROLLCHARS 108
     #endif
 #endif // wxUSE_MOUSEWHEEL
 

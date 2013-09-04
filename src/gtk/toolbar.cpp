@@ -3,7 +3,6 @@
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -298,7 +297,7 @@ void wxToolBarTool::CreateDropDown()
 void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
 {
     wxToolBarBase* toolbar = GetToolBar();
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_TOOL_DROPDOWN, GetId());
     if (!toolbar->HandleWindowEvent(event))
     {
         wxMenu* menu = GetDropdownMenu();

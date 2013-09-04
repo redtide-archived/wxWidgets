@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 November 2012                                                     *
+# Date : 20 August 2013                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -225,7 +225,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
-		textmeasurecmn.obj
+		textmeasurecmn.obj,modalhook.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -429,7 +429,8 @@ SOURCES = \
 		bmpbtncmn.cpp,checklstcmn.cpp,statbmpcmn.cpp,dirctrlcmn.cpp,\
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
-		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp
+		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
+		modalhook.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -589,6 +590,7 @@ platinfo.obj : platinfo.cpp
 popupcmn.obj : popupcmn.cpp
 prntbase.obj : prntbase.cpp
 process.obj : process.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(UNSCOMZER) process.cpp
 protocol.obj : protocol.cpp
 quantize.obj : quantize.cpp
 radiocmn.obj : radiocmn.cpp
@@ -715,3 +717,4 @@ richtooltipcmn.obj : richtooltipcmn.cpp
 persist.obj : persist.cpp
 time.obj : time.cpp
 textmeasurecmn.obj : textmeasurecmn.cpp
+modalhook.obj : modalhook.cpp

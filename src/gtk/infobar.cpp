@@ -3,7 +3,6 @@
 // Purpose:     wxInfoBar implementation for GTK
 // Author:      Vadim Zeitlin
 // Created:     2009-09-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -197,7 +196,7 @@ void wxInfoBar::Dismiss()
 
 void wxInfoBar::GTKResponse(int btnid)
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, btnid);
+    wxCommandEvent event(wxEVT_BUTTON, btnid);
     event.SetEventObject(this);
 
     if ( !HandleWindowEvent(event) )

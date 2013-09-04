@@ -2,7 +2,6 @@
 // Name:        frame.h
 // Purpose:     interface of wxFrame
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +273,7 @@ public:
 
         @see CreateStatusBar(), OnCreateToolBar(), SetToolBar(), GetToolBar()
     */
-    virtual wxToolBar* CreateToolBar(long style = wxBORDER_NONE | wxTB_HORIZONTAL,
+    virtual wxToolBar* CreateToolBar(long style = wxTB_DEFAULT_STYLE,
                                      wxWindowID id = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
 

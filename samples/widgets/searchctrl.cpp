@@ -4,7 +4,6 @@
 // Purpose:     Shows wxSearchCtrl
 // Author:      Robin Dunn
 // Created:     9-Dec-2006
-// Id:          $Id$
 // Copyright:   (c) 2006
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -198,7 +197,7 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
 //     target->Connect(
 //         ID_SEARCHMENU,
 //         ID_SEARCHMENU+SEARCH_MENU_SIZE,
-//         wxEVT_COMMAND_MENU_SELECTED,
+//         wxEVT_MENU,
 //         wxCommandEventHandler(MySearchCtrl::OnSearchMenu)
 //         );
     return menu;

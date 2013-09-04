@@ -42,6 +42,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_regconf.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_evthandler.o \
+	$(OBJS)\test_evtlooptest.o \
 	$(OBJS)\test_evtsource.o \
 	$(OBJS)\test_stopwatch.o \
 	$(OBJS)\test_timertest.o \
@@ -170,6 +171,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_radiobuttontest.o \
 	$(OBJS)\test_gui_rearrangelisttest.o \
 	$(OBJS)\test_gui_richtextctrltest.o \
+	$(OBJS)\test_gui_searchctrltest.o \
+	$(OBJS)\test_gui_simplebooktest.o \
 	$(OBJS)\test_gui_slidertest.o \
 	$(OBJS)\test_gui_spinctrldbltest.o \
 	$(OBJS)\test_gui_spinctrltest.o \
@@ -185,8 +188,10 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_windowtest.o \
 	$(OBJS)\test_gui_dialogtest.o \
 	$(OBJS)\test_gui_clone.o \
+	$(OBJS)\test_gui_evtlooptest.o \
 	$(OBJS)\test_gui_propagation.o \
 	$(OBJS)\test_gui_keyboard.o \
+	$(OBJS)\test_gui_exec.o \
 	$(OBJS)\test_gui_fonttest.o \
 	$(OBJS)\test_gui_image.o \
 	$(OBJS)\test_gui_rawbmp.o \
@@ -216,7 +221,7 @@ ifeq ($(USE_GUI),0)
 PORTNAME = base
 endif
 ifeq ($(USE_GUI),1)
-PORTNAME = msw
+PORTNAME = msw$(TOOLKIT_VERSION)
 endif
 ifeq ($(OFFICIAL_BUILD),1)
 COMPILER_VERSION = ERROR-COMPILER-VERSION-MUST-BE-SET-FOR-OFFICIAL-BUILD
@@ -315,6 +320,11 @@ endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core
+endif
+ifeq ($(MONOLITHIC),1)
+ifeq ($(USE_STC),1)
+__LIB_SCINTILLA_IF_MONO_p = -lwxscintilla$(WXDEBUGFLAG)
+endif
 endif
 ifeq ($(USE_GUI),1)
 __LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
@@ -444,7 +454,7 @@ $(OBJS)\test.exe: $(TEST_OBJECTS)
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
-	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(CPPUNIT_LIBS)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(CPPUNIT_LIBS)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 endif
 
 data: 
@@ -453,7 +463,7 @@ data:
 
 data-images: 
 	if not exist image mkdir image
-	for %%f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp) do if not exist image\%%f copy .\image\%%f image
+	for %%f in (horse_grey.bmp horse_grey_flipped.bmp horse_rle4.bmp horse_rle4_flipped.bmp horse_rle8.bmp horse_rle8_flipped.bmp horse_bicubic_50x50.png horse_bicubic_100x100.png horse_bicubic_150x150.png horse_bicubic_300x300.png horse_bilinear_50x50.png horse_bilinear_100x100.png horse_bilinear_150x150.png horse_bilinear_300x300.png horse_box_average_50x50.png horse_box_average_100x100.png horse_box_average_150x150.png horse_box_average_300x300.png) do if not exist image\%%f copy .\image\%%f image
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -496,6 +506,9 @@ $(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_evthandler.o: ./events/evthandler.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_evtlooptest.o: ./events/evtlooptest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_evtsource.o: ./events/evtsource.cpp
@@ -855,6 +868,12 @@ $(OBJS)\test_gui_rearrangelisttest.o: ./controls/rearrangelisttest.cpp
 $(OBJS)\test_gui_richtextctrltest.o: ./controls/richtextctrltest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_searchctrltest.o: ./controls/searchctrltest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_simplebooktest.o: ./controls/simplebooktest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_slidertest.o: ./controls/slidertest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
@@ -900,10 +919,16 @@ $(OBJS)\test_gui_dialogtest.o: ./controls/dialogtest.cpp
 $(OBJS)\test_gui_clone.o: ./events/clone.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_evtlooptest.o: ./events/evtlooptest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_propagation.o: ./events/propagation.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_keyboard.o: ./events/keyboard.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_exec.o: ./exec/exec.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_fonttest.o: ./font/fonttest.cpp

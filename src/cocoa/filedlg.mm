@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2004-10-02
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #import <AppKit/NSOpenPanel.h>
 #import <AppKit/NSSavePanel.h>
@@ -197,7 +196,7 @@ void wxFileDialog::SetPath(const wxString& path)
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxAutoNSAutoreleasePool thePool;
 

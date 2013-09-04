@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-06-20
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -609,7 +608,7 @@ void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 {
 }
 
-float wxWidgetIPhoneImpl::GetContentScaleFactor() const 
+double wxWidgetIPhoneImpl::GetContentScaleFactor() const 
 {
     if ( [m_osxView respondsToSelector:@selector(contentScaleFactor) ])
         return [m_osxView contentScaleFactor];
@@ -793,7 +792,7 @@ void wxWidgetIPhoneImpl::controlTextDidChange()
     wxTextCtrl* wxpeer = wxDynamicCast((wxWindow*)GetWXPeer(),wxTextCtrl);
     if ( wxpeer ) 
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+        wxCommandEvent event(wxEVT_TEXT, wxpeer->GetId());
         event.SetEventObject( wxpeer );
         event.SetString( wxpeer->GetValue() );
         wxpeer->HandleWindowEvent( event );

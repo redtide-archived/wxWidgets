@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi (readapted code written by Vadim Zeitlin)
 // Modified by:
 // Created:     15/04/2006
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,7 @@ const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 // implementation
 // ============================================================================
 
-wxDEFINE_EVENT(wxEVT_COMMAND_COLOURPICKER_CHANGED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent);
 IMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxEvent)
 
@@ -68,7 +67,7 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_COMMAND_COLOURPICKER_CHANGED,
+    m_picker->Connect(wxEVT_COLOURPICKER_CHANGED,
             wxColourPickerEventHandler(wxColourPickerCtrl::OnColourChange),
             NULL, this);
 

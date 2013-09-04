@@ -3,7 +3,6 @@
 // Purpose:     implements wxGenericAboutBox() function
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,7 +222,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 #if !wxUSE_MODAL_ABOUT_DIALOG
     Connect(wxEVT_CLOSE_WINDOW,
             wxCloseEventHandler(wxGenericAboutDialog::OnCloseWindow));
-    Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(wxID_OK, wxEVT_BUTTON,
             wxCommandEventHandler(wxGenericAboutDialog::OnOK));
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 

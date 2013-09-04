@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -1322,7 +1321,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
         int command = win->GetAcceleratorTable()->GetCommand(event);
         if ( command != -1 )
         {
-            wxCommandEvent eventCmd(wxEVT_COMMAND_MENU_SELECTED, command);
+            wxCommandEvent eventCmd(wxEVT_MENU, command);
             if ( win->GetEventHandler()->ProcessEvent(eventCmd) )
             {
                 // skip "event.Skip()" below
@@ -1353,7 +1352,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
                 wxWindow* child = win->FindWindow(command);
                 if ( child && wxDynamicCast(child, wxButton) )
                 {
-                    wxCommandEvent eventCmd(wxEVT_COMMAND_BUTTON_CLICKED, command);
+                    wxCommandEvent eventCmd(wxEVT_BUTTON, command);
                     eventCmd.SetEventObject(child);
                     if ( child->GetEventHandler()->ProcessEvent(eventCmd) )
                     {
@@ -1428,7 +1427,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
             wxButton *btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
             if ( btn )
             {
-                wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, btn->GetId());
+                wxCommandEvent evt(wxEVT_BUTTON, btn->GetId());
                 evt.SetEventObject(btn);
                 btn->Command(evt);
                 return;

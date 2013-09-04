@@ -10,7 +10,6 @@
 // Author:      Robin Dunn
 //
 // Created:     13-Jan-2000
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 by Total Control Software
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -50,7 +49,7 @@
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
-    #include "wx/ffile.h"
+    #include "wx/file.h"
 #endif
 
 #ifdef __WXGTK__
@@ -4387,7 +4386,7 @@ void wxStyledTextCtrl::DoSetValue(const wxString& value, int flags)
     else
         SetText(value);
 
-    // We don't send wxEVT_COMMAND_TEXT_UPDATED anyhow, so ignore the
+    // We don't send wxEVT_TEXT anyhow, so ignore the
     // SetValue_SendEvent bit of the flags
 }
 
@@ -4433,7 +4432,7 @@ wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
     if ( file.IsOpened() )
     {
         wxString text;
-        if ( file.ReadAll(&text, *wxConvCurrent) )
+        if ( file.ReadAll(&text, wxConvAuto()) )
         {
             // Detect the EOL: we use just the first line because there is not
             // much we can do if the file uses inconsistent EOLs anyhow, we'd
@@ -4509,7 +4508,7 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
 }
 
 void wxStyledTextCtrl::AnnotationClearLine(int line) {
-    SendMsg(SCI_ANNOTATIONSETTEXT, line, NULL);
+    SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
 }
 
 
@@ -4695,9 +4694,11 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
-    m_swx->DoMouseWheel(evt.GetWheelRotation(),
+    m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                        evt.GetWheelRotation(),
                         evt.GetWheelDelta(),
                         evt.GetLinesPerAction(),
+                        evt.GetColumnsPerAction(),
                         evt.ControlDown(),
                         evt.IsPageScroll());
 }

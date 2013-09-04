@@ -2,7 +2,6 @@
 // Name:        src/html/m_tables.cpp
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -821,7 +820,11 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                         new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
                 }
 
-                CallParseInnerWithBg(tag, m_Table->GetRowDefaultBackgroundColour());
+                wxColour bgCol;
+                if ( !tag.GetParamAsColour(wxT("BGCOLOR"), &bgCol) )
+                    bgCol = m_Table->GetRowDefaultBackgroundColour();
+
+                CallParseInnerWithBg(tag, bgCol);
 
                 if ( isHeader )
                 {
